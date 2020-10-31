@@ -9,7 +9,7 @@ public class LeaderBoard: NetworkBehaviour
     public GameObject EntryContainer;
     public GameObject EntryTemplate;
     public int NumberOfEntries = 10;
-    public float RefreshRate = 0.5f;
+    public float RefreshDelaySeconds = 0.5f;
 
     // Client
     private readonly List<GameObject> _entries = new List<GameObject>();
@@ -169,7 +169,7 @@ public class LeaderBoard: NetworkBehaviour
 
             SendScoresToOwners();
 
-            yield return new WaitForSeconds(RefreshRate);
+            yield return new WaitForSeconds(RefreshDelaySeconds);
         }
     }
 
