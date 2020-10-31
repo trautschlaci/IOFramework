@@ -1350,7 +1350,7 @@ MonoBehaviour:
   autoCreatePlayer: 0
   playerSpawnMethod: 0
   spawnPrefabs:
-  - {fileID: 0}
+  - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
   IndexUI: {fileID: 1722162813}
 --- !u!4 &1370688050
 Transform:
@@ -1398,13 +1398,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  SpawnedObject: {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c,
-    type: 3}
+  SelectableObjectsToSpawn:
+  - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
+  SpawnPointSelector: {fileID: 3755292829450704553}
+  AutoStartSpawning: 1
   MinSpawnDelay: 0.1
   MaxSpawnDelay: 0.1
-  AutoStartSpawning: 1
   ChanceOfSpawning: 1
-  SpawnPointSelector: {fileID: 3755292829450704553}
 --- !u!114 &1425738888
 MonoBehaviour:
   m_ObjectHideFlags: 0

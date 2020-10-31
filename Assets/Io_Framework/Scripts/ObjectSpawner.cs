@@ -1,11 +1,13 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using UnityEngine;
 
 
 public class ObjectSpawner: NetworkBehaviour
 {
-    public GameObject SpawnedObject;
+    public List<GameObject> SelectableObjectsToSpawn;
     public SpawnPointSelector SpawnPointSelector;
     public bool AutoStartSpawning = true;
     public float MinSpawnDelay = 0.1f;
@@ -18,6 +20,12 @@ public class ObjectSpawner: NetworkBehaviour
 
     public override void OnStartServer()
     {
+        if (SelectableObjectsToSpawn.Any(spawnObject => !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject)))
+        {
+            Debug.LogError("Prefabs to spawn should also be added to the list of the NetworkManager");
+            return;
+        }
+
         if (AutoStartSpawning)
             StartSpawning();
     }
@@ -47,6 +55,12 @@ public class ObjectSpawner: NetworkBehaviour
     }
 
     [Server]
+    protected virtual GameObject SelectObjectToSpawn()
+    {
+        return SelectableObjectsToSpawn[Random.Range(0, SelectableObjectsToSpawn.Count)];
+    }
+
+    [Server]
     public virtual void Spawn()
     {
         var randomFloat = Random.Range(0.0f, 1.0f);
@@ -55,7 +69,7 @@ public class ObjectSpawner: NetworkBehaviour
 
         var target = SpawnPointSelector.SelectSpawnPoint();
 
-        var spawnGameObject = Instantiate(SpawnedObject, target, Quaternion.identity);
+        var spawnGameObject = Instantiate(SelectObjectToSpawn(), target, Quaternion.identity);
         NetworkServer.Spawn(spawnGameObject);
     }
 }
