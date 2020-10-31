@@ -533,6 +533,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  AutoStartSpawning: 1
   SpawnPrefabs:
   - {fileID: 2486545516468552640, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
 --- !u!114 &622197444

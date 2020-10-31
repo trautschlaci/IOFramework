@@ -11,5 +11,6 @@ public class PlayerNamePresenter : MonoBehaviour
     public virtual void Update()
     {
         nameText.text = player.PlayerName;
+        nameText.transform.rotation = Camera.main.transform.rotation;
     }
 }
