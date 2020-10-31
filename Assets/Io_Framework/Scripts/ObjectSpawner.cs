@@ -1,65 +1,61 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Xml.Serialization;
+﻿using System.Collections;
 using Mirror;
 using UnityEngine;
-using Object = UnityEngine.Object;
-using Random = UnityEngine.Random;
 
-public class ObjectSpawner : NetworkBehaviour
+
+public class ObjectSpawner: NetworkBehaviour
 {
-    public List<SpawnEntry> SpawnEntries;
+    public GameObject SpawnedObject;
+    public SpawnPointSelector SpawnPointSelector;
+    public bool AutoStartSpawning = true;
+    public float MinSpawnDelay = 0.1f;
+    public float MaxSpawnDelay = 0.1f;
+    [Range(0.0f, 1.0f)]
+    public float ChanceOfSpawning = 1.0f;
+
+    protected bool IsStopped;
+
 
     public override void OnStartServer()
     {
-        StartSpawning();
+        if (AutoStartSpawning)
+            StartSpawning();
     }
 
     [Server]
-    public void StartSpawning()
+    public virtual void StartSpawning()
     {
-        foreach (var spawnEntry in SpawnEntries)
-        {
-            if(spawnEntry.AutoStartSpawning)
-                StartCoroutine(spawnEntry.StartSpawning());
-        }
+        IsStopped = false;
+        StartCoroutine(ExecuteSpawning());
     }
-}
 
-[System.Serializable]
-public class SpawnEntry
-{
-    public GameObject SpawnedObject;
-    public float SpawnDelay = 1.0f;
-    public bool AutoStartSpawning = true;
-    [Range(0.0f, 1.0f)]
-    public float ChanceOfSpawning = 1.0f;
-    public SpawnPointSelector SpawnPointSelector;
-
-    private bool _stopSpawning = false;
+    [Server]
+    public virtual void StopSpawning()
+    {
+        IsStopped = true;
+    }
 
 
     [Server]
-    public IEnumerator StartSpawning()
+    protected virtual IEnumerator ExecuteSpawning()
     {
-        while (!_stopSpawning)
+        while (!IsStopped)
         {
             Spawn();
-            yield return new WaitForSeconds(SpawnDelay);
+            yield return new WaitForSeconds(Random.Range(MinSpawnDelay, MaxSpawnDelay));
         }
     }
 
     [Server]
-    private void Spawn()
+    public virtual void Spawn()
     {
-        float randomFloat = Random.Range(0.0f, 1.0f);
+        var randomFloat = Random.Range(0.0f, 1.0f);
         if (randomFloat > ChanceOfSpawning)
             return;
 
         var target = SpawnPointSelector.SelectSpawnPoint();
 
-        GameObject spawnGameObject = Object.Instantiate(SpawnedObject, target, Quaternion.identity);
+        var spawnGameObject = Instantiate(SpawnedObject, target, Quaternion.identity);
         NetworkServer.Spawn(spawnGameObject);
     }
 }
