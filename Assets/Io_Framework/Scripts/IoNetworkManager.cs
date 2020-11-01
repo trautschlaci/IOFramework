@@ -11,7 +11,7 @@ public class IoNetworkManager : NetworkManager
 
     public class CreatePlayerMessage : MessageBase
     {
-        public string name;
+        public string Name;
     }
 
     public override void OnStartServer()
@@ -26,7 +26,7 @@ public class IoNetworkManager : NetworkManager
         base.OnClientConnect(conn);
 
         // tell the server to create a player with this name
-        conn.Send(new CreatePlayerMessage { name = PlayerName });
+        conn.Send(new CreatePlayerMessage { Name = PlayerName });
         IndexUI.SetActive(false);
     }
 
@@ -40,7 +40,7 @@ public class IoNetworkManager : NetworkManager
     {
         // create a gameobject using the name supplied by client
         GameObject playergo = Instantiate(playerPrefab);
-        playergo.GetComponent<Player>().PlayerName = createPlayerMessage.name;
+        playergo.GetComponent<Player>().PlayerName = createPlayerMessage.Name;
 
         // set it as the player
         NetworkServer.AddPlayerForConnection(connection, playergo);
