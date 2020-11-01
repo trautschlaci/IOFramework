@@ -1352,6 +1352,9 @@ MonoBehaviour:
   spawnPrefabs:
   - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
   IndexUI: {fileID: 1722162813}
+  SpawnPointSelector: {fileID: 3755292829450704554}
+  SpawnRetryDelay: 0.01
+  SpawnTimeout: 2
 --- !u!4 &1370688050
 Transform:
   m_ObjectHideFlags: 0
@@ -1400,8 +1403,8 @@ MonoBehaviour:
   syncInterval: 0.1
   SelectableObjectsToSpawn:
   - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
-  SpawnPointSelector: {fileID: 3755292829450704553}
-  AutoStartSpawning: 1
+  RandomPositionSelector: {fileID: 3755292829450704552}
+  AutoStartSpawning: 0
   MinSpawnDelay: 0.1
   MaxSpawnDelay: 0.1
   ChanceOfSpawning: 1
@@ -2097,7 +2100,7 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 3755292829450704549}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &3755292829450704553
+--- !u!114 &3755292829450704552
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2106,10 +2109,24 @@ MonoBehaviour:
   m_GameObject: {fileID: 3755292829450704550}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f2bc22c10121d9a4cb67819d0d2e2180, type: 3}
+  m_Script: {fileID: 11500000, guid: f87f6898445edfa4c8aa1f2cf42889e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnArea: {fileID: 3755292829450704551}
+--- !u!114 &3755292829450704554
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3755292829450704550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionSelector: {fileID: 3755292829450704552}
+  SafeRadius: 1
 --- !u!4 &5859415596321193029
 Transform:
   m_ObjectHideFlags: 0

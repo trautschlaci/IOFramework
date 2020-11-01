@@ -8,17 +8,29 @@ public class IoNetworkManager : NetworkManager
 {
     public GameObject IndexUI;
     public string PlayerName { get; set; }
+    public PlayerSpawnPositionSelector SpawnPointSelector;
+    public float SpawnRetryDelay = 0.01f;
+    public float SpawnTimeout = 2.0f;
+
+    private float _spawnRetryTime;
 
     public class CreatePlayerMessage : MessageBase
     {
         public string Name;
     }
 
-    public override void OnStartServer()
+    public class CouldNotSpawnMessage : MessageBase
     {
-        base.OnStartServer();
-        NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
-        IndexUI.SetActive(false);
+    }
+
+    public override void OnStartClient()
+    {
+        base.OnStartClient();
+        NetworkClient.RegisterHandler<CouldNotSpawnMessage>(OnCouldNotSpawnPlayer);
+    }
+
+    public virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
+    {
     }
 
     public override void OnClientConnect(NetworkConnection conn)
@@ -36,13 +48,42 @@ public class IoNetworkManager : NetworkManager
         IndexUI.SetActive(true);
     }
 
+    public override void OnStartServer()
+    {
+        base.OnStartServer();
+        NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
+        IndexUI.SetActive(false);
+    }
+
     void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
     {
-        // create a gameobject using the name supplied by client
-        GameObject playergo = Instantiate(playerPrefab);
-        playergo.GetComponent<Player>().PlayerName = createPlayerMessage.Name;
+        StartCoroutine(SpawnPlayer(connection.connectionId, createPlayerMessage.Name));
+    }
 
-        // set it as the player
-        NetworkServer.AddPlayerForConnection(connection, playergo);
+    IEnumerator SpawnPlayer(int connectionId, string playerName)
+    {
+        Vector3 spawnPosition;
+        var couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
+        while (!couldSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
+        {
+            couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
+            _spawnRetryTime += SpawnRetryDelay;
+            yield return new WaitForSeconds(SpawnRetryDelay);
+        }
+
+        _spawnRetryTime = 0.0f;
+
+        if (!couldSelectSpawnPosition)
+        {
+            NetworkServer.connections[connectionId].Send(new CouldNotSpawnMessage());
+            NetworkServer.connections[connectionId].Disconnect();
+            yield break;
+        }
+
+        GameObject playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+        playerGameObject.GetComponent<Player>().PlayerName = playerName;
+
+        NetworkServer.AddPlayerForConnection(NetworkServer.connections[connectionId], playerGameObject);
+
     }
 }

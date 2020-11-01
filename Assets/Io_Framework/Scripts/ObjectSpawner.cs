@@ -8,7 +8,7 @@ using UnityEngine;
 public class ObjectSpawner: NetworkBehaviour
 {
     public List<GameObject> SelectableObjectsToSpawn;
-    public SpawnPointSelector SpawnPointSelector;
+    public RandomPositionSelector RandomPositionSelector;
     public bool AutoStartSpawning = true;
     public float MinSpawnDelay = 0.1f;
     public float MaxSpawnDelay = 0.1f;
@@ -67,7 +67,7 @@ public class ObjectSpawner: NetworkBehaviour
         if (randomFloat > ChanceOfSpawning)
             return;
 
-        var target = SpawnPointSelector.SelectSpawnPoint();
+        var target = RandomPositionSelector.RandomPosition();
 
         var spawnGameObject = Instantiate(SelectObjectToSpawn(), target, Quaternion.identity);
         NetworkServer.Spawn(spawnGameObject);
