@@ -15,12 +15,11 @@ GameObject:
   - component: {fileID: 5558229976809921357}
   - component: {fileID: 5558229976809921362}
   - component: {fileID: 4624760001123339452}
-  - component: {fileID: 2780033933129638086}
   - component: {fileID: 4149672768815094167}
   - component: {fileID: 255147376077071153}
   - component: {fileID: 8690573829068873889}
   - component: {fileID: 306789702931312851}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -102,7 +101,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -128,7 +127,7 @@ Rigidbody2D:
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!114 &5558229976809921357
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -182,19 +181,6 @@ MonoBehaviour:
   playerScore: {fileID: 255147376077071153}
   _speed: 300
   _jumpSpeed: 50
---- !u!114 &2780033933129638086
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558229976809921361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 291718139a1de46459fd42e6ae193e72, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Map: {fileID: 3755292830058618777, guid: 5ba758ce8774b3e4b8ca73822104a3f5, type: 3}
 --- !u!114 &4149672768815094167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -224,7 +210,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d77fca3013ac5414b8a9466ea3dbf411, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
+  syncMode: 1
   syncInterval: 0.1
   playerObject: {fileID: 4624760001123339452}
   score: 0
@@ -271,7 +257,7 @@ GameObject:
   - component: {fileID: 7873579956450603363}
   - component: {fileID: 3994113563580228351}
   - component: {fileID: 2041183540282151901}
-  m_Layer: 8
+  m_Layer: 9
   m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

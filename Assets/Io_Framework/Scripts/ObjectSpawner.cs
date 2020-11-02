@@ -14,6 +14,7 @@ public class ObjectSpawner: NetworkBehaviour
     public float MaxSpawnDelay = 0.1f;
     [Range(0.0f, 1.0f)]
     public float ChanceOfSpawning = 1.0f;
+    public int BulkSpawn = 1;
 
     protected bool IsStopped;
 
@@ -49,7 +50,8 @@ public class ObjectSpawner: NetworkBehaviour
     {
         while (!IsStopped)
         {
-            Spawn();
+            for(var i = 0; i < BulkSpawn; i++)
+                Spawn();
             yield return new WaitForSeconds(Random.Range(MinSpawnDelay, MaxSpawnDelay));
         }
     }

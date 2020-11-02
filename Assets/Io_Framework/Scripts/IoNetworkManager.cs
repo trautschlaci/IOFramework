@@ -8,7 +8,7 @@ public class IoNetworkManager : NetworkManager
 {
     public GameObject IndexUI;
     public string PlayerName { get; set; }
-    public PlayerSpawnPositionSelector SpawnPointSelector;
+    public SpawnPositionSelector SpawnPointSelector;
     public float SpawnRetryDelay = 0.01f;
     public float SpawnTimeout = 2.0f;
 

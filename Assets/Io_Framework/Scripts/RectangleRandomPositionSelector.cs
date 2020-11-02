@@ -6,8 +6,10 @@ public class RectangleRandomPositionSelector : RandomPositionSelector
 
     public override Vector3 RandomPosition()
     {
-        var x = Random.Range(SpawnArea.rect.xMin * SpawnArea.localScale.x, SpawnArea.rect.xMax * SpawnArea.localScale.x);
-        var y = Random.Range(SpawnArea.rect.yMin * SpawnArea.localScale.y, SpawnArea.rect.yMax * SpawnArea.localScale.y);
+        Vector3[] corners = new Vector3[4];
+        SpawnArea.GetWorldCorners(corners);
+        var x = Random.Range(corners[0].x, corners[2].x);
+        var y = Random.Range(corners[0].y, corners[2].y);
 
         var target = new Vector3(x, y, 0);
 
