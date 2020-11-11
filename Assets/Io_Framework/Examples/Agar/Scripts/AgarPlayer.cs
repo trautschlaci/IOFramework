@@ -4,7 +4,8 @@ using System.Text;
 using Mirror;
 using UnityEngine;
 
-
+[RequireComponent(typeof(CircleCollider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class AgarPlayer : CloneablePlayerObject
 {
     public PlayerScore playerScore;
@@ -36,6 +37,12 @@ public class AgarPlayer : CloneablePlayerObject
         CalculateCameraScale(playerScore.Score);
     }
 
+    void Start()
+    {
+        GetComponent<CircleCollider2D>().enabled = isServer;
+    }
+
+    [ClientCallback]
     void OnDisable()
     {
         if (Camera.main != null && Camera.main.transform.parent == transform)
@@ -46,7 +53,7 @@ public class AgarPlayer : CloneablePlayerObject
         }
     }
 
-    [Client]
+    [ClientCallback]
     void FixedUpdate()
     {
         if (!hasAuthority || MoveBlocked) return;
@@ -62,7 +69,7 @@ public class AgarPlayer : CloneablePlayerObject
         rigidbody2d.velocity = target * _speed * Time.fixedDeltaTime / (float)Math.Sqrt(transform.localScale.x);
     }
 
-    [Client]
+    [ClientCallback]
     void Update()
     {
 
