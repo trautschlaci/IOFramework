@@ -32,25 +32,12 @@ public class AgarPlayer : CloneablePlayerObject
     public override void OnStartLocalPlayer()
     {
         base.OnStartLocalPlayer();
-        Camera.main.transform.SetParent(transform);
-        Camera.main.transform.localPosition = new Vector3(0f, 0f, -10f);
-        CalculateCameraScale(playerScore.Score);
+        CalculateCameraScale();
     }
 
     void Start()
     {
         GetComponent<CircleCollider2D>().enabled = isServer;
-    }
-
-    [ClientCallback]
-    void OnDisable()
-    {
-        if (Camera.main != null && Camera.main.transform.parent == transform)
-        {
-            Camera.main.transform.SetParent(null);
-            Camera.main.transform.localPosition = new Vector3(0f, 0f, -10f);
-            Camera.main.orthographicSize = 5;
-        }
     }
 
     [ClientCallback]
@@ -107,9 +94,8 @@ public class AgarPlayer : CloneablePlayerObject
     }
 
     [Client]
-    public void CalculateCameraScale(int score)
+    public void CalculateCameraScale()
     {
-        _size = CalculateSize(score);
         Camera.main.orthographicSize = 3 + _size;
     }
 
@@ -138,7 +124,7 @@ public class AgarPlayer : CloneablePlayerObject
         _size = CalculateSize(newScore);
         transform.localScale = new Vector3(_size, _size, 1.0f);
         if (isLocalPlayer)
-            CalculateCameraScale(newScore);
+            CalculateCameraScale();
     }
 
     public override int CompareTo(Player other)

@@ -1530,7 +1530,7 @@ MonoBehaviour:
   SelectableObjectsToSpawn:
   - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
   RandomPositionSelector: {fileID: 3755292829450704552}
-  AutoStartSpawning: 1
+  AutoStartSpawning: 0
   MinSpawnDelay: 0.1
   MaxSpawnDelay: 0.1
   ChanceOfSpawning: 1
