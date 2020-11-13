@@ -6,6 +6,8 @@ using System.Collections.Generic;
 public class ReverseProximityChecker : NetworkVisibility
 {
 
+    public float VisRange = 1;
+
     // How often (in seconds) that this object should update the list of observers that can see it.
     public float visUpdateInterval = 1;
 
@@ -38,7 +40,7 @@ public class ReverseProximityChecker : NetworkVisibility
         if (playerIdentity.GetComponent<Player>() == null)
             return false;
 
-        return Vector3.Distance(playerIdentity.transform.position, transform.position) < playerIdentity.GetComponent<Player>().VisRange;
+        return Vector3.Distance(playerIdentity.transform.position, transform.position) < playerIdentity.GetComponent<Player>().ViewRange + VisRange;
     }
 
     public override void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
@@ -56,7 +58,7 @@ public class ReverseProximityChecker : NetworkVisibility
                 var playerIdentity = conn.identity;
 
                 // check distance
-                if (Vector3.Distance(playerIdentity.transform.position, position) < playerIdentity.GetComponent<Player>().VisRange)
+                if (Vector3.Distance(playerIdentity.transform.position, position) < playerIdentity.GetComponent<Player>().ViewRange + VisRange)
                 {
                     observers.Add(conn);
                 }

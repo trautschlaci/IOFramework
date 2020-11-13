@@ -16,7 +16,7 @@ public class Player : NetworkBehaviour
     public event Action OnPlayerDestroyedServer;
 
     // Server use only
-    public float VisRange = 10.0f;
+    public float ViewRange = 10.0f;
 
     public override void OnStartServer()
     {
