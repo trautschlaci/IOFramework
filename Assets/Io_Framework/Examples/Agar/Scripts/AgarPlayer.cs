@@ -16,11 +16,11 @@ public class AgarPlayer : CloneablePlayerObject
     [SerializeField]
     private float _jumpSpeed = 30.0f;
 
-    private float _size = 1;
-
+    // Client
+    private float _blockTime;
     private bool MoveBlocked => _blockTime >= 0.0f;
 
-    private float _blockTime;
+    private float _size = 1;
 
     public override void OnStartClient()
     {
@@ -37,7 +37,7 @@ public class AgarPlayer : CloneablePlayerObject
 
     void Start()
     {
-        GetComponent<CircleCollider2D>().enabled = isServer;
+        //GetComponent<CircleCollider2D>().enabled = isServer;
     }
 
     [ClientCallback]
@@ -107,13 +107,14 @@ public class AgarPlayer : CloneablePlayerObject
         Vector3 target = transform.position + 2*velocity*Math.Max(latency, Time.fixedDeltaTime);
         GameObject half = InstantiateClone(target, Quaternion.identity);
         half.GetComponent<PlayerScore>().Score = playerScore.Score;
+
         NetworkServer.Spawn(half, connectionToClient);
 
-        half.GetComponent<AgarPlayer>().TargetGiveStartVelocity(velocity.normalized);
+        half.GetComponent<AgarPlayer>().GiveStartVelocity(velocity.normalized);
     }
 
-    [TargetRpc]
-    private void TargetGiveStartVelocity(Vector3 velocity)
+    [Server]
+    private void GiveStartVelocity(Vector3 velocity)
     {
         _blockTime = 0.3f;
         GetComponent<Rigidbody2D>().velocity = velocity * GetComponent<Collider2D>().bounds.extents.x * _jumpSpeed;
