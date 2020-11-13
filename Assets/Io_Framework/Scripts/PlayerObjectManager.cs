@@ -7,8 +7,38 @@ using UnityEngine;
 public class PlayerObjectManager: MonoBehaviour
 {
     public GameObject PlayerPrefab;
+    public static PlayerObjectManager singleton { get; private set; }
+
 
     private readonly Dictionary<int, List<CloneablePlayerObject>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObject>>();
+
+    [ServerCallback]
+    void Awake()
+    {
+        InitializeSingleton();
+    }
+
+    [ServerCallback]
+    void Start()
+    {
+        InitializeSingleton();
+    }
+
+    [Server]
+    private void InitializeSingleton()
+    {
+        if (singleton != null)
+        {
+            if (singleton == this) return;
+
+            Debug.Log("Multiple PlayerObjectManagers detected in the scene. The duplicate will be destroyed.");
+            Destroy(gameObject);
+
+            return;
+        }
+
+        singleton = this;
+    }
 
     [Server]
     public void AddPlayerObject(int playerId, CloneablePlayerObject playerObject)
@@ -44,9 +74,9 @@ public class PlayerObjectManager: MonoBehaviour
     }
 
     [Server]
-    public GameObject SpawnPlayerObject(Vector3 targetPos)
+    public GameObject InstantiatePlayerObject(Vector3 targetPos, Quaternion rotation)
     {
-        GameObject spawnedPlayerObject = Instantiate(PlayerPrefab, targetPos, Quaternion.identity);
+        GameObject spawnedPlayerObject = Instantiate(PlayerPrefab, targetPos, rotation);
         return spawnedPlayerObject;
     }
 

@@ -102,9 +102,10 @@ public class AgarPlayer : CloneablePlayerObject
     [Command]
     private void CmdSplit(Vector3 velocity, float latency)
     {
-        Vector3 target = transform.position + 2*velocity*Math.Max(latency, Time.fixedDeltaTime);
         playerScore.Score = (int)(playerScore.Score / 2.0f);
-        GameObject half = SpawnClone(target);
+
+        Vector3 target = transform.position + 2*velocity*Math.Max(latency, Time.fixedDeltaTime);
+        GameObject half = InstantiateClone(target, Quaternion.identity);
         half.GetComponent<PlayerScore>().Score = playerScore.Score;
         NetworkServer.Spawn(half, connectionToClient);
 

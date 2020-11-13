@@ -28,9 +28,4 @@ public class Player : NetworkBehaviour
         OnPlayerDestroyedServer?.Invoke();
         NetworkServer.Destroy(gameObject);
     }
-
-    public virtual int CompareTo(Player other)
-    {
-        return 0;
-    }
 }

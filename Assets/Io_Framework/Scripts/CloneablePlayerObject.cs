@@ -6,27 +6,29 @@ using UnityEngine;
 
 public class CloneablePlayerObject : Player
 {
-    private PlayerObjectManager _playerManager;
-
     public override void OnStartServer()
     {
         base.OnStartServer();
-        _playerManager = FindObjectOfType<PlayerObjectManager>();
-        _playerManager.AddPlayerObject(PlayerId, this);
-    }
-
-    [Server]
-    public GameObject SpawnClone(Vector3 targetPos)
-    {
-        GameObject clone = _playerManager.SpawnPlayerObject(targetPos);
-        clone.GetComponent<Player>().PlayerName = PlayerName;
-        return clone;
+        PlayerObjectManager.singleton.AddPlayerObject(PlayerId, this);
     }
 
     [Server]
     public override void Destroy()
     {
-        _playerManager.DeleteGameObject(PlayerId, this);
+        PlayerObjectManager.singleton.DeleteGameObject(PlayerId, this);
         base.Destroy();
+    }
+
+    [Server]
+    public virtual GameObject InstantiateClone(Vector3 targetPos, Quaternion rotation)
+    {
+        GameObject clone = PlayerObjectManager.singleton.InstantiatePlayerObject(targetPos, rotation);
+        clone.GetComponent<Player>().PlayerName = PlayerName;
+        return clone;
+    }
+
+    public virtual int CompareTo(Player other)
+    {
+        return 0;
     }
 }
