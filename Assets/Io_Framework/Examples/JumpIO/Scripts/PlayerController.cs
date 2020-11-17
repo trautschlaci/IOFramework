@@ -121,8 +121,6 @@ public class PlayerController : MonoBehaviour
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
 
         jumpPressed = false;
-
-        animator.SetBool(MidAirParamID, true);
     }
 
     void Move()
