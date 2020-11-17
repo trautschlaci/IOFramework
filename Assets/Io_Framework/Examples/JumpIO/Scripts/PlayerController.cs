@@ -6,11 +6,12 @@ public class PlayerController : MonoBehaviour
 {
     public float RunSpeed = 4f;
     public float JumpForce = 6f;
-    public float JumpHoldForce = 1f;
-    public float JumpHoldDuration = 0.1f;
+    public float JumpHoldForce = 0.6f;
+    public float JumpHoldDuration = 0.2f;
     public float CoyoteDuration = 0.1f;
     public float JumpBuffer = 0.1f;
     public float MaxFallSpeed = -12f;
+    public int ExtraJumps;
 
     public Transform LeftFoot;
     public Transform RightFoot;
@@ -28,6 +29,7 @@ public class PlayerController : MonoBehaviour
     private float coyoteTime;
     private float jumpBufferTime;
     private float jumpTime;
+    private int extraJumpCount;
     private float horizontal;
 
     void Start()
@@ -52,7 +54,7 @@ public class PlayerController : MonoBehaviour
     {
         CheckGround();
 
-        Jump();
+        AirMovement();
 
         Move();
 
@@ -71,27 +73,41 @@ public class PlayerController : MonoBehaviour
         {
             isGrounded = true;
             coyoteTime = Time.time + CoyoteDuration;
+            extraJumpCount = ExtraJumps;
+        }
+    }
+
+    void AirMovement()
+    {
+        if (jumpTime <= Time.time)
+            isJumping = false;
+
+        if ((isGrounded || coyoteTime > Time.time) && (jumpBufferTime > Time.time || jumpPressed && jumpHeld) && !isJumping)
+        {
+            Jump();
+            return;
+        }
+
+        if (jumpPressed && extraJumpCount > 0)
+        {
+            Jump();
+            extraJumpCount--;
+            return;
+        }
+
+        if (isJumping && jumpHeld)
+        {
+            rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
         }
     }
 
     void Jump()
     {
-        if ((jumpBufferTime > Time.time || jumpPressed && jumpHeld) && !isJumping && (isGrounded || coyoteTime > Time.time))
-        {
-            isJumping = true;
-            jumpTime = Time.time + JumpHoldDuration;
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+        isJumping = true;
+        jumpTime = Time.time + JumpHoldDuration;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
 
-            jumpPressed = false;
-        }
-        else if (isJumping)
-        {
-            if (jumpHeld)
-                rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
-
-            if (jumpTime <= Time.time)
-                isJumping = false;
-        }
+        jumpPressed = false;
     }
 
     void Move()

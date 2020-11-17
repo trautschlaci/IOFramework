@@ -394,10 +394,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RunSpeed: 4
   JumpForce: 6
-  JumpHoldForce: 1
-  JumpHoldDuration: 0.1
+  JumpHoldForce: 0.6
+  JumpHoldDuration: 0.2
   CoyoteDuration: 0.1
+  JumpBuffer: 0.1
   MaxFallSpeed: -12
+  ExtraJumps: 0
   LeftFoot: {fileID: 1843990536}
   RightFoot: {fileID: 1223602327}
   GroundCheckDistance: 0.05
