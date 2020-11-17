@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    public Animator animator;
     public float RunSpeed = 4f;
     public float JumpForce = 6f;
     public float JumpHoldForce = 0.6f;
@@ -32,9 +33,16 @@ public class PlayerController : MonoBehaviour
     private int extraJumpCount;
     private float horizontal;
 
+    private int SpeedParamID;
+    private int VerticalVelocityParamID;
+    private int MidAirParamID;
+
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        SpeedParamID = Animator.StringToHash("Speed");
+        VerticalVelocityParamID = Animator.StringToHash("VerticalVelocity");
+        MidAirParamID = Animator.StringToHash("IsMidAir");
     }
 
     void Update()
@@ -48,6 +56,10 @@ public class PlayerController : MonoBehaviour
         }
 
         jumpHeld = Input.GetButton("Jump");
+
+        animator.SetBool(MidAirParamID, !isGrounded);
+        animator.SetFloat(SpeedParamID, Mathf.Abs(horizontalMove));
+        animator.SetFloat(VerticalVelocityParamID, rigidBody.velocity.y);
     }
 
     void FixedUpdate()
@@ -72,6 +84,7 @@ public class PlayerController : MonoBehaviour
         if (leftCheck || rightCheck)
         {
             isGrounded = true;
+            isJumping = false;
             coyoteTime = Time.time + CoyoteDuration;
             extraJumpCount = ExtraJumps;
         }
@@ -108,6 +121,8 @@ public class PlayerController : MonoBehaviour
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
 
         jumpPressed = false;
+
+        animator.SetBool(MidAirParamID, true);
     }
 
     void Move()
