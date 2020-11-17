@@ -4,11 +4,13 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public float RunSpeed = 10f;
-    public float JumpForce = 2f;
-    public float JumpHoldForce = 0.5f;
-    public float JumpHoldDuration = 0.2f;
+    public float RunSpeed = 4f;
+    public float JumpForce = 6f;
+    public float JumpHoldForce = 1f;
+    public float JumpHoldDuration = 0.1f;
     public float CoyoteDuration = 0.1f;
+    public float JumpBuffer = 0.1f;
+    public float MaxFallSpeed = -12f;
 
     public Transform LeftFoot;
     public Transform RightFoot;
@@ -24,7 +26,9 @@ public class PlayerController : MonoBehaviour
     private bool jumpPressed;
     private bool jumpHeld;
     private float coyoteTime;
+    private float jumpBufferTime;
     private float jumpTime;
+    private float horizontal;
 
     void Start()
     {
@@ -33,13 +37,12 @@ public class PlayerController : MonoBehaviour
 
     void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
-        horizontal = Mathf.Clamp(horizontal, -1f, 1f);
-        horizontalMove = horizontal * RunSpeed;
+        horizontal = Input.GetAxis("Horizontal");
 
         if (Input.GetButtonDown("Jump"))
         {
             jumpPressed = true;
+            jumpBufferTime = Time.time + JumpBuffer;
         }
 
         jumpHeld = Input.GetButton("Jump");
@@ -52,15 +55,9 @@ public class PlayerController : MonoBehaviour
         Jump();
 
         Move();
-    }
 
-    void FlipCharacterDirection()
-    {
-        playerDir *= -1;
-
-        Vector3 scale = transform.localScale;
-        scale.x *= -1;
-        transform.localScale = scale;
+        if (rigidBody.velocity.y < MaxFallSpeed)
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxFallSpeed);
     }
 
     void CheckGround()
@@ -79,11 +76,12 @@ public class PlayerController : MonoBehaviour
 
     void Jump()
     {
-        if (jumpPressed && !isJumping && (isGrounded || coyoteTime > Time.time))
+        if ((jumpBufferTime > Time.time || jumpPressed && jumpHeld) && !isJumping && (isGrounded || coyoteTime > Time.time))
         {
             isJumping = true;
             jumpTime = Time.time + JumpHoldDuration;
-            rigidBody.AddForce(new Vector2(0f, JumpForce), ForceMode2D.Impulse);
+            rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+
             jumpPressed = false;
         }
         else if (isJumping)
@@ -98,9 +96,20 @@ public class PlayerController : MonoBehaviour
 
     void Move()
     {
+        horizontalMove = horizontal * RunSpeed;
+
         if (horizontalMove * playerDir < 0f)
             FlipCharacterDirection();
 
-        rigidBody.velocity = new Vector2(horizontalMove, rigidBody.velocity.y);
+        rigidBody.velocity = new Vector2(horizontalMove * Time.deltaTime * 50f, rigidBody.velocity.y);
+    }
+
+    void FlipCharacterDirection()
+    {
+        playerDir *= -1;
+
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }
