@@ -23,6 +23,15 @@ public class IoNetworkManager : NetworkManager
     {
     }
 
+    public override void OnValidate()
+    {
+        base.OnValidate();
+        if (playerPrefab.GetComponent<Player>() == null)
+        {
+            Debug.LogError("IoNetworkManager: playerPrefab must have Player script");
+        }
+    }
+
     public override void OnStartClient()
     {
         base.OnStartClient();
@@ -35,24 +44,32 @@ public class IoNetworkManager : NetworkManager
 
     public override void OnClientConnect(NetworkConnection conn)
     {
-        base.OnClientConnect(conn);
+        if (!clientLoadedScene)
+        {
+            if (!ClientScene.ready) ClientScene.Ready(conn);
+            if (autoCreatePlayer)
+            {
+                conn.Send(new CreatePlayerMessage { Name = PlayerName });
+            }
+        }
 
-        // tell the server to create a player with this name
-        conn.Send(new CreatePlayerMessage { Name = PlayerName });
-        IndexUI.SetActive(false);
+        if(IndexUI != null)
+            IndexUI.SetActive(false);
     }
 
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         base.OnClientDisconnect(conn);
-        IndexUI.SetActive(true);
+        if (IndexUI != null)
+            IndexUI.SetActive(true);
     }
 
     public override void OnStartServer()
     {
         base.OnStartServer();
         NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
-        IndexUI.SetActive(false);
+        if (IndexUI != null)
+            IndexUI.SetActive(false);
     }
 
     void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)

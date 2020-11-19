@@ -11,7 +11,9 @@ GameObject:
   - component: {fileID: 4175856779584103703}
   - component: {fileID: 4161820184358463473}
   - component: {fileID: 7968792352193325684}
+  - component: {fileID: 8826335379783656831}
   - component: {fileID: 3938522905339874236}
+  - component: {fileID: 6007221086707126975}
   m_Layer: 11
   m_Name: Pineapple
   m_TagString: Untagged
@@ -102,6 +104,32 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!61 &8826335379783656831
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304267130202560207}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0.000000022351742, y: -0.011386216}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.64, y: 0.64}
+    newSize: {x: 0.64, y: 0.64}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 0.23515682, y: 0.33383727}
+  m_EdgeRadius: 0
 --- !u!114 &3938522905339874236
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,3 +145,19 @@ MonoBehaviour:
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
   Duration: 30
+--- !u!114 &6007221086707126975
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3304267130202560207}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0

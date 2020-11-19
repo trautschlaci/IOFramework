@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Mirror;
 using UnityEngine;
@@ -21,7 +22,7 @@ public class ObjectSpawner: NetworkBehaviour
 
     public override void OnStartServer()
     {
-        if (SelectableObjectsToSpawn.Any(spawnObject => !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
+        if (SelectableObjectsToSpawn.Any(spawnObject => spawnObject.GameObject != null && !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
         {
             Debug.LogError("Prefabs to spawn should also be added to the list of the NetworkManager");
             return;
@@ -95,6 +96,5 @@ public class ObjectSpawner: NetworkBehaviour
 public struct WeightedGameObject
 {
     public GameObject GameObject;
-    [Min(1)]
     public int Weight;
 }

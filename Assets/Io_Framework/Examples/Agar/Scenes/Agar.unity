@@ -784,7 +784,6 @@ GameObject:
   - component: {fileID: 932390531997312464}
   - component: {fileID: 768346429}
   - component: {fileID: 3755292829450704552}
-  - component: {fileID: 3755292829450704554}
   - component: {fileID: 768346430}
   m_Layer: 8
   m_Name: Map
@@ -1473,12 +1472,12 @@ MonoBehaviour:
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 5558229976809921361, guid: 2db5e3cb747244b4c8fff22d390d9722,
     type: 3}
-  autoCreatePlayer: 0
+  autoCreatePlayer: 1
   playerSpawnMethod: 0
   spawnPrefabs:
   - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
   IndexUI: {fileID: 1722162813}
-  SpawnPointSelector: {fileID: 3755292829450704554}
+  SpawnPointSelector: {fileID: 1442107166}
   SpawnRetryDelay: 0.01
   SpawnTimeout: 2
 --- !u!4 &1370688050
@@ -1565,6 +1564,54 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1442107165
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1442107167}
+  - component: {fileID: 1442107166}
+  m_Layer: 0
+  m_Name: PlayerSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1442107166
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442107165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionSelector: {fileID: 3755292829450704552}
+  SafeRadius: 1
+  CheckLayers:
+    serializedVersion: 2
+    m_Bits: 768
+--- !u!4 &1442107167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442107165}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 5.3194613, y: 0.21020144, z: -3.4816368}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1644919967
 GameObject:
@@ -2175,23 +2222,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SpawnArea: {fileID: 430430667}
---- !u!114 &3755292829450704554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 768346428}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  PositionSelector: {fileID: 3755292829450704552}
-  SafeRadius: 1
-  CheckLayers:
-    serializedVersion: 2
-    m_Bits: 768
 --- !u!4 &5859415596321193029
 Transform:
   m_ObjectHideFlags: 0

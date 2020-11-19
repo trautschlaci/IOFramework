@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7863303587250705089}
   - component: {fileID: 7863303587250705090}
   - component: {fileID: 7863303587250705091}
+  - component: {fileID: 6576457434492123952}
   m_Layer: 11
   m_Name: Apple
   m_TagString: Untagged
@@ -145,3 +146,19 @@ MonoBehaviour:
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
   Duration: 30
+--- !u!114 &6576457434492123952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7863303587250705094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+  hasSpawned: 0
