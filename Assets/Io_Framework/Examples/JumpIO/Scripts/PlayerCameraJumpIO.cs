@@ -14,6 +14,7 @@ public class PlayerCameraJumpIO : NetworkBehaviour
         if (cameraBrain == null)
         {
             Debug.LogError("CinemachineBrain missing from main camera");
+            return;
         }
         cinemachineCamera = cameraBrain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
         cinemachineCamera.Follow = transform;
