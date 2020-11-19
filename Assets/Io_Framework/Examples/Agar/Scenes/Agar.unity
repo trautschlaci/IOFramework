@@ -830,7 +830,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 132579361
-  m_SortingLayer: -1
+  m_SortingLayer: -2
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: 66e163a567be8004d9ddb3fff5c6438b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1528,12 +1528,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   SelectableObjectsToSpawn:
-  - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
+  - GameObject: {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c,
+      type: 3}
+    Weight: 1
   RandomPositionSelector: {fileID: 3755292829450704552}
   AutoStartSpawning: 1
   MinSpawnDelay: 0.1
   MaxSpawnDelay: 0.1
-  ChanceOfSpawning: 1
   BulkSpawn: 10
 --- !u!114 &1425738888
 MonoBehaviour:
@@ -2188,6 +2189,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PositionSelector: {fileID: 3755292829450704552}
   SafeRadius: 1
+  CheckLayers:
+    serializedVersion: 2
+    m_Bits: 768
 --- !u!4 &5859415596321193029
 Transform:
   m_ObjectHideFlags: 0

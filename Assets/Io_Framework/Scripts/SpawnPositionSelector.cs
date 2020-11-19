@@ -6,19 +6,13 @@ public class SpawnPositionSelector : MonoBehaviour
 {
     public RandomPositionSelector PositionSelector;
     public float SafeRadius = 1.0f;
-
-    private LayerMask _mask;
-
-    void Awake()
-    {
-        _mask = LayerMask.GetMask("Player", "Obstacle");
-    }
+    public LayerMask CheckLayers;
 
     public bool SelectSpawnPosition(out Vector3 spawnPosition)
     {
         var position = PositionSelector.RandomPosition();
 
-        if (Physics2D.OverlapCircle(position, SafeRadius, _mask) != null)
+        if (Physics2D.OverlapCircle(position, SafeRadius, CheckLayers) != null)
         {
             spawnPosition = position;
             return false;

@@ -1,19 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 
 public class ObjectSpawner: NetworkBehaviour
 {
-    public List<GameObject> SelectableObjectsToSpawn;
+    public List<WeightedGameObject> SelectableObjectsToSpawn;
     public RandomPositionSelector RandomPositionSelector;
     public bool AutoStartSpawning = true;
     public float MinSpawnDelay = 0.1f;
     public float MaxSpawnDelay = 0.1f;
-    [Range(0.0f, 1.0f)]
-    public float ChanceOfSpawning = 1.0f;
     public int BulkSpawn = 1;
 
     protected bool IsStopped;
@@ -21,7 +21,7 @@ public class ObjectSpawner: NetworkBehaviour
 
     public override void OnStartServer()
     {
-        if (SelectableObjectsToSpawn.Any(spawnObject => !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject)))
+        if (SelectableObjectsToSpawn.Any(spawnObject => !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
         {
             Debug.LogError("Prefabs to spawn should also be added to the list of the NetworkManager");
             return;
@@ -32,21 +32,21 @@ public class ObjectSpawner: NetworkBehaviour
     }
 
     [Server]
-    public virtual void StartSpawning()
+    public void StartSpawning()
     {
         IsStopped = false;
         StartCoroutine(ExecuteSpawning());
     }
 
     [Server]
-    public virtual void StopSpawning()
+    public void StopSpawning()
     {
         IsStopped = true;
     }
 
 
     [Server]
-    protected virtual IEnumerator ExecuteSpawning()
+    private IEnumerator ExecuteSpawning()
     {
         while (!IsStopped)
         {
@@ -59,19 +59,42 @@ public class ObjectSpawner: NetworkBehaviour
     [Server]
     protected virtual GameObject SelectObjectToSpawn()
     {
-        return SelectableObjectsToSpawn[Random.Range(0, SelectableObjectsToSpawn.Count)];
+        var weightSum = 0;
+        foreach (var weightedGo in SelectableObjectsToSpawn) weightSum += weightedGo.Weight;
+
+
+        var randomWeight = Random.Range(0, weightSum);
+        foreach (var weightedGo in SelectableObjectsToSpawn)
+        {
+            randomWeight -= weightedGo.Weight;
+            if (randomWeight < 0)
+            {
+                return weightedGo.GameObject;
+            }
+        }
+
+        return null;
     }
 
     [Server]
     public virtual void Spawn()
     {
-        var randomFloat = Random.Range(0.0f, 1.0f);
-        if (randomFloat > ChanceOfSpawning)
-            return;
-
         var target = RandomPositionSelector.RandomPosition();
+        var selectedGo = SelectObjectToSpawn();
 
-        var spawnGameObject = Instantiate(SelectObjectToSpawn(), target, Quaternion.identity);
-        NetworkServer.Spawn(spawnGameObject);
+        if (selectedGo != null)
+        {
+            var spawnGameObject = Instantiate(selectedGo, target, Quaternion.identity);
+            NetworkServer.Spawn(spawnGameObject);
+        }
     }
+}
+
+
+[Serializable]
+public struct WeightedGameObject
+{
+    public GameObject GameObject;
+    [Min(1)]
+    public int Weight;
 }

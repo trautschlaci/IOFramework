@@ -6,6 +6,7 @@ using UnityEngine.Tilemaps;
 public class TilemapRandomPositionSelector : RandomPositionSelector
 {
     public Tilemap TilemapToUse;
+    // Area
 
     private List<Vector3> emptyPositions;
     private BoundsInt tilemapBounds;
