@@ -145,7 +145,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
-  Duration: 30
+  Duration: 20
+  JumpForceModifier: 4
 --- !u!114 &-7814679100696398315
 MonoBehaviour:
   m_ObjectHideFlags: 0
