@@ -101,7 +101,7 @@ public class PlayerController : MonoBehaviour
             return;
         }
 
-        if (jumpPressed && extraJumpCount > 0)
+        if (jumpPressed && extraJumpCount > 0 && !isGrounded)
         {
             Jump();
             extraJumpCount--;
@@ -111,6 +111,11 @@ public class PlayerController : MonoBehaviour
         if (isJumping && jumpHeld)
         {
             rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
+        }
+
+        if (isGrounded)
+        {
+            jumpPressed = false;
         }
     }
 
