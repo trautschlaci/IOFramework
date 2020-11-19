@@ -209,7 +209,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   PlayerName: 
-  VisRange: 10
+  ViewRange: 10
   playerScore: {fileID: 255147376077071153}
   _speed: 300
   _jumpSpeed: 50
@@ -289,6 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  VisRange: 1
   visUpdateInterval: 0.1
   forceHidden: 0
 --- !u!1 &8610653202088646369

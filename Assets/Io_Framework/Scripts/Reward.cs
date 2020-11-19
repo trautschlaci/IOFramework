@@ -1,18 +1,18 @@
 ﻿using UnityEngine;
 
-public class Edible : MonoBehaviour
+public class Reward : MonoBehaviour
 {
-    public bool IsEdible = true;
+    public bool IsAvailable = true;
     public int ConstantScore = 0;
 
-    public virtual void SetEdible(bool value)
+    public virtual void SetAvailable(bool value)
     {
-        IsEdible = value;
+        IsAvailable = value;
     }
 
     public virtual bool CanBeEatenBy(GameObject other)
     {
-        return IsEdible;
+        return IsAvailable;
     }
 
     public virtual int EarnedScore()

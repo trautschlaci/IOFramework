@@ -76,15 +76,15 @@ public class AgarPlayer : CloneablePlayerObject
     [ServerCallback]
     void OnTriggerStay2D(Collider2D other)
     {
-        Edible edible = other.GetComponent<Edible>();
-        if (edible == null)
+        Reward reward = other.GetComponent<Reward>();
+        if (reward == null)
             return;
 
-        if (edible.CanBeEatenBy(gameObject))
+        if (reward.CanBeEatenBy(gameObject))
         {
-            playerScore.Score += edible.EarnedScore();
-            edible.SetEdible(false);
-            edible.Destroy();
+            playerScore.Score += reward.EarnedScore();
+            reward.SetAvailable(false);
+            reward.Destroy();
         }
     }
 

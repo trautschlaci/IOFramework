@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class Food : Edible
+public class Food : Reward
 {
     public override bool CanBeEatenBy(GameObject other)
     {

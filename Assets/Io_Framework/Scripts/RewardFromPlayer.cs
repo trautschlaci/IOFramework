@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class EdiblePlayer : Edible
+public class RewardFromPlayer : Reward
 {
     public Player playerObject;
     public PlayerScore playerScore;
