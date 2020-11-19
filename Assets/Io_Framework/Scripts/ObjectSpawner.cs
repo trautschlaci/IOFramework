@@ -96,5 +96,6 @@ public class ObjectSpawner: NetworkBehaviour
 public struct WeightedGameObject
 {
     public GameObject GameObject;
+    [DefaultValue(1)]
     public int Weight;
 }

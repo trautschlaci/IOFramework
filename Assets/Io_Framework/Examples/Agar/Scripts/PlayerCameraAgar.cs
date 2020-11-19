@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PlayerCamera2D : NetworkBehaviour
+public class PlayerCameraAgar : NetworkBehaviour
 {
     public Transform LocalCameraTransform;
 
