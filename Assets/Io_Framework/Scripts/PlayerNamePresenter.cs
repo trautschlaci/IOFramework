@@ -12,5 +12,8 @@ public class PlayerNamePresenter : MonoBehaviour
     {
         nameText.text = player.PlayerName;
         nameText.transform.rotation = Camera.main.transform.rotation;
+        var scale = nameText.transform.localScale;
+        scale.x = player.transform.localScale.x;
+        nameText.transform.localScale = scale;
     }
 }
