@@ -9,13 +9,13 @@ public class CloneablePlayerObject : Player
     public override void OnStartServer()
     {
         base.OnStartServer();
-        PlayerObjectManager.singleton.AddPlayerObject(PlayerId, this);
+        PlayerObjectManager.singleton.AddPlayerObject(connectionToClient.connectionId, this);
     }
 
     [Server]
     public override void Destroy()
     {
-        PlayerObjectManager.singleton.DeleteGameObject(PlayerId, this);
+        PlayerObjectManager.singleton.DeleteGameObject(connectionToClient.connectionId, this);
         base.Destroy();
     }
 

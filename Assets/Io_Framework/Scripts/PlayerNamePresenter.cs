@@ -5,17 +5,23 @@ using UnityEngine;
 
 public class PlayerNamePresenter : MonoBehaviour
 {
-    public Player player;
+    public Player PlayerToPresent;
     public TextMeshPro nameText;
 
     private int direction = 1;
 
-    public virtual void Update()
+    void Start()
     {
-        nameText.text = player.PlayerName;
+        if(PlayerToPresent == null)
+            PlayerToPresent = GetComponent<Player>();
+    }
+
+    void Update()
+    {
+        nameText.text = PlayerToPresent.PlayerName;
         nameText.transform.rotation = Camera.main.transform.rotation;
         var scale = nameText.transform.localScale;
-        if (player.transform.localScale.x * direction < 0)
+        if (PlayerToPresent.transform.localScale.x * direction < 0)
         {
             direction *= -1;
             scale.x *= -1;

@@ -244,7 +244,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 1
   syncInterval: 0.1
-  playerObject: {fileID: 4624760001123339452}
   score: 0
 --- !u!114 &8690573829068873889
 MonoBehaviour:
@@ -258,7 +257,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8e0b6405470245489630e296dd1eb79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 4624760001123339452}
+  PlayerToPresent: {fileID: 4624760001123339452}
   nameText: {fileID: 2041183540282151901}
 --- !u!114 &-7420083910260204189
 MonoBehaviour:

@@ -10,7 +10,12 @@ public class StompPlayer : RewardBase
     public float CheckDistance = 0.05f;
     public LayerMask PlayerLayer;
 
-    public Player PlayerObject;
+    private Player player;
+
+    void Start()
+    {
+        player = GetComponent<Player>();
+    }
 
     void FixedUpdate()
     {
@@ -40,6 +45,6 @@ public class StompPlayer : RewardBase
 
     public override void Destroy()
     {
-        PlayerObject.Destroy();
+        player.Destroy();
     }
 }

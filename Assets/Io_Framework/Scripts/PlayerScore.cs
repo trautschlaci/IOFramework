@@ -6,7 +6,8 @@ using Mirror;
 
 public class PlayerScore : NetworkBehaviour
 {
-    public Player playerObject;
+    // Server
+    private Player playerObject;
 
     [SyncVar(hook = nameof(SetScoreClient))]
     public int score;
@@ -33,6 +34,7 @@ public class PlayerScore : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        playerObject = GetComponent<Player>();
         _leaderBoard = FindObjectOfType<LeaderBoard>();
         OnScoreChangedServer += ScoreChangedServer;
         OnScoreChangedServer?.Invoke(0, score);
@@ -42,13 +44,13 @@ public class PlayerScore : NetworkBehaviour
     [Server]
     private void ScoreChangedServer(int oldScore, int newScore)
     {
-        _leaderBoard.ChangeScore(playerObject.PlayerId, playerObject.PlayerName, newScore-oldScore);
+        _leaderBoard.ChangeScore(connectionToClient.connectionId, playerObject.PlayerName, newScore-oldScore);
     }
 
     [Server]
     private void PlayerDestroyed()
     {
-        _leaderBoard.RemoveScore(playerObject.PlayerId, score);
+        _leaderBoard.RemoveScore(connectionToClient.connectionId, score);
     }
 
 }

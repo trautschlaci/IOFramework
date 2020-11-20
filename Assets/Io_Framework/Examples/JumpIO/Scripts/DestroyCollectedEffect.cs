@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectedEffectDestroy : MonoBehaviour
+public class DestroyCollectedEffect : MonoBehaviour
 {
     public void DestroyGameObject()
     {

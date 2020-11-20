@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    public Animator animator;
     public float RunSpeed = 4f;
     public float JumpForce = 6f;
     public float JumpHoldForce = 0.6f;
@@ -18,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public Transform RightFoot;
     public float GroundCheckDistance = 0.05f;
     public LayerMask GroundLayers;
+
 
     private Rigidbody2D rigidBody;
     private float horizontalMove;
@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour
     private int extraJumpCount;
     private float horizontal;
 
+    private Animator animator;
     private int SpeedParamID;
     private int VerticalVelocityParamID;
     private int MidAirParamID;
@@ -48,6 +49,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        animator = GetComponent<Animator>();
         rigidBody = GetComponent<Rigidbody2D>();
         SpeedParamID = Animator.StringToHash("Speed");
         VerticalVelocityParamID = Animator.StringToHash("VerticalVelocity");
