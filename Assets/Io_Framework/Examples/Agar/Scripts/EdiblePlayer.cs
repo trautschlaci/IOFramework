@@ -5,9 +5,6 @@ using UnityEngine;
 
 public class EdiblePlayer : Food
 {
-    public Player playerObject;
-    public PlayerScore playerScore;
-
     [Range(0.0f, 1.0f)]
     public float ScoreDecay;
 
@@ -19,11 +16,11 @@ public class EdiblePlayer : Food
 
     public override int EarnedScore()
     {
-        return base.EarnedScore() + (int)((1.0f-ScoreDecay) * playerScore.Score);
+        return base.EarnedScore() + (int)((1.0f-ScoreDecay) * GetComponent<PlayerScore>().Score);
     }
 
     public override void Destroy()
     {
-        playerObject.Destroy();
+        GetComponent<Player>().Destroy();
     }
 }
