@@ -37,6 +37,15 @@ public class PlayerController : MonoBehaviour
     private int VerticalVelocityParamID;
     private int MidAirParamID;
 
+    public void Jump()
+    {
+        isJumping = true;
+        jumpTime = Time.time + JumpHoldDuration;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+
+        jumpPressed = false;
+    }
+
     void Start()
     {
         rigidBody = GetComponent<Rigidbody2D>();
@@ -117,15 +126,6 @@ public class PlayerController : MonoBehaviour
         {
             jumpPressed = false;
         }
-    }
-
-    void Jump()
-    {
-        isJumping = true;
-        jumpTime = Time.time + JumpHoldDuration;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
-
-        jumpPressed = false;
     }
 
     void Move()

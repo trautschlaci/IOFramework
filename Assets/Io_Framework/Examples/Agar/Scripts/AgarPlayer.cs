@@ -73,21 +73,6 @@ public class AgarPlayer : CloneablePlayerObject
         }
     }
 
-    [ServerCallback]
-    void OnTriggerStay2D(Collider2D other)
-    {
-        Reward reward = other.GetComponent<Reward>();
-        if (reward == null)
-            return;
-
-        if (reward.CanBeEatenBy(gameObject))
-        {
-            playerScore.Score += reward.EarnedScore();
-            reward.SetAvailable(false);
-            reward.Destroy();
-        }
-    }
-
     private float CalculateSize(int score)
     {
         return (float) Math.Sqrt(1.0f + score / (2*(float)Math.PI));

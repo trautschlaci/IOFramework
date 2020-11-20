@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class RewardFromPlayer : Reward
+public class EdiblePlayer : Food
 {
     public Player playerObject;
     public PlayerScore playerScore;
@@ -11,11 +11,10 @@ public class RewardFromPlayer : Reward
     [Range(0.0f, 1.0f)]
     public float ScoreDecay;
 
-    public override bool CanBeEatenBy(GameObject other)
+    public override bool CanBeGivenToOther(GameObject other)
     {
-        return Vector3.Distance(transform.position, other.gameObject.transform.position) < other.GetComponent<Collider2D>().bounds.extents.x
-               && GetComponent<Collider2D>().bounds.extents.x < 0.9f * other.GetComponent<Collider2D>().bounds.extents.x
-               && base.CanBeEatenBy(other);
+        return base.CanBeGivenToOther(other) 
+               && GetComponent<Collider2D>().bounds.extents.x < 0.9f * other.GetComponent<Collider2D>().bounds.extents.x;
     }
 
     public override int EarnedScore()
