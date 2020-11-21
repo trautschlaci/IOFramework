@@ -12,16 +12,19 @@ public class StompPlayer : RewardBase
 
     private Player player;
 
+    [ServerCallback]
     void Start()
     {
         player = GetComponent<Player>();
     }
 
+    [ServerCallback]
     void FixedUpdate()
     {
         CheckAboveHead();
     }
 
+    [Server]
     void CheckAboveHead()
     {
         RaycastHit2D leftCheck = Physics2D.Raycast(HeadLeft.position, Vector2.up, CheckDistance, PlayerLayer);
@@ -37,12 +40,14 @@ public class StompPlayer : RewardBase
         }
     }
 
+    [Server]
     public override void ClaimReward(GameObject player)
     {
         player.GetComponent<PlayerController>().Jump();
         base.ClaimReward(player);
     }
 
+    [Server]
     public override void Destroy()
     {
         player.Destroy();

@@ -144,7 +144,7 @@ public class PlayerController : NetworkBehaviour
 
     public override void OnStartServer()
     {
-        animatorUpdateTime = Time.time + 0.1f;
+        animatorUpdateTime = Time.time + 0.2f;
     }
 
     [ServerCallback]

@@ -1,25 +1,22 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
 public class JumpIOPlayer : Player
 {
-    private Animator animator;
-    private int IsDeadParamID;
+    public GameObject DeathEffect;
 
-    void Start()
-    {
-        animator = GetComponent<Animator>();
-        IsDeadParamID = Animator.StringToHash("IsDead");
-    }
-
+    [Server]
     public override void Destroy()
     {
-        animator.SetBool(IsDeadParamID, true);
+        RpcPlayDeathEffect();
+        base.Destroy();
     }
 
-    public void ExecuteDestroy()
+    [ClientRpc]
+    public void RpcPlayDeathEffect()
     {
-        base.Destroy();
+        Instantiate(DeathEffect, transform.position, transform.rotation);
     }
 }

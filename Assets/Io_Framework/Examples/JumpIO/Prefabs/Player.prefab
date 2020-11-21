@@ -153,6 +153,8 @@ MonoBehaviour:
   syncInterval: 0.1
   PlayerName: 
   ViewRange: 10
+  DeathEffect: {fileID: 3309395023284569683, guid: 4aed0573f2b24e9479227867cd312352,
+    type: 3}
 --- !u!212 &3028412526428875683
 SpriteRenderer:
   m_ObjectHideFlags: 0
