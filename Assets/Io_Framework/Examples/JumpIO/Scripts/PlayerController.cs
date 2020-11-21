@@ -240,7 +240,7 @@ public class PlayerController : NetworkBehaviour
     {
         animatorInfo = new AnimatorVariables()
         {
-            IsFalling = rigidBody.velocity.y < 0,
+            IsFalling = rigidBody.velocity.y < -0.01f,
             IsMidAir = !isGrounded,
             IsRunning = Mathf.Abs(horizontalMove) > 0.01f,
         };
