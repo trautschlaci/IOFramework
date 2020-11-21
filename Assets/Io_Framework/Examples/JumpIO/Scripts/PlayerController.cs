@@ -14,26 +14,42 @@ public class PlayerController : NetworkBehaviour
     public float MaxFallSpeed = -12f;
     public int ExtraJumps;
     public float MovementSmoothing = 0.1f;
+    public float AnimationSyncInterval = 0.01f;
 
     public Transform LeftFoot;
     public Transform RightFoot;
     public float GroundCheckDistance = 0.05f;
     public LayerMask GroundLayers;
 
+    #region Client variables
 
     private Animator animator;
-    private int SpeedParamID;
-    private int VerticalVelocityParamID;
+    private int RunningParamID;
+    private int FallingParamID;
     private int MidAirParamID;
 
+    #endregion
+
+
+    #region Client and Server variables
 
     private Rigidbody2D rigidBody;
     private InputInfo lastInput;
 
+    [SyncVar(hook = nameof(UpdateAnimator))]
+    private AnimatorVariables animatorInfo;
+
+    #endregion
+
+
+    #region Server variables
 
     private float horizontalServer;
     private bool jumpPressedServer;
     private bool jumpHeldServer;
+
+    #endregion
+
 
     private Vector2 velocity = Vector2.zero;
     private float horizontalMove;
@@ -45,6 +61,8 @@ public class PlayerController : NetworkBehaviour
     private float jumpTime;
     private int extraJumpCount;
 
+    private float animatorUpdateTime;
+
     public struct InputInfo
     {
         public int Horizontal;
@@ -52,38 +70,16 @@ public class PlayerController : NetworkBehaviour
         public bool JumpHeld;
     }
 
-    [Server]
-    public void Jump()
+    public struct AnimatorVariables
     {
-        isJumping = true;
-        jumpTime = Time.time + JumpHoldDuration;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
-
-        jumpPressedServer = false;
-    }
-
-    void Start()
-    {
-        GetComponent<Rigidbody2D>().simulated = isServer;
-
-        if (isClient)
-        {
-            animator = GetComponent<Animator>();
-            rigidBody = GetComponent<Rigidbody2D>();
-            SpeedParamID = Animator.StringToHash("Speed");
-            VerticalVelocityParamID = Animator.StringToHash("VerticalVelocity");
-            MidAirParamID = Animator.StringToHash("IsMidAir");
-        }
+        public bool IsRunning;
+        public bool IsFalling;
+        public bool IsMidAir;
     }
 
     [ClientCallback]
     void Update()
     {
-        animator.SetBool(MidAirParamID, !isGrounded);
-        animator.SetFloat(SpeedParamID, Mathf.Abs(horizontalMove));
-        animator.SetFloat(VerticalVelocityParamID, rigidBody.velocity.y);
-
-
         if (!hasAuthority)
             return;
 
@@ -101,6 +97,39 @@ public class PlayerController : NetworkBehaviour
         }
     }
 
+    void Start()
+    {
+        GetComponent<Rigidbody2D>().simulated = isServer;
+
+        if (isClient)
+        {
+            animator = GetComponent<Animator>();
+            rigidBody = GetComponent<Rigidbody2D>();
+            RunningParamID = Animator.StringToHash("IsRunning");
+            FallingParamID = Animator.StringToHash("IsFalling");
+            MidAirParamID = Animator.StringToHash("IsMidAir");
+            UpdateAnimator(new AnimatorVariables(), animatorInfo);
+        }
+    }
+
+    [Client]
+    void UpdateAnimator(AnimatorVariables oldState, AnimatorVariables newState)
+    {
+        animator.SetBool(MidAirParamID, newState.IsMidAir);
+        animator.SetBool(RunningParamID, newState.IsRunning);
+        animator.SetBool(FallingParamID, newState.IsFalling);
+    }
+
+    [Server]
+    public void Jump()
+    {
+        isJumping = true;
+        jumpTime = Time.time + JumpHoldDuration;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+
+        jumpPressedServer = false;
+    }
+
     [Command]
     void CmdSendInputInfo(InputInfo input)
     {
@@ -111,6 +140,11 @@ public class PlayerController : NetworkBehaviour
             jumpPressedServer = true;
             jumpBufferTime = Time.time + JumpBuffer;
         }
+    }
+
+    public override void OnStartServer()
+    {
+        animatorUpdateTime = Time.time + 0.1f;
     }
 
     [ServerCallback]
@@ -124,6 +158,12 @@ public class PlayerController : NetworkBehaviour
 
         if (rigidBody.velocity.y < MaxFallSpeed)
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxFallSpeed);
+
+        if (Time.time > animatorUpdateTime)
+        {
+            UpdateAnimatorState();
+            animatorUpdateTime = Time.time + AnimationSyncInterval;
+        }
     }
 
     [Server]
@@ -193,5 +233,16 @@ public class PlayerController : NetworkBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    [Server]
+    void UpdateAnimatorState()
+    {
+        animatorInfo = new AnimatorVariables()
+        {
+            IsFalling = rigidBody.velocity.y < 0,
+            IsMidAir = !isGrounded,
+            IsRunning = Mathf.Abs(horizontalMove) > 0.01f,
+        };
     }
 }
