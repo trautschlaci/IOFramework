@@ -21,6 +21,7 @@ public class PlayerController : NetworkBehaviour
     public float GroundCheckDistance = 0.05f;
     public LayerMask GroundLayers;
 
+
     #region Client variables
 
     private Animator animator;
@@ -48,9 +49,6 @@ public class PlayerController : NetworkBehaviour
     private bool jumpPressedServer;
     private bool jumpHeldServer;
 
-    #endregion
-
-
     private Vector2 velocity = Vector2.zero;
     private float horizontalMove;
     private int playerDir = 1;
@@ -62,6 +60,8 @@ public class PlayerController : NetworkBehaviour
     private int extraJumpCount;
 
     private float animatorUpdateTime;
+
+    #endregion
 
     public struct InputInfo
     {
