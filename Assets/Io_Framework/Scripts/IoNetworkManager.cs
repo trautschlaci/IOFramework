@@ -67,12 +67,12 @@ public class IoNetworkManager : NetworkManager
     public override void OnStartServer()
     {
         base.OnStartServer();
-        NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayer);
+        NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayerMessage);
         if (IndexUI != null)
             IndexUI.SetActive(false);
     }
 
-    void OnCreatePlayer(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
+    void OnCreatePlayerMessage(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
     {
         StartCoroutine(SpawnPlayer(connection.connectionId, createPlayerMessage.Name));
     }

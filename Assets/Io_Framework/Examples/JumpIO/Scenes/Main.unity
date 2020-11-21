@@ -846,7 +846,7 @@ MonoBehaviour:
   - {fileID: 8452888110254851950, guid: b2a29bc2f447a6d458df13cd8a1261b5, type: 3}
   - {fileID: 2422806767067271991, guid: 78bc046d2083f85448a431ab763df637, type: 3}
   - {fileID: 3304267130202560207, guid: 7314d1258e5da5045892e93ad7a5766d, type: 3}
-  IndexUI: {fileID: 0}
+  IndexUI: {fileID: 1757505718}
   SpawnPointSelector: {fileID: 1165212358}
   SpawnRetryDelay: 0.01
   SpawnTimeout: 2
