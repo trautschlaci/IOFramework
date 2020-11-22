@@ -10,8 +10,6 @@ public abstract class PickUpBase : NetworkBehaviour
     public float Duration = 30.0f;
     public GameObject CollectedEffect;
 
-    private bool didEffect;
-
     [Server]
     public void PickUp(GameObject player)
     {
