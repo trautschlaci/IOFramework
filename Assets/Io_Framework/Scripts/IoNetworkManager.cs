@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
+using UnityEngine.UI;
 
 [AddComponentMenu("")]
 public class IoNetworkManager : NetworkManager
 {
     public GameObject IndexUI;
     public GameObject RestartUI;
+    public InputField RestartNameInputField;
     public GameObject LeaderBoardUI;
     public string PlayerName { get; set; }
     public SpawnPositionSelector SpawnPointSelector;
@@ -79,7 +81,10 @@ public class IoNetworkManager : NetworkManager
     [Client]
     public virtual void RestartPlayerClient()
     {
-        if(RestartUI != null)
+        if (RestartNameInputField != null)
+            RestartNameInputField.text = PlayerName;
+
+        if (RestartUI != null)
             RestartUI.SetActive(true);
     }
 
