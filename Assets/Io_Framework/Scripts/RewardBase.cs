@@ -1,7 +1,7 @@
 ﻿using Mirror;
 using UnityEngine;
 
-public abstract class RewardBase : MonoBehaviour
+public abstract class RewardBase : NetworkBehaviour
 {
     public bool IsAvailable = true;
     public int ConstantScore = 1;

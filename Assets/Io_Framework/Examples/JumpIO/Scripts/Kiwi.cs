@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using UnityEngine;
 
-public class Kiwi : PickUpBase
+public class Kiwi : JumpIOPickUpBase
 {
     public float JumpForceModifier = 4f;
 
-    public override void ApplyEffect(Collider2D player)
+    public override void ApplyEffectServer(GameObject player)
     {
         player.GetComponent<PlayerController>().JumpForce += JumpForceModifier;
     }
 
-    public override void RevertEffect(Collider2D player)
+    public override void RevertEffectServer(GameObject player)
     {
         player.GetComponent<PlayerController>().JumpForce -= JumpForceModifier;
     }

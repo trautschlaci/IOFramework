@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using UnityEngine;
 
-public class Apple : PickUpBase
+public class Apple : JumpIOPickUpBase
 {
     public int ExtraJumpModifier = 1;
 
-    public override void ApplyEffect(Collider2D player)
+    public override void ApplyEffectServer(GameObject player)
     {
         player.GetComponent<PlayerController>().ExtraJumps += ExtraJumpModifier;
     }
 
-    public override void RevertEffect(Collider2D player)
+    public override void RevertEffectServer(GameObject player)
     {
         player.GetComponent<PlayerController>().ExtraJumps -= ExtraJumpModifier;
     }

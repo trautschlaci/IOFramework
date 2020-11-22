@@ -1,57 +1,71 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Mirror;
 using UnityEngine;
 
-public class PickUpBase : MonoBehaviour
+public abstract class PickUpBase : NetworkBehaviour
 {
     public GameObject CollectedEffect;
     public float Duration = 30.0f;
+    public bool IsAvailable = true;
 
-    private bool used;
-
-    void OnTriggerEnter2D(Collider2D other)
+    public void PickUp(GameObject player)
     {
-        if (used) return;
-
-        if (other.CompareTag("Player"))
-        {
-            used = true;
-            StartCoroutine(PickUp(other));
-        }
+        if(IsAvailable)
+            StartCoroutine(PickUpCoroutine(player));
     }
 
-    IEnumerator PickUp(Collider2D player)
+    [Server]
+    private IEnumerator PickUpCoroutine(GameObject player)
     {
-        AddCollectedEffect();
-        DisablePickUp();
+        IsAvailable = false;
+        HideServer();
+        TargetDisplayCollect(player.GetComponent<NetworkBehaviour>().connectionToClient);
+        RpcNotifyClients();
 
         ApplyEffect(player);
 
         yield return new WaitForSeconds(Duration);
 
-        RevertEffect(player);
+        if(player != null)
+            RevertEffect(player);
 
-        Destroy(gameObject);
+        NetworkServer.Destroy(gameObject);
     }
 
-    private void AddCollectedEffect()
+
+    [TargetRpc]
+    public virtual void TargetDisplayCollect(NetworkConnection conn)
     {
         Instantiate(CollectedEffect, transform.position, transform.rotation);
     }
 
-    private void DisablePickUp()
+    [ClientRpc]
+    public virtual void RpcNotifyClients()
     {
-        GetComponent<SpriteRenderer>().enabled = false;
-        GetComponent<Collider2D>().enabled = false;
+        HideClient();
     }
 
-    public virtual void ApplyEffect(Collider2D player)
-    {
-        // Check if player exists
-    }
+    public virtual void RpcApplyEffect(GameObject player){}
 
-    public virtual void RevertEffect(Collider2D player)
-    {
-        // Check if player still exits
-    }
+    public virtual void RpcRevertEffect(GameObject player){}
+
+    public virtual void TargetApplyEffect(NetworkConnection conn, GameObject player){}
+
+    public virtual void TargetRevertEffect(NetworkConnection conn, GameObject player){}
+
+    public virtual void ApplyEffectServer(GameObject player){}
+
+    public virtual void RevertEffectServer(GameObject player){}
+
+
+
+    public abstract void HideClient();
+
+    public abstract void HideServer();
+
+    public abstract void ApplyEffect(GameObject player);
+
+    public abstract void RevertEffect(GameObject player);
 }

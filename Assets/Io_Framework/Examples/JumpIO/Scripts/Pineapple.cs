@@ -1,14 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using UnityEngine;
 
-public class Pineapple : PickUpBase
+public class Pineapple : JumpIOPickUpBase
 {
-    public override void ApplyEffect(Collider2D player)
+    public override void ApplyEffectServer(GameObject player)
     {
     }
 
-    public override void RevertEffect(Collider2D player)
+    public override void RevertEffectServer(GameObject player)
     {
     }
 }
