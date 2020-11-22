@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7863303587250705090}
   - component: {fileID: 7863303587250705091}
   - component: {fileID: 6576457434492123952}
+  - component: {fileID: 1619875215067897657}
   m_Layer: 11
   m_Name: Apple
   m_TagString: Untagged
@@ -143,9 +144,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a37b649f7185b64f81f449d46753965, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  IsAvailable: 1
+  Duration: 20
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
-  Duration: 20
   ExtraJumpModifier: 1
 --- !u!114 &6576457434492123952
 MonoBehaviour:
@@ -163,3 +167,20 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
+--- !u!114 &1619875215067897657
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7863303587250705094}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1731d8de2d0c84333b08ebe1e79f4118, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  visRange: 15
+  visUpdateInterval: 0.2
+  forceHidden: 0
