@@ -7,12 +7,6 @@ using UnityEngine;
 public class Pineapple : JumpIOPickUpBase
 {
     [Server]
-    public override bool CanBeGivenToPlayerServer(GameObject player)
-    {
-        return player.GetComponent<StompPlayer>().IsAvailable;
-    }
-
-    [Server]
     public override void ApplyEffect(GameObject player)
     {
         player.GetComponent<StompPlayer>().IsAvailable = false;

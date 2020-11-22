@@ -145,7 +145,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   IsAvailable: 1
-  Duration: 20
+  Duration: 10
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
 --- !u!114 &6007221086707126975

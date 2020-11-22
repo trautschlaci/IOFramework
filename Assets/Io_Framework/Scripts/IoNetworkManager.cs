@@ -7,6 +7,8 @@ using UnityEngine;
 public class IoNetworkManager : NetworkManager
 {
     public GameObject IndexUI;
+    public GameObject RestartUI;
+    public GameObject LeaderBoardUI;
     public string PlayerName { get; set; }
     public SpawnPositionSelector SpawnPointSelector;
     public float SpawnRetryDelay = 0.01f;
@@ -49,19 +51,36 @@ public class IoNetworkManager : NetworkManager
             if (!ClientScene.ready) ClientScene.Ready(conn);
             if (autoCreatePlayer)
             {
-                conn.Send(new CreatePlayerMessage { Name = PlayerName });
+                CreateNewPlayer();
             }
         }
-
-        if(IndexUI != null)
-            IndexUI.SetActive(false);
     }
 
     public override void OnClientDisconnect(NetworkConnection conn)
     {
         base.OnClientDisconnect(conn);
+
         if (IndexUI != null)
             IndexUI.SetActive(true);
+        
+        if(LeaderBoardUI != null)
+            LeaderBoardUI.SetActive(false);
+
+        if (RestartUI != null)
+            RestartUI.SetActive(false);
+    }
+
+    [Client]
+    public void CreateNewPlayer()
+    {
+        NetworkClient.connection.Send(new CreatePlayerMessage { Name = PlayerName });
+    }
+
+    [Client]
+    public virtual void RestartPlayerClient()
+    {
+        if(RestartUI != null)
+            RestartUI.SetActive(true);
     }
 
     public override void OnStartServer()

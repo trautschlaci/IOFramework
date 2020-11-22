@@ -25,6 +25,7 @@ public class Player : NetworkBehaviour
         Invoke(nameof(ExecuteDestroy), DestroyDelay);
     }
 
+    [Server]
     public virtual void ExecuteDestroy()
     {
         NetworkServer.Destroy(gameObject);

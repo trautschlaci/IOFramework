@@ -10,13 +10,24 @@ public class JumpIOPlayer : Player
     [Server]
     public override void Destroy()
     {
-        RpcPlayDeathEffect();
+        RpcNotifyClients();
+        var _leaderBoard = FindObjectOfType<LeaderBoard>();
+        _leaderBoard.RemovePlayer(connectionToClient.connectionId);
         base.Destroy();
     }
 
     [ClientRpc]
-    public void RpcPlayDeathEffect()
+    public void RpcNotifyClients()
     {
         Instantiate(DeathEffect, transform.position, transform.rotation);
+
+        if (!hasAuthority)
+            return;
+
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
+
+        IoNetworkManager networkManager = (IoNetworkManager) NetworkManager.singleton;
+        networkManager.RestartPlayerClient();
     }
 }
