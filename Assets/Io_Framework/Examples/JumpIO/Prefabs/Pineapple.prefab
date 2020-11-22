@@ -142,9 +142,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 32513846a7dd0be4ca11d71034db6e99, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  IsAvailable: 1
+  Duration: 20
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
-  Duration: 20
 --- !u!114 &6007221086707126975
 MonoBehaviour:
   m_ObjectHideFlags: 0

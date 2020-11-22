@@ -1,18 +1,21 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Assets.Io_Framework.Examples.JumpIO.Scripts;
+using Mirror;
 using UnityEngine;
 
 public class Kiwi : JumpIOPickUpBase
 {
     public float JumpForceModifier = 4f;
 
-    public override void ApplyEffectServer(GameObject player)
+    [Server]
+    public override void ApplyEffect(GameObject player)
     {
         player.GetComponent<PlayerController>().JumpForce += JumpForceModifier;
     }
 
-    public override void RevertEffectServer(GameObject player)
+    [Server]
+    public override void RevertEffect(GameObject player)
     {
         player.GetComponent<PlayerController>().JumpForce -= JumpForceModifier;
     }

@@ -6,10 +6,6 @@ public abstract class RewardBase : NetworkBehaviour
     public bool IsAvailable = true;
     public int ConstantScore = 1;
 
-    public void SetAvailable(bool value)
-    {
-        IsAvailable = value;
-    }
 
     public virtual bool CanBeGivenToOther(GameObject other)
     {
@@ -23,8 +19,8 @@ public abstract class RewardBase : NetworkBehaviour
 
     public virtual void ClaimReward(GameObject other)
     {
+        IsAvailable = false;
         other.GetComponent<PlayerScore>().Score += EarnedScore();
-        SetAvailable(false);
         Destroy();
     }
 

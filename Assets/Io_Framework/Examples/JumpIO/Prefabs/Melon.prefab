@@ -143,9 +143,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ca5426ad965aee469eaf613491362cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  IsAvailable: 1
+  Duration: 20
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
-  Duration: 20
+  SpeedModifier: 2
+  MaxSpeed: 10
 --- !u!114 &5360194215446331902
 MonoBehaviour:
   m_ObjectHideFlags: 0

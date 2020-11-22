@@ -6,13 +6,16 @@ using UnityEngine;
 
 public abstract class PickUpBase : NetworkBehaviour
 {
-    public GameObject CollectedEffect;
-    public float Duration = 30.0f;
     public bool IsAvailable = true;
+    public float Duration = 30.0f;
+    public GameObject CollectedEffect;
 
+    private bool didEffect;
+
+    [Server]
     public void PickUp(GameObject player)
     {
-        if(IsAvailable)
+        if(CanBeGivenToPlayerServer(player))
             StartCoroutine(PickUpCoroutine(player));
     }
 
@@ -21,8 +24,13 @@ public abstract class PickUpBase : NetworkBehaviour
     {
         IsAvailable = false;
         HideServer();
+
         TargetDisplayCollect(player.GetComponent<NetworkBehaviour>().connectionToClient);
         RpcNotifyClients();
+
+
+        if (!CanAffectPlayerServer(player))
+            yield break;
 
         ApplyEffect(player);
 
@@ -47,19 +55,17 @@ public abstract class PickUpBase : NetworkBehaviour
         HideClient();
     }
 
-    public virtual void RpcApplyEffect(GameObject player){}
+    [Server]
+    public virtual bool CanBeGivenToPlayerServer(GameObject player)
+    {
+        return IsAvailable;
+    }
 
-    public virtual void RpcRevertEffect(GameObject player){}
-
-    public virtual void TargetApplyEffect(NetworkConnection conn, GameObject player){}
-
-    public virtual void TargetRevertEffect(NetworkConnection conn, GameObject player){}
-
-    public virtual void ApplyEffectServer(GameObject player){}
-
-    public virtual void RevertEffectServer(GameObject player){}
-
-
+    [Server]
+    public virtual bool CanAffectPlayerServer(GameObject player)
+    {
+        return true;
+    }
 
     public abstract void HideClient();
 

@@ -18574,16 +18574,16 @@ MonoBehaviour:
   SelectableObjectsToSpawn:
   - GameObject: {fileID: 7863303587250705094, guid: 0f10c6fa83d01b54ca2b054a2869c1d0,
       type: 3}
-    Weight: 1
+    Weight: 2
   - GameObject: {fileID: 7550580902942828273, guid: 6622ae2b5a9566249a3a473bd60a7cf7,
       type: 3}
-    Weight: 1
+    Weight: 2
   - GameObject: {fileID: 8452888110254851950, guid: b2a29bc2f447a6d458df13cd8a1261b5,
       type: 3}
-    Weight: 1
+    Weight: 2
   - GameObject: {fileID: 2422806767067271991, guid: 78bc046d2083f85448a431ab763df637,
       type: 3}
-    Weight: 1
+    Weight: 2
   - GameObject: {fileID: 3304267130202560207, guid: 7314d1258e5da5045892e93ad7a5766d,
       type: 3}
     Weight: 1

@@ -35,19 +35,5 @@ namespace Assets.Io_Framework.Examples.JumpIO.Scripts
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
         }
-
-        public override void ApplyEffect(GameObject player)
-        {
-            ApplyEffectServer(player);
-        }
-
-        public override void RevertEffect(GameObject player)
-        {
-            RevertEffectServer(player);
-        }
-
-        public abstract override void ApplyEffectServer(GameObject player);
-
-        public abstract override void RevertEffectServer(GameObject player);
     }
 }
