@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Pineapple : JumpIOPowerUpBase
+public class Pineapple : JumpIO2PowerUpBase
 {
     [Server]
     public override void ApplyEffect(GameObject player)
