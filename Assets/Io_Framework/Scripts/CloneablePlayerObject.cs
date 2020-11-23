@@ -6,6 +6,9 @@ using UnityEngine;
 
 public class CloneablePlayerObject : Player
 {
+    public int MaxNumberOfClones = 20;
+
+    [Server]
     public override void OnStartServer()
     {
         base.OnStartServer();
@@ -25,6 +28,12 @@ public class CloneablePlayerObject : Player
         GameObject clone = PlayerObjectManager.singleton.InstantiatePlayerObject(targetPos, rotation);
         clone.GetComponent<Player>().PlayerName = PlayerName;
         return clone;
+    }
+
+    [Server]
+    public virtual bool CanCreateClone()
+    {
+        return PlayerObjectManager.singleton.GetNumberOfPlayerObjects(connectionToClient.connectionId) <= MaxNumberOfClones;
     }
 
     public virtual int CompareTo(Player other)

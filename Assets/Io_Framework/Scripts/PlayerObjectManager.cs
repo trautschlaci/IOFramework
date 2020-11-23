@@ -113,4 +113,16 @@ public class PlayerObjectManager: MonoBehaviour
 
         return false;
     }
+
+    [Server]
+    public int GetNumberOfPlayerObjects(int playerId)
+    {
+        return _objectsOfPlayers[playerId].Count;
+    }
+
+    [Server]
+    public List<CloneablePlayerObject> GetPlayerObjects(int playerId)
+    {
+        return _objectsOfPlayers[playerId];
+    }
 }

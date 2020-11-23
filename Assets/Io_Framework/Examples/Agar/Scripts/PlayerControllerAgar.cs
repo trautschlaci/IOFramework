@@ -8,14 +8,13 @@ public class PlayerControllerAgar : NetworkBehaviour
 {
     public float Speed = 3.0f;
     public float JumpSpeed = 10.0f;
-    public float MovementSmoothing = 0.1f;
     public float MoveBlockInterval = 0.3f;
     public float InputSyncInterval = 0.1f;
 
 
 
     private float inputSyncTime;
-    private Vector2 moveVectorClient;
+    private Vector2 mousePosClient;
     private bool jumpPressedClient;
     private int frameCount;
 
@@ -27,13 +26,12 @@ public class PlayerControllerAgar : NetworkBehaviour
     private Vector2 moveVectorServer;
     private bool jumpPressedServer;
 
-    private Vector2 velocity = Vector2.zero;
     private float moveBlockTime;
 
 
     public struct InputInfo
     {
-        public Vector2 MoveVector;
+        public Vector2 MousePos;
         public bool JumpPressed;
     }
 
@@ -41,27 +39,22 @@ public class PlayerControllerAgar : NetworkBehaviour
     [ClientCallback]
     private void Update()
     {
-        if (!hasAuthority)
+        if (!isLocalPlayer)
             return;
 
-        Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 target = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
-
-        moveVectorClient += target;
+        mousePosClient = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         jumpPressedClient = jumpPressedClient || Input.GetButtonDown("Jump");
-        frameCount++;
 
         if (inputSyncTime < Time.time)
         {
             var inputInfo = new InputInfo()
             {
-                MoveVector = (moveVectorClient / frameCount).normalized,
+                MousePos = mousePosClient,
                 JumpPressed = jumpPressedClient
             };
 
             CmdSendInputInfo(inputInfo);
 
-            moveVectorClient = Vector2.zero;
             jumpPressedClient = false;
             inputSyncTime = Time.time + InputSyncInterval;
         }
@@ -72,7 +65,14 @@ public class PlayerControllerAgar : NetworkBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.simulated = isServer;
-        //player = GetComponent<AgarPlayer2>();
+        player = GetComponent<AgarPlayer2>();
+    }
+
+    private void Awake()
+    {
+        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.simulated = isServer;
+        player = GetComponent<AgarPlayer2>();
     }
 
 
@@ -82,23 +82,40 @@ public class PlayerControllerAgar : NetworkBehaviour
         Move();
 
         if (jumpPressedServer)
+        {
+            jumpPressedServer = false;
             player.Split(moveVectorServer);
+        }
     }
 
     [Server]
     public void GiveStartVelocity(Vector2 startVelocityDir)
     {
-        moveBlockTime = Time.fixedDeltaTime + MoveBlockInterval;
+        moveBlockTime = Time.fixedTime + MoveBlockInterval;
 
-        Vector2 targetVelocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f / (float)Math.Sqrt(transform.localScale.x);
-        rigidBody.velocity = Vector2.SmoothDamp(rigidBody.velocity, targetVelocity, ref velocity, MovementSmoothing);
+        rigidBody.velocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
     }
 
     [Command]
     private void CmdSendInputInfo(InputInfo input)
     {
-        moveVectorServer = input.MoveVector.normalized;
-        jumpPressedServer = input.JumpPressed;
+        var clones = PlayerObjectManager.singleton.GetPlayerObjects(connectionToClient.connectionId);
+        foreach (var playerClone in clones)
+        {
+            playerClone.GetComponent<PlayerControllerAgar>().UpdateMovement(input);
+        }
+    }
+
+    public void UpdateMovement(InputInfo input)
+    {
+        var mousePos = input.MousePos;
+        moveVectorServer = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
+        
+        if (moveVectorServer.magnitude > 1)
+            moveVectorServer = moveVectorServer.normalized;
+
+        if (input.JumpPressed)
+            jumpPressedServer = true;
     }
 
     [Server]
@@ -107,8 +124,7 @@ public class PlayerControllerAgar : NetworkBehaviour
         if (moveBlockTime > Time.fixedTime)
             return;
 
-        Vector2 targetVelocity = moveVectorServer * Speed * Time.fixedDeltaTime * 50f / (float)Math.Sqrt(transform.localScale.x);
-        rigidBody.velocity = Vector2.SmoothDamp(rigidBody.velocity, targetVelocity, ref velocity, MovementSmoothing);
+        rigidBody.velocity = moveVectorServer * Speed * Time.fixedDeltaTime * 50f / Mathf.Sqrt(transform.localScale.x);
     }
 
 }
