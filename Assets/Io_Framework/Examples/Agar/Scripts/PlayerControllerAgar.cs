@@ -93,7 +93,7 @@ public class PlayerControllerAgar : NetworkBehaviour
     {
         moveBlockTime = Time.fixedTime + MoveBlockInterval;
 
-        rigidBody.velocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
+        rigidBody.velocity = startVelocityDir.normalized * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
     }
 
     [Command]

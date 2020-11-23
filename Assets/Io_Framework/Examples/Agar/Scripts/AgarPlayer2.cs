@@ -9,8 +9,14 @@ public class AgarPlayer2 : CloneablePlayerObject
 
     private PlayerScore playerScore;
 
-    [Server]
+    [ServerCallback]
     private void Start()
+    {
+        playerScore = GetComponent<PlayerScore>();
+    }
+
+    [ServerCallback]
+    private void Awake()
     {
         playerScore = GetComponent<PlayerScore>();
     }
@@ -23,15 +29,45 @@ public class AgarPlayer2 : CloneablePlayerObject
 
         playerScore.Score = (int)(playerScore.Score / 2.0f);
 
-        Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x);
+        Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
         GameObject half = InstantiateClone(target, Quaternion.identity);
-        half.GetComponent<PlayerScore>().Score = playerScore.Score;
         NetworkServer.Spawn(half, connectionToClient);
+        half.GetComponent<PlayerScore>().Score = playerScore.Score;
         half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
     }
-
+    
+    [Server]
     public override bool CanCreateClone()
     {
         return playerScore.Score >= MinScoreToSplit && base.CanCreateClone();
+    }
+
+    [Server]
+    public override void OnLastPlayerObjectDestroyed()
+    {
+        RpcDisplayDestroy();
+        var leaderBoard = FindObjectOfType<LeaderBoard>();
+        leaderBoard.RemovePlayer(connectionToClient.connectionId);
+    }
+
+
+    [ClientRpc]
+    private void RpcDisplayDestroy()
+    {
+        if (!hasAuthority)
+            return;
+
+        IoNetworkManager networkManager = (IoNetworkManager)NetworkManager.singleton;
+        networkManager.RestartPlayerClient();
+    }
+
+
+    public override int CompareTo(CloneablePlayerObject other)
+    {
+        var otherScore = other.GetComponent<PlayerScore>();
+        if (otherScore == null)
+            return 0;
+
+        return playerScore.Score.CompareTo(otherScore.Score);
     }
 }

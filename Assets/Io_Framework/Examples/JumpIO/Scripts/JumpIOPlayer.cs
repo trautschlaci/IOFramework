@@ -10,22 +10,23 @@ public class JumpIOPlayer : Player
     [Server]
     public override void Destroy()
     {
-        RpcNotifyClients();
-        var _leaderBoard = FindObjectOfType<LeaderBoard>();
-        _leaderBoard.RemovePlayer(connectionToClient.connectionId);
+        RpcDisplayDestroy();
+        var leaderBoard = FindObjectOfType<LeaderBoard>();
+        leaderBoard.RemovePlayer(connectionToClient.connectionId);
         base.Destroy();
     }
 
     [ClientRpc]
-    public void RpcNotifyClients()
+    private void RpcDisplayDestroy()
     {
         Instantiate(DeathEffect, transform.position, transform.rotation);
 
-        if (!hasAuthority)
-            return;
-
         GetComponent<Collider2D>().enabled = false;
         GetComponent<SpriteRenderer>().enabled = false;
+
+
+        if (!hasAuthority)
+            return;
 
         IoNetworkManager networkManager = (IoNetworkManager) NetworkManager.singleton;
         networkManager.RestartPlayerClient();

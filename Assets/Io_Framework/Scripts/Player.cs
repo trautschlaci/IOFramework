@@ -13,9 +13,8 @@ public class Player : NetworkBehaviour
 
     public event Action OnPlayerDestroyedServer;
 
-    // Server use only
+    // Server
     public float ViewRange = 10.0f;
-
     public float DestroyDelay = 0.1f;
 
     [Server]

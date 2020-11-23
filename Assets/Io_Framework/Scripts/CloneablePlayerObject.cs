@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class CloneablePlayerObject : Player
+public abstract class CloneablePlayerObject : Player
 {
     public int MaxNumberOfClones = 20;
 
@@ -18,7 +18,10 @@ public class CloneablePlayerObject : Player
     [Server]
     public override void Destroy()
     {
-        PlayerObjectManager.singleton.DeleteGameObject(connectionToClient.connectionId, this);
+        bool wasLast = PlayerObjectManager.singleton.DeleteGameObject(connectionToClient.connectionId, this);
+        if(wasLast)
+            OnLastPlayerObjectDestroyed();
+
         base.Destroy();
     }
 
@@ -33,11 +36,11 @@ public class CloneablePlayerObject : Player
     [Server]
     public virtual bool CanCreateClone()
     {
-        return PlayerObjectManager.singleton.GetNumberOfPlayerObjects(connectionToClient.connectionId) <= MaxNumberOfClones;
+        return PlayerObjectManager.singleton.GetNumberOfPlayerObjects(connectionToClient.connectionId) < MaxNumberOfClones;
     }
 
-    public virtual int CompareTo(Player other)
-    {
-        return 0;
-    }
+    public abstract int CompareTo(CloneablePlayerObject other);
+
+    public abstract void OnLastPlayerObjectDestroyed();
+
 }

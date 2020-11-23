@@ -80,18 +80,17 @@ public class PlayerObjectManager: MonoBehaviour
         return spawnedPlayerObject;
     }
 
+    // Returns true if it was the last object of the player else false.
     [Server]
-    public void DeleteGameObject(int playerId, CloneablePlayerObject playerObject)
+    public bool DeleteGameObject(int playerId, CloneablePlayerObject playerObject)
     {
         bool isLastPlayerObject = false;
         if (IsMainPlayerObject(playerObject))
             isLastPlayerObject = !ChangeMainPlayerObject(playerId);
 
         RemovePlayerObject(playerId, playerObject);
-        if (isLastPlayerObject)
-        {
-            NetworkServer.connections[playerId].Disconnect();
-        }
+
+        return isLastPlayerObject;
     }
 
     [Server]
@@ -107,7 +106,7 @@ public class PlayerObjectManager: MonoBehaviour
 
         if (nextMainPlayer != null)
         {
-            NetworkServer.ReplacePlayerForConnection(nextMainPlayer.connectionToClient, nextMainPlayer.gameObject);
+            NetworkServer.ReplacePlayerForConnection(nextMainPlayer.connectionToClient, nextMainPlayer.gameObject, true);
             return true;
         }
 

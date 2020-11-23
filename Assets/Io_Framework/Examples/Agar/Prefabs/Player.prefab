@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &844900245085247445
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5223635020359318458}
+  - component: {fileID: 3453141645313337180}
+  m_Layer: 9
+  m_Name: TriggerCollider
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5223635020359318458
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844900245085247445}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5558229976809921363}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3453141645313337180
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 844900245085247445}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &2229703110112324196
 GameObject:
   m_ObjectHideFlags: 0
@@ -9,7 +56,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8436451021285286132}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: CameraTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -40,6 +87,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5558229976809921363}
   - component: {fileID: -8080154277492193237}
+  - component: {fileID: 255147376077071153}
   - component: {fileID: 4722273232285375839}
   - component: {fileID: 5558229976809921360}
   - component: {fileID: 2993354878972745121}
@@ -47,11 +95,11 @@ GameObject:
   - component: {fileID: 5558229976809921357}
   - component: {fileID: 5558229976809921362}
   - component: {fileID: 4149672768815094167}
-  - component: {fileID: 255147376077071153}
   - component: {fileID: 8690573829068873889}
   - component: {fileID: -3743514672454514056}
   - component: {fileID: -8622523398005349982}
-  m_Layer: 9
+  - component: {fileID: -8505305297163932780}
+  m_Layer: 12
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -71,6 +119,7 @@ Transform:
   m_Children:
   - {fileID: 889923485366923085}
   - {fileID: 8436451021285286132}
+  - {fileID: 5223635020359318458}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -89,9 +138,25 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   PlayerName: 
-  ViewRange: 20
+  ViewRange: 15
   DestroyDelay: 0.1
-  MinScoreToSplit: 0
+  MaxNumberOfClones: 20
+  MinScoreToSplit: 10
+--- !u!114 &255147376077071153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5558229976809921361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d77fca3013ac5414b8a9466ea3dbf411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  score: 0
 --- !u!114 &4722273232285375839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +235,7 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -248,21 +313,6 @@ MonoBehaviour:
   IsAvailable: 1
   ConstantScore: 3
   ScoreDecay: 0.2
---- !u!114 &255147376077071153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558229976809921361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d77fca3013ac5414b8a9466ea3dbf411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 1
-  syncInterval: 0.1
-  score: 0
 --- !u!114 &8690573829068873889
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -291,7 +341,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  VisRange: 1
+  VisRange: 0.5
   visUpdateInterval: 0.1
   forceHidden: 0
 --- !u!114 &-8622523398005349982
@@ -309,6 +359,21 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   LocalCameraTransform: {fileID: 8436451021285286132}
+--- !u!114 &-8505305297163932780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5558229976809921361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f42b5b33ea92ff24db330fb0f285dc1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  ViewRangeMultiplier: 3
 --- !u!1 &8610653202088646369
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +387,7 @@ GameObject:
   - component: {fileID: 7873579956450603363}
   - component: {fileID: 3994113563580228351}
   - component: {fileID: 2041183540282151901}
-  m_Layer: 9
+  m_Layer: 12
   m_Name: NameText
   m_TagString: Untagged
   m_Icon: {fileID: 0}

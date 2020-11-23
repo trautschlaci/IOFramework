@@ -170,7 +170,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d532cdf95240664ebcf0e016e00c292, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  IsEdible: 1
+  syncMode: 0
+  syncInterval: 0.1
+  IsAvailable: 1
   ConstantScore: 1
 --- !u!114 &-1937837376084535462
 MonoBehaviour:
@@ -186,5 +188,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  VisRange: 0.3
   visUpdateInterval: 0.1
   forceHidden: 0
