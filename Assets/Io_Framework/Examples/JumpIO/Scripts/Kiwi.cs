@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Kiwi : JumpIO2PowerUpBase
+public class Kiwi : JumpIOPowerUpBase
 {
     public float JumpForceModifier = 4f;
 

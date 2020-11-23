@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Melon : JumpIO2PowerUpBase
+public class Melon : JumpIOPowerUpBase
 {
     public float SpeedModifier = 2.0f;
     public float MaxSpeed = 10.0f;

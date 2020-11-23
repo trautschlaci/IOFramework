@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Apple : JumpIO2PowerUpBase
+public class Apple : JumpIOPowerUpBase
 {
     public int ExtraJumpModifier = 1;
 
