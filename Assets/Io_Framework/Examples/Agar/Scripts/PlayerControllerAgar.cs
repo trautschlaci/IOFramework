@@ -20,7 +20,7 @@ public class PlayerControllerAgar : NetworkBehaviour
 
 
     private Rigidbody2D rigidBody;
-    private AgarPlayer2 player;
+    private AgarPlayer player;
 
 
     private Vector2 moveVectorServer;
@@ -65,14 +65,14 @@ public class PlayerControllerAgar : NetworkBehaviour
     {
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.simulated = isServer;
-        player = GetComponent<AgarPlayer2>();
+        player = GetComponent<AgarPlayer>();
     }
 
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
         rigidBody.simulated = isServer;
-        player = GetComponent<AgarPlayer2>();
+        player = GetComponent<AgarPlayer>();
     }
 
 
@@ -84,7 +84,7 @@ public class PlayerControllerAgar : NetworkBehaviour
         if (jumpPressedServer)
         {
             jumpPressedServer = false;
-            player.Split(moveVectorServer);
+            player.Split(moveVectorServer.normalized);
         }
     }
 
@@ -93,7 +93,7 @@ public class PlayerControllerAgar : NetworkBehaviour
     {
         moveBlockTime = Time.fixedTime + MoveBlockInterval;
 
-        rigidBody.velocity = startVelocityDir.normalized * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
+        rigidBody.velocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
     }
 
     [Command]

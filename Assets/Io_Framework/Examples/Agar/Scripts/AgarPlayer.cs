@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class AgarPlayer2 : CloneablePlayerObject
+public class AgarPlayer : CloneablePlayerObject
 {
     public int MinScoreToSplit = 10;
 
