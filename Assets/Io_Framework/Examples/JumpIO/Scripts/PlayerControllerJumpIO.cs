@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerControllerJumpIO : NetworkBehaviour
 {
     public float RunSpeed = 4f;
     public float JumpForce = 6f;

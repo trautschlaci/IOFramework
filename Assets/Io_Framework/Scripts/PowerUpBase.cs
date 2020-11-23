@@ -4,11 +4,14 @@ using System.Runtime.CompilerServices;
 using Mirror;
 using UnityEngine;
 
-public abstract class PickUpBase : NetworkBehaviour
+public abstract class PowerUpBase : NetworkBehaviour
 {
     public bool IsAvailable = true;
     public float Duration = 30.0f;
     public GameObject CollectedEffect;
+
+    [SyncVar]
+    private bool isHidden;
 
     [Server]
     public void PickUp(GameObject player)
@@ -21,36 +24,39 @@ public abstract class PickUpBase : NetworkBehaviour
     private IEnumerator PickUpCoroutine(GameObject player)
     {
         IsAvailable = false;
-        HideServer();
+        isHidden = true;
 
         TargetDisplayCollect(player.GetComponent<NetworkBehaviour>().connectionToClient);
-        RpcNotifyClients();
 
+        if (CanAffectPlayerServer(player))
+        {
+            ApplyEffect(player);
 
-        if (!CanAffectPlayerServer(player))
-            yield break;
+            yield return new WaitForSeconds(Duration);
 
-        ApplyEffect(player);
-
-        yield return new WaitForSeconds(Duration);
-
-        if(player != null)
-            RevertEffect(player);
+            if (player != null)
+                RevertEffect(player);
+        }
 
         NetworkServer.Destroy(gameObject);
     }
 
+    public virtual void Update()
+    {
+        if (!isHidden)
+            return;
+
+
+        if (isClient)
+            HideClient();
+        else
+            HideServer();
+    }
 
     [TargetRpc]
     public virtual void TargetDisplayCollect(NetworkConnection conn)
     {
         Instantiate(CollectedEffect, transform.position, transform.rotation);
-    }
-
-    [ClientRpc]
-    public virtual void RpcNotifyClients()
-    {
-        HideClient();
     }
 
     [Server]

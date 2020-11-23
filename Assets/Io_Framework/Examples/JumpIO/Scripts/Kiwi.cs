@@ -4,19 +4,19 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Kiwi : JumpIOPickUpBase
+public class Kiwi : JumpIoPowerUpBase
 {
     public float JumpForceModifier = 4f;
 
     [Server]
     public override void ApplyEffect(GameObject player)
     {
-        player.GetComponent<PlayerController>().JumpForce += JumpForceModifier;
+        player.GetComponent<PlayerControllerJumpIO>().JumpForce += JumpForceModifier;
     }
 
     [Server]
     public override void RevertEffect(GameObject player)
     {
-        player.GetComponent<PlayerController>().JumpForce -= JumpForceModifier;
+        player.GetComponent<PlayerControllerJumpIO>().JumpForce -= JumpForceModifier;
     }
 }

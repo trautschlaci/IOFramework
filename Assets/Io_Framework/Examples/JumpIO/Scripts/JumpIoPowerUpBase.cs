@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Assets.Io_Framework.Examples.JumpIO.Scripts
 {
-    public abstract class JumpIoPowerUpBase: PowerUpBase
+    public abstract class JumpIOPowerUpBase: PowerUpBase
     {
 
         [ServerCallback]

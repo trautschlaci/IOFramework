@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
 
-public class PickUpSpawner : ObjectSpawner
+public class PowerUpSpawner : ObjectSpawner
 {
     public float CheckRadius = 0.1f;
     public LayerMask CheckLayers;

@@ -40,10 +40,15 @@ public class StompPlayer : RewardBase
         }
     }
 
+    public override bool CanBeGivenToOther(GameObject other)
+    {
+        return base.CanBeGivenToOther(other) && other != gameObject;
+    }
+
     [Server]
     public override void ClaimReward(GameObject player)
     {
-        player.GetComponent<PlayerController>().Jump();
+        player.GetComponent<PlayerControllerJumpIO>().Jump();
         base.ClaimReward(player);
     }
 

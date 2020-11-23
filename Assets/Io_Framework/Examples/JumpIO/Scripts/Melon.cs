@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Melon : JumpIOPickUpBase
+public class Melon : JumpIoPowerUpBase
 {
     public float SpeedModifier = 2.0f;
     public float MaxSpeed = 10.0f;
@@ -12,18 +12,18 @@ public class Melon : JumpIOPickUpBase
     [Server]
     public override bool CanAffectPlayerServer(GameObject player)
     {
-        return player.GetComponent<PlayerController>().RunSpeed + SpeedModifier <= MaxSpeed;
+        return player.GetComponent<PlayerControllerJumpIO>().RunSpeed + SpeedModifier <= MaxSpeed;
     }
 
     [Server]
     public override void ApplyEffect(GameObject player)
     {
-        player.GetComponent<PlayerController>().RunSpeed += SpeedModifier;
+        player.GetComponent<PlayerControllerJumpIO>().RunSpeed += SpeedModifier;
     }
 
     [Server]
     public override void RevertEffect(GameObject player)
     {
-        player.GetComponent<PlayerController>().RunSpeed -= SpeedModifier;
+        player.GetComponent<PlayerControllerJumpIO>().RunSpeed -= SpeedModifier;
     }
 }

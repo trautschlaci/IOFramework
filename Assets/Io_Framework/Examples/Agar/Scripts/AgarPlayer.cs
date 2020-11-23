@@ -10,11 +10,8 @@ public class AgarPlayer : CloneablePlayerObject
 {
     public PlayerScore playerScore;
 
-    [SerializeField] 
-    private float _speed = 300.0f;
-
-    [SerializeField]
-    private float _jumpSpeed = 30.0f;
+    public float Speed = 300.0f;
+    public float JumpSpeed = 30.0f;
 
     // Client
     private float _blockTime;
@@ -53,7 +50,7 @@ public class AgarPlayer : CloneablePlayerObject
             target.y /= Math.Abs(target.y);
 
         var rigidbody2d = GetComponent<Rigidbody2D>();
-        rigidbody2d.velocity = target * _speed * Time.fixedDeltaTime / (float)Math.Sqrt(transform.localScale.x);
+        rigidbody2d.velocity = target * Speed * Time.fixedDeltaTime / (float)Math.Sqrt(transform.localScale.x);
     }
 
     [ClientCallback]
@@ -102,7 +99,7 @@ public class AgarPlayer : CloneablePlayerObject
     private void GiveStartVelocity(Vector3 velocity)
     {
         _blockTime = 0.3f;
-        GetComponent<Rigidbody2D>().velocity = velocity * GetComponent<Collider2D>().bounds.extents.x * _jumpSpeed;
+        GetComponent<Rigidbody2D>().velocity = velocity * GetComponent<Collider2D>().bounds.extents.x * JumpSpeed;
     }
 
     [Client]
