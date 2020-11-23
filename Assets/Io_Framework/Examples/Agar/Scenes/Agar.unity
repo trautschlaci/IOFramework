@@ -2053,8 +2053,8 @@ MonoBehaviour:
     Weight: 1
   RandomPositionSelector: {fileID: 3755292829450704552}
   AutoStartSpawning: 1
-  MinSpawnDelay: 0.1
-  MaxSpawnDelay: 0.1
+  MinSpawnDelay: 0.5
+  MaxSpawnDelay: 0.5
   BulkSpawn: 10
 --- !u!114 &1425738888
 MonoBehaviour:

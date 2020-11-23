@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Mirror;
 using UnityEngine;
@@ -29,13 +30,14 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     private int FallingParamID;
     private int MidAirParamID;
 
+    private InputInfo lastInput;
+
     #endregion
 
 
     #region Client and Server variables
 
     private Rigidbody2D rigidBody;
-    private InputInfo lastInput;
 
     [SyncVar(hook = nameof(UpdateAnimator))]
     private AnimatorVariables animatorInfo;
@@ -63,6 +65,7 @@ public class PlayerControllerJumpIO : NetworkBehaviour
 
     #endregion
 
+
     public struct InputInfo
     {
         public int Horizontal;
@@ -78,7 +81,7 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     }
 
     [ClientCallback]
-    void Update()
+    private void Update()
     {
         if (!hasAuthority)
             return;
@@ -97,14 +100,23 @@ public class PlayerControllerJumpIO : NetworkBehaviour
         }
     }
 
-    void Start()
+    [Client]
+    private void UpdateAnimator(AnimatorVariables oldState, AnimatorVariables newState)
     {
-        GetComponent<Rigidbody2D>().simulated = isServer;
+        animator.SetBool(MidAirParamID, newState.IsMidAir);
+        animator.SetBool(RunningParamID, newState.IsRunning);
+        animator.SetBool(FallingParamID, newState.IsFalling);
+    }
+
+
+    private void Start()
+    {
+        rigidBody = GetComponent<Rigidbody2D>();
+        rigidBody.simulated = isServer;
 
         if (isClient)
         {
             animator = GetComponent<Animator>();
-            rigidBody = GetComponent<Rigidbody2D>();
             RunningParamID = Animator.StringToHash("IsRunning");
             FallingParamID = Animator.StringToHash("IsFalling");
             MidAirParamID = Animator.StringToHash("IsMidAir");
@@ -112,43 +124,9 @@ public class PlayerControllerJumpIO : NetworkBehaviour
         }
     }
 
-    [Client]
-    void UpdateAnimator(AnimatorVariables oldState, AnimatorVariables newState)
-    {
-        animator.SetBool(MidAirParamID, newState.IsMidAir);
-        animator.SetBool(RunningParamID, newState.IsRunning);
-        animator.SetBool(FallingParamID, newState.IsFalling);
-    }
-
-    [Server]
-    public void Jump()
-    {
-        isJumping = true;
-        jumpTime = Time.time + JumpHoldDuration;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
-
-        jumpPressedServer = false;
-    }
-
-    [Command]
-    void CmdSendInputInfo(InputInfo input)
-    {
-        horizontalServer = input.Horizontal;
-        jumpHeldServer = input.JumpHeld;
-        if (input.JumpPressed)
-        {
-            jumpPressedServer = true;
-            jumpBufferTime = Time.time + JumpBuffer;
-        }
-    }
-
-    public override void OnStartServer()
-    {
-        animatorUpdateTime = Time.time + 0.2f;
-    }
 
     [ServerCallback]
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         CheckGround();
 
@@ -159,15 +137,42 @@ public class PlayerControllerJumpIO : NetworkBehaviour
         if (rigidBody.velocity.y < MaxFallSpeed)
             rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxFallSpeed);
 
-        if (Time.time > animatorUpdateTime)
+        if (Time.fixedTime > animatorUpdateTime)
         {
             UpdateAnimatorState();
-            animatorUpdateTime = Time.time + AnimationSyncInterval;
+            animatorUpdateTime = Time.fixedTime + AnimationSyncInterval;
+        }
+    }
+
+    [Command]
+    private void CmdSendInputInfo(InputInfo input)
+    {
+        horizontalServer = Mathf.Clamp(input.Horizontal, -1, 1);
+        jumpHeldServer = input.JumpHeld;
+        if (input.JumpPressed)
+        {
+            jumpPressedServer = true;
+            jumpBufferTime = Time.fixedTime + JumpBuffer;
         }
     }
 
     [Server]
-    void CheckGround()
+    public void Jump()
+    {
+        isJumping = true;
+        jumpTime = Time.fixedTime + JumpHoldDuration;
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+
+        jumpPressedServer = false;
+    }
+
+    public override void OnStartServer()
+    {
+        animatorUpdateTime = Time.fixedTime + 0.2f;
+    }
+
+    [Server]
+    private void CheckGround()
     {
         isGrounded = false;
 
@@ -178,18 +183,18 @@ public class PlayerControllerJumpIO : NetworkBehaviour
         {
             isGrounded = true;
             isJumping = false;
-            coyoteTime = Time.time + CoyoteDuration;
+            coyoteTime = Time.fixedTime + CoyoteDuration;
             extraJumpCount = ExtraJumps;
         }
     }
 
     [Server]
-    void AirMovement()
+    private void AirMovement()
     {
-        if (jumpTime <= Time.time)
+        if (jumpTime <= Time.fixedTime)
             isJumping = false;
 
-        if ((isGrounded || coyoteTime > Time.time) && (jumpBufferTime > Time.time || jumpPressedServer && jumpHeldServer) && !isJumping)
+        if ((isGrounded || coyoteTime > Time.fixedTime) && (jumpBufferTime > Time.fixedTime || jumpPressedServer && jumpHeldServer) && !isJumping)
         {
             Jump();
             return;
@@ -214,19 +219,19 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     }
 
     [Server]
-    void Move()
+    private void Move()
     {
         horizontalMove = horizontalServer * RunSpeed;
 
         if (horizontalMove * playerDir < 0f)
             FlipCharacterDirection();
 
-        Vector2 targetVelocity = new Vector2(horizontalMove * Time.deltaTime * 50f, rigidBody.velocity.y);
+        Vector2 targetVelocity = new Vector2(horizontalMove * Time.fixedDeltaTime * 50f, rigidBody.velocity.y);
         rigidBody.velocity = Vector2.SmoothDamp(rigidBody.velocity, targetVelocity, ref velocity, MovementSmoothing);
     }
 
     [Server]
-    void FlipCharacterDirection()
+    private void FlipCharacterDirection()
     {
         playerDir *= -1;
 
@@ -236,7 +241,7 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     }
 
     [Server]
-    void UpdateAnimatorState()
+    private void UpdateAnimatorState()
     {
         animatorInfo = new AnimatorVariables()
         {

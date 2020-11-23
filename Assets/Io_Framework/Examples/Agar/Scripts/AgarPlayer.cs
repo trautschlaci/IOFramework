@@ -32,11 +32,6 @@ public class AgarPlayer : CloneablePlayerObject
         CalculateCameraScale();
     }
 
-    void Start()
-    {
-        //GetComponent<CircleCollider2D>().enabled = isServer;
-    }
-
     [ClientCallback]
     void FixedUpdate()
     {
