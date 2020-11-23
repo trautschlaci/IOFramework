@@ -4,7 +4,7 @@ using Assets.Io_Framework.Examples.JumpIO.Scripts;
 using Mirror;
 using UnityEngine;
 
-public class Banana : JumpIoPowerUpBase
+public class Banana : JumpIOPowerUpBase
 {
     public float JumpHoldDurationModifier = 1f;
 
