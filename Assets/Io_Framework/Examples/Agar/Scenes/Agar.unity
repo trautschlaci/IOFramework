@@ -641,7 +641,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: JumpIO Example
+  m_Text: Agar Example
 --- !u!222 &419360278
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1757,7 +1757,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1370688049}
         m_MethodName: CreateNewPlayer
         m_Mode: 1
         m_Arguments:
@@ -1779,7 +1779,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 648668728}
         m_MethodName: SetActive
         m_Mode: 6
         m_Arguments:
@@ -2691,7 +2691,7 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1370688049}
         m_MethodName: set_PlayerName
         m_Mode: 0
         m_Arguments:

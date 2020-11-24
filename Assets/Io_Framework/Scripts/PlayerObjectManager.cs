@@ -122,6 +122,9 @@ public class PlayerObjectManager: MonoBehaviour
     [Server]
     public List<CloneablePlayerObject> GetPlayerObjects(int playerId)
     {
+        if (!_objectsOfPlayers.ContainsKey(playerId)) return null;
+
         return _objectsOfPlayers[playerId];
+
     }
 }

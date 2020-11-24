@@ -100,6 +100,8 @@ public class PlayerControllerAgar : NetworkBehaviour
     private void CmdSendInputInfo(InputInfo input)
     {
         var clones = PlayerObjectManager.singleton.GetPlayerObjects(connectionToClient.connectionId);
+        if (clones == null) return;
+
         foreach (var playerClone in clones)
         {
             playerClone.GetComponent<PlayerControllerAgar>().UpdateMovement(input);
