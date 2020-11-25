@@ -42,28 +42,12 @@ public class AgarPlayer : CloneablePlayerObject
     }
 
     [Server]
-    public override void Destroy()
-    {
-        GetComponent<Collider2D>().enabled = false;
-        GetComponent<SpriteRenderer>().enabled = false;
-        RpcDisplayDestroy();
-        base.Destroy();
-    }
-
-    [Server]
     public override void OnLastPlayerObjectDestroyed()
     {
         base.OnLastPlayerObjectDestroyed();
         TargetLastObjectDestroyed();
     }
 
-
-    [ClientRpc]
-    private void RpcDisplayDestroy()
-    {
-        GetComponent<Collider2D>().enabled = false;
-        GetComponent<SpriteRenderer>().enabled = false;
-    }
 
     [TargetRpc]
     private void TargetLastObjectDestroyed()

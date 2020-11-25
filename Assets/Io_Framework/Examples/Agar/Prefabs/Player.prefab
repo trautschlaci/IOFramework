@@ -374,6 +374,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   ViewRangeMultiplier: 3
+  NameText: {fileID: 2041183540282151901}
 --- !u!1 &8610653202088646369
 GameObject:
   m_ObjectHideFlags: 0

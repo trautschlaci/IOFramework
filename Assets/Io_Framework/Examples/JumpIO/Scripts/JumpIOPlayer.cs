@@ -10,19 +10,15 @@ public class JumpIOPlayer : Player
     [Server]
     public override void Destroy()
     {
-        GetComponent<Collider2D>().enabled = false;
-        GetComponent<SpriteRenderer>().enabled = false;
-        RpcDisplayDestroy();
         var leaderBoard = FindObjectOfType<LeaderBoard>();
         leaderBoard.RemovePlayer(connectionToClient.connectionId);
         base.Destroy();
     }
 
     [ClientRpc]
-    private void RpcDisplayDestroy()
+    public override void RpcDisplayDestroy()
     {
-        GetComponent<Collider2D>().enabled = false;
-        GetComponent<SpriteRenderer>().enabled = false;
+        base.RpcDisplayDestroy();
 
         Instantiate(DeathEffect, transform.position, transform.rotation);
 

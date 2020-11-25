@@ -20,13 +20,30 @@ public class Player : NetworkBehaviour
     [Server]
     public virtual void Destroy()
     {
+        HideObject();
+        RpcDisplayDestroy();
         OnPlayerDestroyedServer?.Invoke();
         Invoke(nameof(ExecuteDestroy), DestroyDelay);
     }
 
     [Server]
-    public virtual void ExecuteDestroy()
+    private void ExecuteDestroy()
     {
         NetworkServer.Destroy(gameObject);
+    }
+
+
+    public virtual void HideObject()
+    {
+        foreach (Collider2D c in GetComponentsInChildren<Collider2D>()) { c.enabled = false; }
+        foreach (Collider c in GetComponentsInChildren<Collider>()) { c.enabled = false; }
+        foreach (Renderer r in GetComponentsInChildren<Renderer>()) { r.enabled = false; }
+    }
+
+
+    [ClientRpc]
+    public virtual void RpcDisplayDestroy()
+    {
+        HideObject();
     }
 }
