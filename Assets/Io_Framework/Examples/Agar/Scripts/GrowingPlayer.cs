@@ -47,7 +47,7 @@ public class GrowingPlayer : NetworkBehaviour
 
     private float CalculateCameraScale(float size)
     {
-        return 4 + size;
+        return 3 + size;
     }
 
 
