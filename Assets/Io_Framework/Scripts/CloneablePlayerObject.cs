@@ -26,10 +26,11 @@ public abstract class CloneablePlayerObject : Player
     }
 
     [Server]
-    public virtual GameObject InstantiateClone(Vector3 targetPos, Quaternion rotation)
+    public virtual GameObject SpawnClone(Vector3 targetPos, Quaternion rotation)
     {
         GameObject clone = PlayerObjectManager.singleton.InstantiatePlayerObject(targetPos, rotation);
         clone.GetComponent<Player>().PlayerName = PlayerName;
+        NetworkServer.Spawn(clone, connectionToClient);
         return clone;
     }
 
@@ -39,8 +40,17 @@ public abstract class CloneablePlayerObject : Player
         return PlayerObjectManager.singleton.GetNumberOfPlayerObjects(connectionToClient.connectionId) < MaxNumberOfClones;
     }
 
-    public abstract int CompareTo(CloneablePlayerObject other);
+    [Server]
+    public virtual void OnLastPlayerObjectDestroyed()
+    {
+        var leaderBoard = FindObjectOfType<LeaderBoard>();
+        leaderBoard.RemovePlayer(connectionToClient.connectionId);
+    }
 
-    public abstract void OnLastPlayerObjectDestroyed();
+    [Server]
+    public virtual int CompareTo(CloneablePlayerObject other)
+    {
+        return 0;
+    }
 
 }

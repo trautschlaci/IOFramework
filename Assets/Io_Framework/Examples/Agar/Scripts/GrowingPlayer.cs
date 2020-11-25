@@ -33,7 +33,7 @@ public class GrowingPlayer : NetworkBehaviour
         if (connectionToClient.identity == netIdentity)
             TargetSetCameraScale(_size);
 
-        _player.ViewRange = ViewRangeMultiplier * GetCameraScale(_size);
+        _player.ViewRange = ViewRangeMultiplier * CalculateCameraScale(_size);
         if (_reverseProximityChecker != null)
         {
             _reverseProximityChecker.VisRange *= (_size/lastSize);
@@ -46,7 +46,12 @@ public class GrowingPlayer : NetworkBehaviour
         return Mathf.Sqrt(1.0f + score / (2.0f * Mathf.PI));
     }
 
-    private float GetCameraScale(float size)
+    public float GetCameraScale()
+    {
+        return CalculateCameraScale(transform.localScale.x);
+    }
+
+    private float CalculateCameraScale(float size)
     {
         return 4 + size;
     }
@@ -57,6 +62,6 @@ public class GrowingPlayer : NetworkBehaviour
         if (Camera.main == null || Camera.main.transform.parent != transform)
             return;
 
-        Camera.main.orthographicSize = GetCameraScale(size);
+        Camera.main.orthographicSize = CalculateCameraScale(size);
     }
 }

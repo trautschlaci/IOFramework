@@ -7,20 +7,12 @@ public class PlayerCameraAgar : NetworkBehaviour
 {
     public Transform LocalCameraTransform;
 
-    private static Transform _cameraStartTransform;
-    private static float _startOrthographicSize;
-
     public override void OnStartLocalPlayer()
     {
-        if (_cameraStartTransform == null)
-        {
-            _cameraStartTransform = Camera.main.transform;
-            _startOrthographicSize = Camera.main.orthographicSize;
-        }
-
         Camera.main.transform.SetParent(transform);
         Camera.main.transform.localPosition = LocalCameraTransform.localPosition;
         Camera.main.transform.localRotation = LocalCameraTransform.localRotation;
+        Camera.main.orthographicSize = GetComponent<GrowingPlayer>().GetCameraScale();
     }
 
     [ClientCallback]
@@ -29,9 +21,6 @@ public class PlayerCameraAgar : NetworkBehaviour
         if (Camera.main == null || Camera.main.transform.parent != transform) return;
 
         Camera.main.transform.SetParent(null);
-        Camera.main.transform.localPosition = _cameraStartTransform.localPosition;
-        Camera.main.transform.localRotation = _cameraStartTransform.localRotation;
-        Camera.main.orthographicSize = _startOrthographicSize;
     }
 
 }
