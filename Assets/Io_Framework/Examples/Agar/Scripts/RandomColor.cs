@@ -1,19 +1,31 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using UnityEngine;
 
-public class RandomColor : MonoBehaviour
+public class RandomColor : NetworkBehaviour
 {
-    Material cachedMaterial;
+    [SyncVar(hook = nameof(SetColor))]
+    public Color32 PlayerColor = Color.black;
 
-    private void Start()
+    private Material _cachedMaterial;
+
+    [Server]
+    public override void OnStartServer()
     {
-        cachedMaterial = GetComponentInChildren<Renderer>().material;
-        cachedMaterial.color = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        PlayerColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
+    [Client]
+    private void SetColor(Color32 _, Color32 newColor)
+    {
+        if (_cachedMaterial == null) _cachedMaterial = GetComponentInChildren<Renderer>().material;
+        _cachedMaterial.color = newColor;
+    }
+
+    [ClientCallback]
     void OnDestroy()
     {
-        Destroy(cachedMaterial);
+        Destroy(_cachedMaterial);
     }
 }

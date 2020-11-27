@@ -32,6 +32,7 @@ public class AgarPlayer : CloneablePlayerObject
         Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
         GameObject half = SpawnClone(target, Quaternion.identity);
         half.GetComponent<PlayerScore>().Score = playerScore.Score;
+        half.GetComponent<RandomColor>().PlayerColor = GetComponent<RandomColor>().PlayerColor;
         half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
     }
     
