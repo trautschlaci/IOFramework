@@ -2305,7 +2305,7 @@ MonoBehaviour:
   EntryContainer: {fileID: 664861717}
   EntryTemplate: {fileID: 1601256317}
   NumberOfEntries: 10
-  RefreshDelaySeconds: 0.5
+  RefreshDelaySeconds: 0.2
   IsRefreshStopped: 0
 --- !u!114 &1461936363
 MonoBehaviour:

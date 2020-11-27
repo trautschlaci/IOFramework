@@ -24,7 +24,6 @@ namespace Io_Framework
 
         // Server
         private Player _playerObject;
-        private LeaderBoard _leaderBoard;
 
         [Client]
         private void SetScoreClient(int oldScore, int newScore)
@@ -32,10 +31,10 @@ namespace Io_Framework
             OnScoreChangedClient?.Invoke(oldScore, newScore);
         }
 
+        [Server]
         public override void OnStartServer()
         {
             _playerObject = GetComponent<Player>();
-            _leaderBoard = FindObjectOfType<LeaderBoard>();
             OnScoreChangedServer += ScoreChangedServer;
             OnScoreChangedServer?.Invoke(0, _score);
             _playerObject.OnPlayerDestroyedServer += PlayerDestroyed;
@@ -44,13 +43,13 @@ namespace Io_Framework
         [Server]
         private void ScoreChangedServer(int oldScore, int newScore)
         {
-            _leaderBoard.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
+            LeaderBoard.ServerSingleton.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
         }
 
         [Server]
         private void PlayerDestroyed()
         {
-            _leaderBoard.RemoveScore(connectionToClient.connectionId, _score);
+            LeaderBoard.ServerSingleton.RemoveScore(connectionToClient.connectionId, _score);
         }
 
     }

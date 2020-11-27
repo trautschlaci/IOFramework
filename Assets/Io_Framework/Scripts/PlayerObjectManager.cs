@@ -12,11 +12,6 @@ namespace Io_Framework
 
         private readonly Dictionary<int, List<CloneablePlayerObject>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObject>>();
 
-        [ServerCallback]
-        void Awake()
-        {
-            InitializeSingleton();
-        }
 
         [ServerCallback]
         void Start()

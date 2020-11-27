@@ -11,8 +11,13 @@ namespace Io_Framework
         public GameObject EntryContainer;
         public GameObject EntryTemplate;
         public int NumberOfEntries = 10;
-        public float RefreshDelaySeconds = 0.5f;
+        public float RefreshDelaySeconds = 0.2f;
         public bool IsRefreshStopped;
+
+
+        // Server
+        public static LeaderBoard ServerSingleton { get; private set; }
+
 
         // Client
         private readonly List<GameObject> _entries = new List<GameObject>();
@@ -25,6 +30,8 @@ namespace Io_Framework
         // Server
         private readonly List<ScoreEntry> _scoreOfPlayers = new List<ScoreEntry>();
 
+
+        [Client]
         public override void OnStartClient()
         {
             OwnScore = new ScoreEntry(-1, null, -1);
@@ -41,6 +48,7 @@ namespace Io_Framework
             }
         }
 
+        [Client]
         public override void OnStopClient()
         {
             base.OnStopClient();
@@ -119,10 +127,28 @@ namespace Io_Framework
             _entries[_entries.Count - 1].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
         }
 
+
         [ServerCallback]
-        void Start()
+        private void Start()
         {
+            InitializeSingleton();
             StartCoroutine(Refresh());
+        }
+
+        [Server]
+        private void InitializeSingleton()
+        {
+            if (ServerSingleton != null)
+            {
+                if (ServerSingleton == this) return;
+
+                Debug.Log("Multiple LeaderBoards detected in the scene. The duplicate will be destroyed.");
+                Destroy(gameObject);
+
+                return;
+            }
+
+            ServerSingleton = this;
         }
 
         [Server]
@@ -243,6 +269,7 @@ namespace Io_Framework
             IsRefreshStopped = true;
         }
     }
+
 
     [Serializable]
     public class SyncListEntry : SyncList<ScoreEntry> { }

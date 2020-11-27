@@ -42,8 +42,7 @@ namespace Io_Framework
         [Server]
         public virtual void OnLastPlayerObjectDestroyed()
         {
-            var leaderBoard = FindObjectOfType<LeaderBoard>();
-            leaderBoard.RemovePlayer(connectionToClient.connectionId);
+            LeaderBoard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
         }
 
         [Server]
