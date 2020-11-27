@@ -37,7 +37,7 @@ namespace Io_Framework
             for (var i = 0; i < _topScores.Count; i++)
             {
                 _entries[i].SetActive(true);
-                _entries[i].GetComponent<LeaderBoardEntry>().Set(i, _topScores[i].PlayerName, _topScores[i].Score, false);
+                _entries[i].GetComponent<LeaderBoardEntryBase>().SetValues(i, _topScores[i].PlayerName, _topScores[i].Score, false);
             }
         }
 
@@ -61,7 +61,7 @@ namespace Io_Framework
                     // index is where it got added in the list
                     // item is the new item
                     _entries[index].SetActive(true);
-                    _entries[index].GetComponent<LeaderBoardEntry>().Set(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _entries[_entries.Count - 1].SetActive(false);
@@ -78,7 +78,7 @@ namespace Io_Framework
                     // index is where it got added in the list
                     // item is the new item
                     _entries[index].SetActive(true);
-                    _entries[index].GetComponent<LeaderBoardEntry>().Set(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _entries[_entries.Count - 1].SetActive(false);
@@ -92,7 +92,7 @@ namespace Io_Framework
                 case SyncListEntry.Operation.OP_SET:
                     // index is the index of the item that was updated
                     // item is the previous item
-                    _entries[index].GetComponent<LeaderBoardEntry>().Set(index, newScore.PlayerName, newScore.Score, newScore.PlayerId==OwnScore.PlayerId);
+                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId==OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _entries[_entries.Count - 1].SetActive(false);
@@ -111,12 +111,12 @@ namespace Io_Framework
                 if (_topScores[i].PlayerId == OwnScore.PlayerId)
                 {
                     _entries[_entries.Count - 1].SetActive(false);
-                    _entries[i].GetComponent<LeaderBoardEntry>().Set(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
+                    _entries[i].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
                     return;
                 } 
             }
             _entries[_entries.Count - 1].SetActive(true);
-            _entries[_entries.Count - 1].GetComponent<LeaderBoardEntry>().Set(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
+            _entries[_entries.Count - 1].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
         }
 
         [ServerCallback]
