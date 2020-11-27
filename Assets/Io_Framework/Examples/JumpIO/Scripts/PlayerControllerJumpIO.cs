@@ -25,43 +25,43 @@ public class PlayerControllerJumpIO : NetworkBehaviour
 
     #region Client variables
 
-    private Animator animator;
-    private int RunningParamID;
-    private int FallingParamID;
-    private int MidAirParamID;
+    private Animator _animator;
+    private int _runningParamId;
+    private int _fallingParamId;
+    private int _midAirParamId;
 
-    private InputInfo lastInput;
+    private InputInfo _lastInput;
 
     #endregion
 
 
     #region Client and Server variables
 
-    private Rigidbody2D rigidBody;
+    private Rigidbody2D _rigidBody;
 
-    [SyncVar(hook = nameof(UpdateAnimator))]
-    private AnimatorVariables animatorInfo;
+    [SyncVar]
+    private AnimatorVariables _animatorInfo;
 
     #endregion
 
 
     #region Server variables
 
-    private float horizontalServer;
-    private bool jumpPressedServer;
-    private bool jumpHeldServer;
+    private float _horizontalServer;
+    private bool _jumpPressedServer;
+    private bool _jumpHeldServer;
 
-    private Vector2 velocity = Vector2.zero;
-    private float horizontalMove;
-    private int playerDir = 1;
-    private bool isGrounded;
-    private bool isJumping;
-    private float coyoteTime;
-    private float jumpBufferTime;
-    private float jumpTime;
-    private int extraJumpCount;
+    private Vector2 _velocity = Vector2.zero;
+    private float _horizontalMove;
+    private int _playerDir = 1;
+    private bool _isGrounded;
+    private bool _isJumping;
+    private float _coyoteTime;
+    private float _jumpBufferTime;
+    private float _jumpTime;
+    private int _extraJumpCount;
 
-    private float animatorUpdateTime;
+    private float _animatorUpdateTime;
 
     #endregion
 
@@ -83,9 +83,26 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     [ClientCallback]
     private void Update()
     {
+        UpdateAnimator();
+
+
         if (!hasAuthority)
             return;
 
+        UpdateInput();
+    }
+
+    [Client]
+    private void UpdateAnimator()
+    {
+        _animator.SetBool(_runningParamId, _animatorInfo.IsRunning);
+        _animator.SetBool(_fallingParamId, _animatorInfo.IsFalling);
+        _animator.SetBool(_midAirParamId, _animatorInfo.IsMidAir);
+    }
+
+    [Client]
+    private void UpdateInput()
+    {
         var inputInfo = new InputInfo
         {
             Horizontal = (int)Input.GetAxisRaw("Horizontal"),
@@ -93,38 +110,25 @@ public class PlayerControllerJumpIO : NetworkBehaviour
             JumpHeld = Input.GetButton("Jump")
         };
 
-        if (!lastInput.Equals(inputInfo))
-        {
-            lastInput = inputInfo;
-            CmdSendInputInfo(inputInfo);
-        }
-    }
+        if (_lastInput.Equals(inputInfo)) return;
 
-    [Client]
-    private void UpdateAnimator(AnimatorVariables oldState, AnimatorVariables newState)
-    {
-        if (animator == null)
-            return;
-
-        animator.SetBool(RunningParamID, newState.IsRunning);
-        animator.SetBool(FallingParamID, newState.IsFalling);
-        animator.SetBool(MidAirParamID, newState.IsMidAir);
+        _lastInput = inputInfo;
+        CmdSendInputInfo(inputInfo);
     }
 
 
     private void Start()
     {
-        rigidBody = GetComponent<Rigidbody2D>();
-        rigidBody.simulated = isServer;
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _rigidBody.simulated = isServer;
 
-        if (isClient)
-        {
-            animator = GetComponent<Animator>();
-            RunningParamID = Animator.StringToHash("IsRunning");
-            FallingParamID = Animator.StringToHash("IsFalling");
-            MidAirParamID = Animator.StringToHash("IsMidAir");
-            UpdateAnimator(new AnimatorVariables(), animatorInfo);
-        }
+
+        if (!isClient) return;
+
+        _animator = GetComponent<Animator>();
+        _runningParamId = Animator.StringToHash("IsRunning");
+        _fallingParamId = Animator.StringToHash("IsFalling");
+        _midAirParamId = Animator.StringToHash("IsMidAir");
     }
 
 
@@ -137,107 +141,107 @@ public class PlayerControllerJumpIO : NetworkBehaviour
 
         Move();
 
-        if (rigidBody.velocity.y < MaxFallSpeed)
-            rigidBody.velocity = new Vector2(rigidBody.velocity.x, MaxFallSpeed);
+        if (_rigidBody.velocity.y < MaxFallSpeed)
+            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, MaxFallSpeed);
 
-        if (Time.fixedTime > animatorUpdateTime)
+        if (Time.fixedTime > _animatorUpdateTime)
         {
             SyncAnimatorState();
-            animatorUpdateTime = Time.fixedTime + AnimationSyncInterval;
+            _animatorUpdateTime = Time.fixedTime + AnimationSyncInterval;
         }
     }
 
     [Command]
     private void CmdSendInputInfo(InputInfo input)
     {
-        horizontalServer = Mathf.Clamp(input.Horizontal, -1, 1);
-        jumpHeldServer = input.JumpHeld;
+        _horizontalServer = Mathf.Clamp(input.Horizontal, -1, 1);
+        _jumpHeldServer = input.JumpHeld;
         if (input.JumpPressed)
         {
-            jumpPressedServer = true;
-            jumpBufferTime = Time.fixedTime + JumpBuffer;
+            _jumpPressedServer = true;
+            _jumpBufferTime = Time.fixedTime + JumpBuffer;
         }
     }
 
     [Server]
     public void Jump()
     {
-        isJumping = true;
-        jumpTime = Time.fixedTime + JumpHoldDuration;
-        rigidBody.velocity = new Vector2(rigidBody.velocity.x, JumpForce);
+        _isJumping = true;
+        _jumpTime = Time.fixedTime + JumpHoldDuration;
+        _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, JumpForce);
 
-        jumpPressedServer = false;
+        _jumpPressedServer = false;
     }
 
     [Server]
     public override void OnStartServer()
     {
-        animatorUpdateTime = Time.fixedTime + 0.2f;
+        _animatorUpdateTime = Time.fixedTime + 0.2f;
     }
 
     [Server]
     private void CheckGround()
     {
-        isGrounded = false;
+        _isGrounded = false;
 
         RaycastHit2D leftCheck = Physics2D.Raycast(LeftFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
         RaycastHit2D rightCheck = Physics2D.Raycast(RightFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
 
         if (leftCheck || rightCheck)
         {
-            isGrounded = true;
-            isJumping = false;
-            coyoteTime = Time.fixedTime + CoyoteDuration;
-            extraJumpCount = ExtraJumps;
+            _isGrounded = true;
+            _isJumping = false;
+            _coyoteTime = Time.fixedTime + CoyoteDuration;
+            _extraJumpCount = ExtraJumps;
         }
     }
 
     [Server]
     private void AirMovement()
     {
-        if (jumpTime <= Time.fixedTime)
-            isJumping = false;
+        if (_jumpTime <= Time.fixedTime)
+            _isJumping = false;
 
-        if ((isGrounded || coyoteTime > Time.fixedTime) && (jumpBufferTime > Time.fixedTime || jumpPressedServer && jumpHeldServer) && !isJumping)
+        if ((_isGrounded || _coyoteTime > Time.fixedTime) && (_jumpBufferTime > Time.fixedTime || _jumpPressedServer && _jumpHeldServer) && !_isJumping)
         {
             Jump();
             return;
         }
 
-        if (jumpPressedServer && extraJumpCount > 0 && !isGrounded)
+        if (_jumpPressedServer && _extraJumpCount > 0 && !_isGrounded)
         {
             Jump();
-            extraJumpCount--;
+            _extraJumpCount--;
             return;
         }
 
-        if (isJumping && jumpHeldServer)
+        if (_isJumping && _jumpHeldServer)
         {
-            rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
+            _rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
         }
 
-        if (isGrounded)
+        if (_isGrounded)
         {
-            jumpPressedServer = false;
+            _jumpPressedServer = false;
         }
     }
 
     [Server]
     private void Move()
     {
-        horizontalMove = horizontalServer * RunSpeed;
+        _horizontalMove = _horizontalServer * RunSpeed;
 
-        if (horizontalMove * playerDir < 0f)
+        if (_horizontalMove * _playerDir < 0f)
             FlipCharacterDirection();
 
-        Vector2 targetVelocity = new Vector2(horizontalMove * Time.fixedDeltaTime * 50f, rigidBody.velocity.y);
-        rigidBody.velocity = Vector2.SmoothDamp(rigidBody.velocity, targetVelocity, ref velocity, MovementSmoothing);
+        Vector2 targetVelocity = new Vector2(_horizontalMove * Time.fixedDeltaTime * 50f, _rigidBody.velocity.y);
+        _rigidBody.velocity = Vector2.SmoothDamp(_rigidBody.velocity, targetVelocity, ref _velocity, MovementSmoothing);
     }
 
     [Server]
     private void FlipCharacterDirection()
     {
-        playerDir *= -1;
+        _playerDir *= -1;
 
         Vector3 scale = transform.localScale;
         scale.x *= -1;
@@ -247,11 +251,11 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     [Server]
     private void SyncAnimatorState()
     {
-        animatorInfo = new AnimatorVariables()
+        _animatorInfo = new AnimatorVariables
         {
-            IsRunning = Mathf.Abs(horizontalMove) > 0.01f,
-            IsFalling = rigidBody.velocity.y < -0.01f,
-            IsMidAir = !isGrounded
+            IsRunning = Mathf.Abs(_horizontalMove) > 0.01f,
+            IsFalling = _rigidBody.velocity.y < -0.01f,
+            IsMidAir = !_isGrounded
         };
     }
 }
