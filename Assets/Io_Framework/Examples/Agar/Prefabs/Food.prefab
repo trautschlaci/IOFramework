@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 1455619517116697772}
   - component: {fileID: 1455619517116697775}
   - component: {fileID: 3882362046024056866}
-  - component: {fileID: 7910782813168107043}
   - component: {fileID: 3327983738939562808}
   - component: {fileID: 1450294395300155639}
   - component: {fileID: 405077109998862488}
@@ -104,24 +103,6 @@ MonoBehaviour:
   serverOnly: 0
   m_AssetId: 
   hasSpawned: 0
---- !u!114 &7910782813168107043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1455619517116697774}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
 --- !u!58 &3327983738939562808
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -204,3 +185,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b1223429a0a3e745b4c4b5668dd2d83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0
+  PlayerColor:
+    serializedVersion: 2
+    rgba: 4278190080
