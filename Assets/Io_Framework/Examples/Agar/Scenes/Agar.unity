@@ -1993,7 +1993,7 @@ MonoBehaviour:
   onlineScene: 
   transport: {fileID: 1370688048}
   networkAddress: localhost
-  maxConnections: 4
+  maxConnections: 60
   disconnectInactiveConnections: 0
   disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
@@ -2155,7 +2155,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 1841562080
-  serverOnly: 0
+  serverOnly: 1
   m_AssetId: 
   hasSpawned: 0
 --- !u!4 &1425738889

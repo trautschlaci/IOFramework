@@ -20,6 +20,7 @@ public class ObjectSpawner: NetworkBehaviour
     protected bool IsStopped;
 
 
+    [Server]
     public override void OnStartServer()
     {
         if (SelectableObjectsToSpawn.Any(spawnObject => spawnObject.GameObject != null && !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
