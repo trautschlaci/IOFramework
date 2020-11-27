@@ -170,9 +170,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  VisRange: 0.3
-  visUpdateInterval: 0.1
-  forceHidden: 0
+  OwnExtent: 0.3
+  VisUpdateInterval: 0.1
+  ForceHidden: 0
 --- !u!114 &-3757685363038072360
 MonoBehaviour:
   m_ObjectHideFlags: 0

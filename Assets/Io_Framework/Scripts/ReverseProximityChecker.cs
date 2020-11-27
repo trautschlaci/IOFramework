@@ -6,18 +6,18 @@ using System.Collections.Generic;
 public class ReverseProximityChecker : NetworkVisibility
 {
 
-    public float VisRange = 1;
+    public float OwnExtent = 1;
 
     // How often (in seconds) that this object should update the list of observers that can see it.
-    public float visUpdateInterval = 1;
+    public float VisUpdateInterval = 0.1f;
 
     // Flag to force this object to be hidden for players.
-    public bool forceHidden;
+    public bool ForceHidden;
 
 
     public override void OnStartServer()
     {
-        InvokeRepeating(nameof(RebuildObservers), 0, visUpdateInterval);
+        InvokeRepeating(nameof(RebuildObservers), 0, VisUpdateInterval);
     }
 
     public override void OnStopServer()
@@ -32,7 +32,7 @@ public class ReverseProximityChecker : NetworkVisibility
 
     public override bool OnCheckObserver(NetworkConnection conn)
     {
-        if (forceHidden)
+        if (ForceHidden)
             return false;
 
         var playerIdentity = conn.identity;
@@ -40,12 +40,12 @@ public class ReverseProximityChecker : NetworkVisibility
         if (playerIdentity.GetComponent<Player>() == null)
             return false;
 
-        return Vector3.Distance(playerIdentity.transform.position, transform.position) < playerIdentity.GetComponent<Player>().ViewRange + VisRange;
+        return Vector3.Distance(playerIdentity.transform.position, transform.position) < playerIdentity.GetComponent<Player>().ViewRange + OwnExtent;
     }
 
     public override void OnRebuildObservers(HashSet<NetworkConnection> observers, bool initialize)
     {
-        if (forceHidden)
+        if (ForceHidden)
             return;
 
         // 'transform.' calls GetComponent, only do it once
@@ -58,7 +58,7 @@ public class ReverseProximityChecker : NetworkVisibility
                 var playerIdentity = conn.identity;
 
                 // check distance
-                if (Vector3.Distance(playerIdentity.transform.position, position) < playerIdentity.GetComponent<Player>().ViewRange + VisRange)
+                if (Vector3.Distance(playerIdentity.transform.position, position) < playerIdentity.GetComponent<Player>().ViewRange + OwnExtent)
                 {
                     observers.Add(conn);
                 }

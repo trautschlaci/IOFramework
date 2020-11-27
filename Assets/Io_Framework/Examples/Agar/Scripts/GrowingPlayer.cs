@@ -29,7 +29,7 @@ public class GrowingPlayer : NetworkBehaviour
         _player.ViewRange = ViewRangeMultiplier * CalculateCameraScale(newSize);
         if (_reverseProximityChecker != null)
         {
-            _reverseProximityChecker.VisRange *= (newSize/lastSize);
+            _reverseProximityChecker.OwnExtent *= (newSize/lastSize);
         }
     }
 
