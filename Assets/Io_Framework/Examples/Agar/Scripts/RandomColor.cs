@@ -6,14 +6,14 @@ using UnityEngine;
 public class RandomColor : NetworkBehaviour
 {
     [SyncVar(hook = nameof(SetColor))]
-    public Color32 PlayerColor = Color.black;
+    public Color32 BodyColor = Color.black;
 
     private Material _cachedMaterial;
 
     [Server]
     public override void OnStartServer()
     {
-        PlayerColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+        BodyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
     }
 
     [Client]
