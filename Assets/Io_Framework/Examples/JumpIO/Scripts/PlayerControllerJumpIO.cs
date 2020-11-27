@@ -103,9 +103,12 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     [Client]
     private void UpdateAnimator(AnimatorVariables oldState, AnimatorVariables newState)
     {
-        animator.SetBool(MidAirParamID, newState.IsMidAir);
+        if (animator == null)
+            return;
+
         animator.SetBool(RunningParamID, newState.IsRunning);
         animator.SetBool(FallingParamID, newState.IsFalling);
+        animator.SetBool(MidAirParamID, newState.IsMidAir);
     }
 
 
@@ -139,7 +142,7 @@ public class PlayerControllerJumpIO : NetworkBehaviour
 
         if (Time.fixedTime > animatorUpdateTime)
         {
-            UpdateAnimatorState();
+            SyncAnimatorState();
             animatorUpdateTime = Time.fixedTime + AnimationSyncInterval;
         }
     }
@@ -166,6 +169,7 @@ public class PlayerControllerJumpIO : NetworkBehaviour
         jumpPressedServer = false;
     }
 
+    [Server]
     public override void OnStartServer()
     {
         animatorUpdateTime = Time.fixedTime + 0.2f;
@@ -241,13 +245,13 @@ public class PlayerControllerJumpIO : NetworkBehaviour
     }
 
     [Server]
-    private void UpdateAnimatorState()
+    private void SyncAnimatorState()
     {
         animatorInfo = new AnimatorVariables()
         {
-            IsFalling = rigidBody.velocity.y < -0.01f,
-            IsMidAir = !isGrounded,
             IsRunning = Mathf.Abs(horizontalMove) > 0.01f,
+            IsFalling = rigidBody.velocity.y < -0.01f,
+            IsMidAir = !isGrounded
         };
     }
 }
