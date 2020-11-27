@@ -98,7 +98,7 @@ GameObject:
   - component: {fileID: 8690573829068873889}
   - component: {fileID: -3743514672454514056}
   - component: {fileID: -8622523398005349982}
-  - component: {fileID: -8505305297163932780}
+  - component: {fileID: 5804752609003387805}
   - component: {fileID: 3354471976414740092}
   m_Layer: 12
   m_Name: Player
@@ -360,7 +360,7 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   LocalCameraTransform: {fileID: 8436451021285286132}
---- !u!114 &-8505305297163932780
+--- !u!114 &5804752609003387805
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -369,12 +369,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 5558229976809921361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f42b5b33ea92ff24db330fb0f285dc1e, type: 3}
+  m_Script: {fileID: 11500000, guid: dce202ce27353d3488bb22e6756d356b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  ViewRangeMultiplier: 3
+  ViewRangeScaler: 3
+  Is2D: 1
   NameText: {fileID: 2041183540282151901}
 --- !u!114 &3354471976414740092
 MonoBehaviour:
