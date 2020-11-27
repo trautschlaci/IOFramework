@@ -80,10 +80,10 @@ namespace Io_Framework
         [Server]
         public virtual void Spawn()
         {
-            var targetPosition = SpawnPointSelector.SelectSpawnPosition(out var doesCollide);
+            var doesNotCollide = SpawnPointSelector.SelectSpawnPosition(out var targetPosition);
 
 
-            if (doesCollide)
+            if (!doesNotCollide)
                 return;
 
 

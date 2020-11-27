@@ -104,18 +104,18 @@ namespace Io_Framework
 
         IEnumerator SpawnPlayer(int connectionId, string playerName)
         {
-            var spawnPosition = SpawnPointSelector.SelectSpawnPosition(out var couldNotSelectSpawnPosition);
+            var couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out var spawnPosition);
 
-            while (couldNotSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
+            while (!couldSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
             {
-                spawnPosition = SpawnPointSelector.SelectSpawnPosition(out couldNotSelectSpawnPosition);
+                couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
                 _spawnRetryTime += SpawnRetryDelay;
                 yield return new WaitForSeconds(SpawnRetryDelay);
             }
 
             _spawnRetryTime = 0.0f;
 
-            if (couldNotSelectSpawnPosition)
+            if (!couldSelectSpawnPosition)
             {
                 NetworkServer.connections[connectionId].Send(new CouldNotSpawnMessage());
                 NetworkServer.connections[connectionId].Disconnect();

@@ -8,17 +8,17 @@ namespace Io_Framework
         public float SafeRadius = 1.0f;
         public LayerMask CheckLayers;
 
-        public Vector3 SelectSpawnPosition(out bool doesCollide)
+        public bool SelectSpawnPosition(out Vector3 selectedPosition)
         {
-            doesCollide = false;
-            var selectedPosition = PositionSelector.RandomPosition();
+            var doesNotCollide = true;
+            selectedPosition = PositionSelector.RandomPosition();
 
             if (Physics2D.OverlapCircle(selectedPosition, SafeRadius, CheckLayers) != null)
             {
-                doesCollide = true;
+                doesNotCollide = false;
             }
 
-            return selectedPosition;
+            return doesNotCollide;
         }
     }
 }
