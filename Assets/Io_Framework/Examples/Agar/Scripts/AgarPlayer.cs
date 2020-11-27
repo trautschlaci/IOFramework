@@ -1,69 +1,70 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class AgarPlayer : CloneablePlayerObject
+namespace Io_Framework.Examples.Agar
 {
-    public int MinScoreToSplit = 10;
-
-    private PlayerScore playerScore;
-
-    [ServerCallback]
-    private void Start()
+    public class AgarPlayer : CloneablePlayerObject
     {
-        playerScore = GetComponent<PlayerScore>();
-    }
+        public int MinScoreToSplit = 10;
 
-    [ServerCallback]
-    private void Awake()
-    {
-        playerScore = GetComponent<PlayerScore>();
-    }
+        private PlayerScore _playerScore;
 
-    [Server]
-    public void Split(Vector2 startVelocityDir)
-    {
-        if (!CanCreateClone())
-            return;
+        [ServerCallback]
+        private void Start()
+        {
+            _playerScore = GetComponent<PlayerScore>();
+        }
 
-        playerScore.Score = (int)(playerScore.Score / 2.0f);
+        [ServerCallback]
+        private void Awake()
+        {
+            _playerScore = GetComponent<PlayerScore>();
+        }
 
-        Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
-        GameObject half = SpawnClone(target, Quaternion.identity);
-        half.GetComponent<PlayerScore>().Score = playerScore.Score;
-        half.GetComponent<RandomColor>().BodyColor = GetComponent<RandomColor>().BodyColor;
-        half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
-    }
+        [Server]
+        public void Split(Vector2 startVelocityDir)
+        {
+            if (!CanCreateClone())
+                return;
+
+            _playerScore.Score = (int)(_playerScore.Score / 2.0f);
+
+            Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
+            GameObject half = SpawnClone(target, Quaternion.identity);
+            half.GetComponent<PlayerScore>().Score = _playerScore.Score;
+            half.GetComponent<RandomColor>().BodyColor = GetComponent<RandomColor>().BodyColor;
+            half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
+        }
     
-    [Server]
-    public override bool CanCreateClone()
-    {
-        return playerScore.Score >= MinScoreToSplit && base.CanCreateClone();
-    }
+        [Server]
+        public override bool CanCreateClone()
+        {
+            return _playerScore.Score >= MinScoreToSplit && base.CanCreateClone();
+        }
 
-    [Server]
-    public override void OnLastPlayerObjectDestroyed()
-    {
-        base.OnLastPlayerObjectDestroyed();
-        TargetLastObjectDestroyed();
-    }
-
-
-    [TargetRpc]
-    private void TargetLastObjectDestroyed()
-    {
-        IoNetworkManager networkManager = (IoNetworkManager)NetworkManager.singleton;
-        networkManager.RestartPlayerClient();
-    }
+        [Server]
+        public override void OnLastPlayerObjectDestroyed()
+        {
+            base.OnLastPlayerObjectDestroyed();
+            TargetLastObjectDestroyed();
+        }
 
 
-    public override int CompareTo(CloneablePlayerObject other)
-    {
-        var otherScore = other.GetComponent<PlayerScore>();
-        if (otherScore == null)
-            return base.CompareTo(other);
+        [TargetRpc]
+        private void TargetLastObjectDestroyed()
+        {
+            IoNetworkManager networkManager = (IoNetworkManager)NetworkManager.singleton;
+            networkManager.RestartPlayerClient();
+        }
 
-        return playerScore.Score.CompareTo(otherScore.Score);
+
+        public override int CompareTo(CloneablePlayerObject other)
+        {
+            var otherScore = other.GetComponent<PlayerScore>();
+            if (otherScore == null)
+                return base.CompareTo(other);
+
+            return _playerScore.Score.CompareTo(otherScore.Score);
+        }
     }
 }

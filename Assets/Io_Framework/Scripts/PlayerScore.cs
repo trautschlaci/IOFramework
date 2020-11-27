@@ -1,55 +1,57 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Mirror;
+using UnityEngine;
 
-public class PlayerScore : NetworkBehaviour
+namespace Io_Framework
 {
-    [SyncVar(hook = nameof(SetScoreClient))]
-    public int score;
-    public int Score
+    public class PlayerScore : NetworkBehaviour
     {
-        get => score;
-        set
+        [SerializeField]
+        [SyncVar(hook = nameof(SetScoreClient))]
+        private int _score;
+        public int Score
         {
-            OnScoreChangedServer?.Invoke(score, value);
-            score = value;
+            get => _score;
+            set
+            {
+                OnScoreChangedServer?.Invoke(_score, value);
+                _score = value;
+            }
         }
+
+        public event Action<int, int> OnScoreChangedClient;
+        public event Action<int, int> OnScoreChangedServer;
+
+        // Server
+        private Player _playerObject;
+        private LeaderBoard _leaderBoard;
+
+        [Client]
+        private void SetScoreClient(int oldScore, int newScore)
+        {
+            OnScoreChangedClient?.Invoke(oldScore, newScore);
+        }
+
+        public override void OnStartServer()
+        {
+            _playerObject = GetComponent<Player>();
+            _leaderBoard = FindObjectOfType<LeaderBoard>();
+            OnScoreChangedServer += ScoreChangedServer;
+            OnScoreChangedServer?.Invoke(0, _score);
+            _playerObject.OnPlayerDestroyedServer += PlayerDestroyed;
+        }
+
+        [Server]
+        private void ScoreChangedServer(int oldScore, int newScore)
+        {
+            _leaderBoard.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
+        }
+
+        [Server]
+        private void PlayerDestroyed()
+        {
+            _leaderBoard.RemoveScore(connectionToClient.connectionId, _score);
+        }
+
     }
-
-    public event Action<int, int> OnScoreChangedClient;
-    public event Action<int, int> OnScoreChangedServer;
-
-    // Server
-    private Player _playerObject;
-    private LeaderBoard _leaderBoard;
-
-    [Client]
-    private void SetScoreClient(int oldScore, int newScore)
-    {
-        OnScoreChangedClient?.Invoke(oldScore, newScore);
-    }
-
-    public override void OnStartServer()
-    {
-        _playerObject = GetComponent<Player>();
-        _leaderBoard = FindObjectOfType<LeaderBoard>();
-        OnScoreChangedServer += ScoreChangedServer;
-        OnScoreChangedServer?.Invoke(0, score);
-        _playerObject.OnPlayerDestroyedServer += PlayerDestroyed;
-    }
-
-    [Server]
-    private void ScoreChangedServer(int oldScore, int newScore)
-    {
-        _leaderBoard.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
-    }
-
-    [Server]
-    private void PlayerDestroyed()
-    {
-        _leaderBoard.RemoveScore(connectionToClient.connectionId, score);
-    }
-
 }

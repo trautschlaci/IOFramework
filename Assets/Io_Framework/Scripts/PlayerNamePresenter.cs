@@ -1,31 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using TMPro;
+﻿using TMPro;
 using UnityEngine;
 
-public class PlayerNamePresenter : MonoBehaviour
+namespace Io_Framework
 {
-    public Player PlayerToPresent;
-    public TextMeshPro nameText;
-
-    private int direction = 1;
-
-    void Start()
+    public class PlayerNamePresenter : MonoBehaviour
     {
-        if(PlayerToPresent == null)
-            PlayerToPresent = GetComponent<Player>();
-    }
+        public Player PlayerToPresent;
+        public TextMeshPro NameText;
 
-    void Update()
-    {
-        nameText.text = PlayerToPresent.PlayerName;
-        nameText.transform.rotation = Camera.main.transform.rotation;
-        var scale = nameText.transform.localScale;
-        if (PlayerToPresent.transform.localScale.x * direction < 0)
+        private int _direction = 1;
+
+        void Start()
         {
-            direction *= -1;
-            scale.x *= -1;
+            if(PlayerToPresent == null)
+                PlayerToPresent = GetComponent<Player>();
         }
-        nameText.transform.localScale = scale;
+
+        void Update()
+        {
+            NameText.text = PlayerToPresent.PlayerName;
+            NameText.transform.rotation = Camera.main.transform.rotation;
+            var scale = NameText.transform.localScale;
+            if (PlayerToPresent.transform.localScale.x * _direction < 0)
+            {
+                _direction *= -1;
+                scale.x *= -1;
+            }
+            NameText.transform.localScale = scale;
+        }
     }
 }

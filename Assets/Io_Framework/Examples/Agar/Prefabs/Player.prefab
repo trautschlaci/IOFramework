@@ -157,7 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  score: 0
+  _score: 0
 --- !u!114 &4722273232285375839
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -327,7 +327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerToPresent: {fileID: -8080154277492193237}
-  nameText: {fileID: 2041183540282151901}
+  NameText: {fileID: 2041183540282151901}
 --- !u!114 &-3743514672454514056
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -390,7 +390,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0
-  PlayerColor:
+  BodyColor:
     serializedVersion: 2
     rgba: 4278190080
 --- !u!1 &8610653202088646369

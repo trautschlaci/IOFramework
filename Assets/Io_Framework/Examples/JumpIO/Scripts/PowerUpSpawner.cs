@@ -1,28 +1,29 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class PowerUpSpawner : ObjectSpawner
+namespace Io_Framework.Examples.JumpIO
 {
-    public float CheckRadius = 0.1f;
-    public LayerMask CheckLayers;
-
-    public override void Spawn()
+    public class PowerUpSpawner : ObjectSpawner
     {
-        var target = RandomPositionSelector.RandomPosition();
+        public float CheckRadius = 0.1f;
+        public LayerMask CheckLayers;
 
-        if (Physics2D.OverlapCircle(target, CheckRadius, CheckLayers) != null)
+        public override void Spawn()
         {
-            return;
-        }
+            var target = RandomPositionSelector.RandomPosition();
 
-        var selectedGo = SelectObjectToSpawn();
+            if (Physics2D.OverlapCircle(target, CheckRadius, CheckLayers) != null)
+            {
+                return;
+            }
 
-        if (selectedGo != null)
-        {
-            var spawnGameObject = Instantiate(selectedGo, target, Quaternion.identity);
-            NetworkServer.Spawn(spawnGameObject);
+            var selectedGo = SelectObjectToSpawn();
+
+            if (selectedGo != null)
+            {
+                var spawnGameObject = Instantiate(selectedGo, target, Quaternion.identity);
+                NetworkServer.Spawn(spawnGameObject);
+            }
         }
     }
 }

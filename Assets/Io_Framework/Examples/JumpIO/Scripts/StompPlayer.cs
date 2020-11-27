@@ -1,60 +1,61 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class StompPlayer : RewardBase
+namespace Io_Framework.Examples.JumpIO
 {
-    public Transform HeadLeft;
-    public Transform HeadRight;
-    public float CheckDistance = 0.05f;
-    public LayerMask PlayerLayer;
-
-    private Player player;
-
-    [ServerCallback]
-    void Start()
+    public class StompPlayer : RewardBase
     {
-        player = GetComponent<Player>();
-    }
+        public Transform HeadLeft;
+        public Transform HeadRight;
+        public float CheckDistance = 0.05f;
+        public LayerMask PlayerLayer;
 
-    [ServerCallback]
-    void FixedUpdate()
-    {
-        CheckAboveHead();
-    }
+        private Player _player;
 
-    [Server]
-    void CheckAboveHead()
-    {
-        RaycastHit2D leftCheck = Physics2D.Raycast(HeadLeft.position, Vector2.up, CheckDistance, PlayerLayer);
-        RaycastHit2D rightCheck = Physics2D.Raycast(HeadRight.position, Vector2.up, CheckDistance, PlayerLayer);
-
-        RaycastHit2D contact = leftCheck;
-        if (!contact)
-            contact = rightCheck;
-
-        if (contact && CanBeGivenToOther(contact.collider.gameObject))
+        [ServerCallback]
+        void Start()
         {
-            ClaimReward(contact.collider.gameObject);
+            _player = GetComponent<Player>();
         }
-    }
 
-    public override bool CanBeGivenToOther(GameObject other)
-    {
-        return base.CanBeGivenToOther(other) && other != gameObject;
-    }
+        [ServerCallback]
+        void FixedUpdate()
+        {
+            CheckAboveHead();
+        }
 
-    [Server]
-    public override void ClaimReward(GameObject player)
-    {
-        player.GetComponent<PlayerControllerJumpIO>().Jump();
-        base.ClaimReward(player);
-    }
+        [Server]
+        void CheckAboveHead()
+        {
+            RaycastHit2D leftCheck = Physics2D.Raycast(HeadLeft.position, Vector2.up, CheckDistance, PlayerLayer);
+            RaycastHit2D rightCheck = Physics2D.Raycast(HeadRight.position, Vector2.up, CheckDistance, PlayerLayer);
 
-    [Server]
-    public override void Destroy()
-    {
-        player.Destroy();
+            RaycastHit2D contact = leftCheck;
+            if (!contact)
+                contact = rightCheck;
+
+            if (contact && CanBeGivenToOther(contact.collider.gameObject))
+            {
+                ClaimReward(contact.collider.gameObject);
+            }
+        }
+
+        public override bool CanBeGivenToOther(GameObject other)
+        {
+            return base.CanBeGivenToOther(other) && other != gameObject;
+        }
+
+        [Server]
+        public override void ClaimReward(GameObject player)
+        {
+            player.GetComponent<PlayerControllerJumpIO>().Jump();
+            base.ClaimReward(player);
+        }
+
+        [Server]
+        public override void Destroy()
+        {
+            _player.Destroy();
+        }
     }
 }

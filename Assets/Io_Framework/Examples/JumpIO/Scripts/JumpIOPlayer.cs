@@ -1,32 +1,33 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class JumpIOPlayer : Player
+namespace Io_Framework.Examples.JumpIO
 {
-    public GameObject DeathEffect;
-
-    [Server]
-    public override void Destroy()
+    public class JumpIOPlayer : Player
     {
-        var leaderBoard = FindObjectOfType<LeaderBoard>();
-        leaderBoard.RemovePlayer(connectionToClient.connectionId);
-        base.Destroy();
-    }
+        public GameObject DeathEffect;
 
-    [ClientRpc]
-    public override void RpcDisplayDestroy()
-    {
-        base.RpcDisplayDestroy();
+        [Server]
+        public override void Destroy()
+        {
+            var leaderBoard = FindObjectOfType<LeaderBoard>();
+            leaderBoard.RemovePlayer(connectionToClient.connectionId);
+            base.Destroy();
+        }
 
-        Instantiate(DeathEffect, transform.position, transform.rotation);
+        [ClientRpc]
+        public override void RpcDisplayDestroy()
+        {
+            base.RpcDisplayDestroy();
+
+            Instantiate(DeathEffect, transform.position, transform.rotation);
 
 
-        if (!hasAuthority)
-            return;
+            if (!hasAuthority)
+                return;
 
-        IoNetworkManager networkManager = (IoNetworkManager) NetworkManager.singleton;
-        networkManager.RestartPlayerClient();
+            IoNetworkManager networkManager = (IoNetworkManager) NetworkManager.singleton;
+            networkManager.RestartPlayerClient();
+        }
     }
 }

@@ -1,24 +1,25 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class SpawnPositionSelector : MonoBehaviour
+namespace Io_Framework
 {
-    public RandomPositionSelector PositionSelector;
-    public float SafeRadius = 1.0f;
-    public LayerMask CheckLayers;
-
-    public bool SelectSpawnPosition(out Vector3 spawnPosition)
+    public class SpawnPositionSelector : MonoBehaviour
     {
-        var position = PositionSelector.RandomPosition();
+        public RandomPositionSelector PositionSelector;
+        public float SafeRadius = 1.0f;
+        public LayerMask CheckLayers;
 
-        if (Physics2D.OverlapCircle(position, SafeRadius, CheckLayers) != null)
+        public bool SelectSpawnPosition(out Vector3 spawnPosition)
         {
-            spawnPosition = position;
-            return false;
-        }
+            var position = PositionSelector.RandomPosition();
 
-        spawnPosition = position;
-        return true;
+            if (Physics2D.OverlapCircle(position, SafeRadius, CheckLayers) != null)
+            {
+                spawnPosition = position;
+                return false;
+            }
+
+            spawnPosition = position;
+            return true;
+        }
     }
 }

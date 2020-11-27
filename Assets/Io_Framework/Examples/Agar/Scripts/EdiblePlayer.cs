@@ -1,26 +1,26 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class EdiblePlayer : Food
+namespace Io_Framework.Examples.Agar
 {
-    [Range(0.0f, 1.0f)]
-    public float ScoreDecay;
-
-    public override bool CanBeGivenToOther(GameObject other)
+    public class EdiblePlayer : Food
     {
-        return base.CanBeGivenToOther(other) 
-               && GetComponent<Collider2D>().bounds.extents.x < 0.9f * other.GetComponent<Collider2D>().bounds.extents.x;
-    }
+        [Range(0.0f, 1.0f)]
+        public float ScoreDecay;
 
-    public override int EarnedScore()
-    {
-        return base.EarnedScore() + (int)((1.0f-ScoreDecay) * GetComponent<PlayerScore>().Score);
-    }
+        public override bool CanBeGivenToOther(GameObject other)
+        {
+            return base.CanBeGivenToOther(other) 
+                   && GetComponent<Collider2D>().bounds.extents.x < 0.9f * other.GetComponent<Collider2D>().bounds.extents.x;
+        }
 
-    public override void Destroy()
-    {
-        GetComponent<Player>().Destroy();
+        public override int EarnedScore()
+        {
+            return base.EarnedScore() + (int)((1.0f-ScoreDecay) * GetComponent<PlayerScore>().Score);
+        }
+
+        public override void Destroy()
+        {
+            GetComponent<Player>().Destroy();
+        }
     }
 }

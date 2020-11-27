@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-namespace Assets.Io_Framework.Examples.JumpIO.Scripts
+namespace Io_Framework.Examples.JumpIO
 {
     public abstract class JumpIOPowerUpBase: PowerUpBase
     {

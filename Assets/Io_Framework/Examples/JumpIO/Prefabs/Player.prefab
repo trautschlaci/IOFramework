@@ -347,7 +347,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerToPresent: {fileID: 6265447081225371889}
-  nameText: {fileID: 3373187223457057930}
+  NameText: {fileID: 3373187223457057930}
 --- !u!114 &2817396425393884415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -362,7 +362,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  score: 0
+  _score: 0
 --- !u!114 &5321146476413219960
 MonoBehaviour:
   m_ObjectHideFlags: 0

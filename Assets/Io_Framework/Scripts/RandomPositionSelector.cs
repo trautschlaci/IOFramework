@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 
-public abstract class RandomPositionSelector: MonoBehaviour
+namespace Io_Framework
 {
-    public abstract Vector3 RandomPosition();
+    public abstract class RandomPositionSelector: MonoBehaviour
+    {
+        public abstract Vector3 RandomPosition();
+    }
 }

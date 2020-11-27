@@ -1,26 +1,27 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class PlayerCameraAgar : NetworkBehaviour
+namespace Io_Framework.Examples.Agar
 {
-    public Transform LocalCameraTransform;
-
-    public override void OnStartLocalPlayer()
+    public class PlayerCameraAgar : NetworkBehaviour
     {
-        Camera.main.transform.SetParent(transform);
-        Camera.main.transform.localPosition = LocalCameraTransform.localPosition;
-        Camera.main.transform.localRotation = LocalCameraTransform.localRotation;
-        Camera.main.orthographicSize = GetComponent<GrowingPlayer>().GetCameraScale();
+        public Transform LocalCameraTransform;
+
+        public override void OnStartLocalPlayer()
+        {
+            Camera.main.transform.SetParent(transform);
+            Camera.main.transform.localPosition = LocalCameraTransform.localPosition;
+            Camera.main.transform.localRotation = LocalCameraTransform.localRotation;
+            Camera.main.orthographicSize = GetComponent<GrowingPlayer>().GetCameraScale();
+        }
+
+        [ClientCallback]
+        void OnDisable()
+        {
+            if (Camera.main == null || Camera.main.transform.parent != transform) return;
+
+            Camera.main.transform.SetParent(null);
+        }
+
     }
-
-    [ClientCallback]
-    void OnDisable()
-    {
-        if (Camera.main == null || Camera.main.transform.parent != transform) return;
-
-        Camera.main.transform.SetParent(null);
-    }
-
 }

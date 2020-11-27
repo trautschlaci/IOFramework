@@ -1,31 +1,32 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
+﻿using Cinemachine;
 using Mirror;
 using UnityEngine;
 
-public class PlayerCameraJumpIO : NetworkBehaviour
+namespace Io_Framework.Examples.JumpIO
 {
-    private CinemachineVirtualCamera cinemachineCamera;
-
-    public override void OnStartLocalPlayer()
+    public class PlayerCameraJumpIO : NetworkBehaviour
     {
-        CinemachineBrain cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
-        if (cameraBrain == null)
+        private CinemachineVirtualCamera _cinemachineCamera;
+
+        public override void OnStartLocalPlayer()
         {
-            Debug.LogError("CinemachineBrain missing from main camera");
-            return;
+            CinemachineBrain cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
+            if (cameraBrain == null)
+            {
+                Debug.LogError("CinemachineBrain missing from main camera");
+                return;
+            }
+            _cinemachineCamera = cameraBrain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
+            _cinemachineCamera.Follow = transform;
         }
-        cinemachineCamera = cameraBrain.ActiveVirtualCamera.VirtualCameraGameObject.GetComponent<CinemachineVirtualCamera>();
-        cinemachineCamera.Follow = transform;
+
+        [ClientCallback]
+        void OnDisable()
+        {
+            if (_cinemachineCamera == null || _cinemachineCamera.Follow != transform) return;
+
+            _cinemachineCamera.Follow = null;
+        }
+
     }
-
-    [ClientCallback]
-    void OnDisable()
-    {
-        if (cinemachineCamera == null || cinemachineCamera.Follow != transform) return;
-
-        cinemachineCamera.Follow = null;
-    }
-
 }

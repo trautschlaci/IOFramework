@@ -1,20 +1,20 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Assets.Io_Framework.Examples.JumpIO.Scripts;
-using Mirror;
+﻿using Mirror;
 using UnityEngine;
 
-public class Pineapple : JumpIOPowerUpBase
+namespace Io_Framework.Examples.JumpIO
 {
-    [Server]
-    public override void ApplyEffect(GameObject player)
+    public class Pineapple : JumpIOPowerUpBase
     {
-        player.GetComponent<StompPlayer>().IsAvailable = false;
-    }
+        [Server]
+        public override void ApplyEffect(GameObject player)
+        {
+            player.GetComponent<StompPlayer>().IsAvailable = false;
+        }
 
-    [Server]
-    public override void RevertEffect(GameObject player)
-    {
-        player.GetComponent<StompPlayer>().IsAvailable = true;
+        [Server]
+        public override void RevertEffect(GameObject player)
+        {
+            player.GetComponent<StompPlayer>().IsAvailable = true;
+        }
     }
 }

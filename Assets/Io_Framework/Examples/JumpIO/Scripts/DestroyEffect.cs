@@ -1,11 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class DestroyEffect : MonoBehaviour
+namespace Io_Framework.Examples.JumpIO
 {
-    public void DestroyGameObject()
+    public class DestroyEffect : MonoBehaviour
     {
-        Destroy(gameObject);
+        public void DestroyGameObject()
+        {
+            Destroy(gameObject);
+        }
     }
 }

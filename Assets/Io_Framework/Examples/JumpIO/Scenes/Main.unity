@@ -2415,7 +2415,7 @@ MonoBehaviour:
   PositionText: {fileID: 586598014}
   NameText: {fileID: 1872389798}
   ScoreText: {fileID: 638247260}
-  image: {fileID: 1601256319}
+  BackgroundImage: {fileID: 1601256319}
 --- !u!114 &1601256322
 MonoBehaviour:
   m_ObjectHideFlags: 0

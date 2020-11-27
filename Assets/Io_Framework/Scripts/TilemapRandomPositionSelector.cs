@@ -1,41 +1,43 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class TilemapRandomPositionSelector : RandomPositionSelector
+namespace Io_Framework
 {
-    public Tilemap TilemapToUse;
-
-    private List<Vector3> emptyPositions;
-    private BoundsInt tilemapBounds;
-
-    void Start()
+    public class TilemapRandomPositionSelector : RandomPositionSelector
     {
-        emptyPositions = new List<Vector3>();
-        tilemapBounds = TilemapToUse.cellBounds;
-        TileBase[] tileArray = TilemapToUse.GetTilesBlock(tilemapBounds);
-        for (var index = 0; index < tileArray.Length; index++)
+        public Tilemap TilemapToUse;
+
+        private List<Vector3> _emptyPositions;
+        private BoundsInt _tilemapBounds;
+
+        void Start()
         {
-            if (tileArray[index] == null)
+            _emptyPositions = new List<Vector3>();
+            _tilemapBounds = TilemapToUse.cellBounds;
+            TileBase[] tileArray = TilemapToUse.GetTilesBlock(_tilemapBounds);
+            for (var index = 0; index < tileArray.Length; index++)
             {
-                var coords = TilemapToUse.GetCellCenterWorld(ArrayIndexToCellPosition(index));
-                emptyPositions.Add(coords);
+                if (tileArray[index] == null)
+                {
+                    var coords = TilemapToUse.GetCellCenterWorld(ArrayIndexToCellPosition(index));
+                    _emptyPositions.Add(coords);
+                }
             }
         }
-    }
 
-    public override Vector3 RandomPosition()
-    {
-        return emptyPositions[Random.Range(0, emptyPositions.Count)];
-    }
+        public override Vector3 RandomPosition()
+        {
+            return _emptyPositions[Random.Range(0, _emptyPositions.Count)];
+        }
 
 
-    private Vector3Int ArrayIndexToCellPosition(int index)
-    {
-        int x = index % tilemapBounds.size.x + tilemapBounds.x;
-        int y = index / tilemapBounds.size.x + tilemapBounds.y;
+        private Vector3Int ArrayIndexToCellPosition(int index)
+        {
+            int x = index % _tilemapBounds.size.x + _tilemapBounds.x;
+            int y = index / _tilemapBounds.size.x + _tilemapBounds.y;
 
-        return new Vector3Int(x, y, 0);
+            return new Vector3Int(x, y, 0);
+        }
     }
 }

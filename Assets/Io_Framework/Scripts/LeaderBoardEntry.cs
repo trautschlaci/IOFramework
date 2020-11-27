@@ -1,39 +1,40 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-public class LeaderBoardEntry : MonoBehaviour
+namespace Io_Framework
 {
-    public Text PositionText;
-    public Text NameText;
-    public Text ScoreText;
-    public Image image;
-
-    private Color _normalColor;
-
-    void Awake()
+    public class LeaderBoardEntry : MonoBehaviour
     {
-        _normalColor = image.color;
-    }
+        public Text PositionText;
+        public Text NameText;
+        public Text ScoreText;
+        public Image BackgroundImage;
 
-    public void Set(int position, string playerName, int score, bool isOwnScore)
-    {
-        PositionText.text = (position+1) + ".";
-        NameText.text = playerName;
-        ScoreText.text = score.ToString();
-        SwitchHighlight(isOwnScore);
-    }
+        private Color _normalColor;
 
-    private void SwitchHighlight(bool value)
-    {
-        if (value)
+        void Awake()
         {
-            image.color = new Color(0.5f, 0.8f, 0.5f);
+            _normalColor = BackgroundImage.color;
         }
-        else
+
+        public void Set(int position, string playerName, int score, bool isOwnScore)
         {
-            image.color = _normalColor;
+            PositionText.text = (position+1) + ".";
+            NameText.text = playerName;
+            ScoreText.text = score.ToString();
+            SwitchHighlight(isOwnScore);
+        }
+
+        private void SwitchHighlight(bool value)
+        {
+            if (value)
+            {
+                BackgroundImage.color = new Color(0.5f, 0.8f, 0.5f);
+            }
+            else
+            {
+                BackgroundImage.color = _normalColor;
+            }
         }
     }
 }
