@@ -97,32 +97,32 @@ namespace Io_Framework
                 IndexUI.SetActive(false);
         }
 
-        void OnCreatePlayerMessage(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
+        private void OnCreatePlayerMessage(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
         {
             StartCoroutine(SpawnPlayer(connection.connectionId, createPlayerMessage.Name));
         }
 
         IEnumerator SpawnPlayer(int connectionId, string playerName)
         {
-            Vector3 spawnPosition;
-            var couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
-            while (!couldSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
+            var spawnPosition = SpawnPointSelector.SelectSpawnPosition(out var couldNotSelectSpawnPosition);
+
+            while (couldNotSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
             {
-                couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
+                spawnPosition = SpawnPointSelector.SelectSpawnPosition(out couldNotSelectSpawnPosition);
                 _spawnRetryTime += SpawnRetryDelay;
                 yield return new WaitForSeconds(SpawnRetryDelay);
             }
 
             _spawnRetryTime = 0.0f;
 
-            if (!couldSelectSpawnPosition)
+            if (couldNotSelectSpawnPosition)
             {
                 NetworkServer.connections[connectionId].Send(new CouldNotSpawnMessage());
                 NetworkServer.connections[connectionId].Disconnect();
                 yield break;
             }
 
-            GameObject playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
+            var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
             playerGameObject.GetComponent<Player>().PlayerName = playerName;
 
             NetworkServer.AddPlayerForConnection(NetworkServer.connections[connectionId], playerGameObject);

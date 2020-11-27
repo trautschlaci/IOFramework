@@ -2306,6 +2306,7 @@ MonoBehaviour:
   EntryTemplate: {fileID: 1601256317}
   NumberOfEntries: 10
   RefreshDelaySeconds: 0.5
+  IsRefreshStopped: 0
 --- !u!114 &1461936363
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19225,6 +19226,7 @@ GameObject:
   - component: {fileID: 2133162662}
   - component: {fileID: 2133162665}
   - component: {fileID: 2133162664}
+  - component: {fileID: 2133162663}
   m_Layer: 0
   m_Name: ObjectSpawner
   m_TagString: Untagged
@@ -19246,6 +19248,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2133162663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2133162661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PositionSelector: {fileID: 1694750525}
+  SafeRadius: 0.1
+  CheckLayers:
+    serializedVersion: 2
+    m_Bits: 2560
 --- !u!114 &2133162664
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -19255,7 +19274,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2133162661}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e71a793dfc8462245accbd75a3b0d45b, type: 3}
+  m_Script: {fileID: 11500000, guid: e677aa5a85f96d340b7587d95089d102, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
@@ -19276,15 +19295,12 @@ MonoBehaviour:
   - GameObject: {fileID: 3304267130202560207, guid: 7314d1258e5da5045892e93ad7a5766d,
       type: 3}
     Weight: 1
-  RandomPositionSelector: {fileID: 1694750525}
+  SpawnPointSelector: {fileID: 2133162663}
   AutoStartSpawning: 1
   MinSpawnDelay: 4
   MaxSpawnDelay: 4
   BulkSpawn: 1
-  CheckRadius: 0.1
-  CheckLayers:
-    serializedVersion: 2
-    m_Bits: 2048
+  IsStopped: 0
 --- !u!114 &2133162665
 MonoBehaviour:
   m_ObjectHideFlags: 0

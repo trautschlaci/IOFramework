@@ -12,7 +12,7 @@ namespace Io_Framework
     public class ObjectSpawner: NetworkBehaviour
     {
         public List<WeightedGameObject> SelectableObjectsToSpawn;
-        public RandomPositionSelector RandomPositionSelector;
+        public SpawnPositionSelector SpawnPointSelector;
         public bool AutoStartSpawning = true;
         public float MinSpawnDelay = 0.1f;
         public float MaxSpawnDelay = 0.1f;
@@ -80,12 +80,18 @@ namespace Io_Framework
         [Server]
         public virtual void Spawn()
         {
-            var target = RandomPositionSelector.RandomPosition();
+            var targetPosition = SpawnPointSelector.SelectSpawnPosition(out var doesCollide);
+
+
+            if (doesCollide)
+                return;
+
+
             var selectedGo = SelectObjectToSpawn();
 
             if (selectedGo != null)
             {
-                var spawnGameObject = Instantiate(selectedGo, target, Quaternion.identity);
+                var spawnGameObject = Instantiate(selectedGo, targetPosition, Quaternion.identity);
                 NetworkServer.Spawn(spawnGameObject);
             }
         }
