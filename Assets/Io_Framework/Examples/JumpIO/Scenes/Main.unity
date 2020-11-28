@@ -677,7 +677,6 @@ RectTransform:
   - {fileID: 1757505719}
   - {fileID: 534770340}
   - {fileID: 318595901}
-  - {fileID: 1461936361}
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1165,7 +1164,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 1
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 112.
+  m_Text: 
 --- !u!222 &586598015
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1393,7 +1392,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100
+  m_Text: 
 --- !u!222 &638247261
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2280,12 +2279,12 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 264059656}
-  m_RootOrder: 3
+  m_Father: {fileID: 0}
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 359.5, y: 124.5}
+  m_AnchoredPosition: {x: 839, y: 394}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1461936362
@@ -18783,7 +18782,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Mayuyu
+  m_Text: 
 --- !u!222 &1872389799
 CanvasRenderer:
   m_ObjectHideFlags: 0
