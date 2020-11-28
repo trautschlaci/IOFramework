@@ -8,7 +8,7 @@ namespace Io_Framework
 
         public override Vector3 RandomPosition()
         {
-            Vector3[] corners = new Vector3[4];
+            var corners = new Vector3[4];
             SpawnArea.GetWorldCorners(corners);
             var x = Random.Range(corners[0].x, corners[2].x);
             var y = Random.Range(corners[0].y, corners[2].y);

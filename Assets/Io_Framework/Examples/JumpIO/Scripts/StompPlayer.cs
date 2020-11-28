@@ -13,24 +13,24 @@ namespace Io_Framework.Examples.JumpIO
         private Player _player;
 
         [ServerCallback]
-        void Start()
+        private void Start()
         {
             _player = GetComponent<Player>();
         }
 
         [ServerCallback]
-        void FixedUpdate()
+        private void FixedUpdate()
         {
             CheckAboveHead();
         }
 
         [Server]
-        void CheckAboveHead()
+        private void CheckAboveHead()
         {
-            RaycastHit2D leftCheck = Physics2D.Raycast(HeadLeft.position, Vector2.up, CheckDistance, PlayerLayer);
-            RaycastHit2D rightCheck = Physics2D.Raycast(HeadRight.position, Vector2.up, CheckDistance, PlayerLayer);
+            var leftCheck = Physics2D.Raycast(HeadLeft.position, Vector2.up, CheckDistance, PlayerLayer);
+            var rightCheck = Physics2D.Raycast(HeadRight.position, Vector2.up, CheckDistance, PlayerLayer);
 
-            RaycastHit2D contact = leftCheck;
+            var contact = leftCheck;
             if (!contact)
                 contact = rightCheck;
 
@@ -40,13 +40,14 @@ namespace Io_Framework.Examples.JumpIO
             }
         }
 
+        [Server]
         public override bool CanBeGivenToOther(GameObject other)
         {
             return base.CanBeGivenToOther(other) && other != gameObject;
         }
 
         [Server]
-        public override void ClaimReward(GameObject player)
+        protected override void ClaimReward(GameObject player)
         {
             player.GetComponent<PlayerControllerJumpIO>().Jump();
             base.ClaimReward(player);

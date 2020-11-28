@@ -1,4 +1,5 @@
-﻿using TMPro;
+﻿using Mirror;
+using TMPro;
 using UnityEngine;
 
 namespace Io_Framework
@@ -10,13 +11,16 @@ namespace Io_Framework
 
         private int _direction = 1;
 
-        void Start()
+
+        [ClientCallback]
+        private void Start()
         {
             if(PlayerToPresent == null)
                 PlayerToPresent = GetComponent<Player>();
         }
 
-        void Update()
+        [ClientCallback]
+        private void Update()
         {
             NameText.text = PlayerToPresent.PlayerName;
             NameText.transform.rotation = Camera.main.transform.rotation;

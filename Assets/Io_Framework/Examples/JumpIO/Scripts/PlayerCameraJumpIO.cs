@@ -8,9 +8,10 @@ namespace Io_Framework.Examples.JumpIO
     {
         private CinemachineVirtualCamera _cinemachineCamera;
 
+
         public override void OnStartLocalPlayer()
         {
-            CinemachineBrain cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
+            var cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
             if (cameraBrain == null)
             {
                 Debug.LogError("CinemachineBrain missing from main camera");
@@ -21,7 +22,7 @@ namespace Io_Framework.Examples.JumpIO
         }
 
         [ClientCallback]
-        void OnDisable()
+        private void OnDisable()
         {
             if (_cinemachineCamera == null || _cinemachineCamera.Follow != transform) return;
 

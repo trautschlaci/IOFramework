@@ -28,7 +28,7 @@ namespace Io_Framework.Examples.Agar
         private float _moveBlockTime;
 
 
-        public struct InputInfo
+        private struct InputInfo
         {
             public Vector2 MousePos;
             public bool JumpPressed;
@@ -46,7 +46,7 @@ namespace Io_Framework.Examples.Agar
 
             if (_inputSyncTime < Time.time)
             {
-                var inputInfo = new InputInfo()
+                var inputInfo = new InputInfo
                 {
                     MousePos = _mousePosClient,
                     JumpPressed = _jumpPressedClient
@@ -115,7 +115,8 @@ namespace Io_Framework.Examples.Agar
             }
         }
 
-        public void UpdateMovement(InputInfo input)
+        [Server]
+        private void UpdateMovement(InputInfo input)
         {
             var mousePos = input.MousePos;
             _moveVectorServer = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);

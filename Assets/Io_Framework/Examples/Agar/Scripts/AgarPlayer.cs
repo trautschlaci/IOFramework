@@ -9,6 +9,7 @@ namespace Io_Framework.Examples.Agar
 
         private PlayerScore _playerScore;
 
+
         [ServerCallback]
         private void Start()
         {
@@ -29,8 +30,8 @@ namespace Io_Framework.Examples.Agar
 
             _playerScore.Score = (int)(_playerScore.Score / 2.0f);
 
-            Vector3 target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
-            GameObject half = SpawnClone(target, Quaternion.identity);
+            var target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
+            var half = SpawnClone(target, Quaternion.identity);
             half.GetComponent<PlayerScore>().Score = _playerScore.Score;
             half.GetComponent<RandomColor>().BodyColor = GetComponent<RandomColor>().BodyColor;
             half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
@@ -43,7 +44,7 @@ namespace Io_Framework.Examples.Agar
         }
 
         [Server]
-        public override void OnLastPlayerObjectDestroyed()
+        protected override void OnLastPlayerObjectDestroyed()
         {
             base.OnLastPlayerObjectDestroyed();
             TargetLastObjectDestroyed();
@@ -53,7 +54,7 @@ namespace Io_Framework.Examples.Agar
         [TargetRpc]
         private void TargetLastObjectDestroyed()
         {
-            IoNetworkManager networkManager = (IoNetworkManager)NetworkManager.singleton;
+            var networkManager = (IoNetworkManager)NetworkManager.singleton;
             networkManager.RestartPlayerClient();
         }
 

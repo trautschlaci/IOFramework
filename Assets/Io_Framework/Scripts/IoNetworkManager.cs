@@ -43,20 +43,22 @@ namespace Io_Framework
             NetworkClient.RegisterHandler<CouldNotSpawnMessage>(OnCouldNotSpawnPlayer);
         }
 
-        public virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
+        protected virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
         {
         }
 
         public override void OnClientConnect(NetworkConnection conn)
         {
-            if (!clientLoadedScene)
-            {
-                if (!ClientScene.ready) ClientScene.Ready(conn);
-                if (autoCreatePlayer)
-                {
-                    CreateNewPlayer();
-                }
-            }
+            if (clientLoadedScene) 
+                return;
+
+
+            if (!ClientScene.ready) 
+                ClientScene.Ready(conn);
+
+            if (autoCreatePlayer)
+                CreateNewPlayer();
+            
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -97,12 +99,14 @@ namespace Io_Framework
                 IndexUI.SetActive(false);
         }
 
+        [Server]
         private void OnCreatePlayerMessage(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
         {
             StartCoroutine(SpawnPlayer(connection.connectionId, createPlayerMessage.Name));
         }
 
-        IEnumerator SpawnPlayer(int connectionId, string playerName)
+        [Server]
+        private IEnumerator SpawnPlayer(int connectionId, string playerName)
         {
             var couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out var spawnPosition);
 

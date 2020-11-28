@@ -8,7 +8,7 @@ namespace Io_Framework.Examples.Agar
         public override bool CanBeGivenToOther(GameObject other)
         {
             return base.CanBeGivenToOther(other) 
-                   && other.tag == "Player" 
+                   && other.CompareTag("Player") 
                    && Vector3.Distance(transform.position, other.transform.position) < other.GetComponent<Collider2D>().bounds.extents.x;
         }
 
@@ -18,7 +18,7 @@ namespace Io_Framework.Examples.Agar
         }
 
         [ServerCallback]
-        void OnTriggerStay2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
             if (CanBeGivenToOther(other.gameObject))
             {

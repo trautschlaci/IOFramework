@@ -65,14 +65,14 @@ namespace Io_Framework.Examples.JumpIO
         #endregion
 
 
-        public struct InputInfo
+        private struct InputInfo
         {
             public int Horizontal;
             public bool JumpPressed;
             public bool JumpHeld;
         }
 
-        public struct AnimatorVariables
+        private struct AnimatorVariables
         {
             public bool IsRunning;
             public bool IsFalling;
@@ -116,6 +116,7 @@ namespace Io_Framework.Examples.JumpIO
         }
 
 
+
         private void Start()
         {
             _rigidBody = GetComponent<Rigidbody2D>();
@@ -129,6 +130,7 @@ namespace Io_Framework.Examples.JumpIO
             _fallingParamId = Animator.StringToHash("IsFalling");
             _midAirParamId = Animator.StringToHash("IsMidAir");
         }
+
 
 
         [ServerCallback]
@@ -172,7 +174,6 @@ namespace Io_Framework.Examples.JumpIO
             _jumpPressedServer = false;
         }
 
-        [Server]
         public override void OnStartServer()
         {
             _animatorUpdateTime = Time.fixedTime + 0.2f;
@@ -183,16 +184,18 @@ namespace Io_Framework.Examples.JumpIO
         {
             _isGrounded = false;
 
-            RaycastHit2D leftCheck = Physics2D.Raycast(LeftFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
-            RaycastHit2D rightCheck = Physics2D.Raycast(RightFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
+            var leftCheck = Physics2D.Raycast(LeftFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
+            var rightCheck = Physics2D.Raycast(RightFoot.position, Vector2.down, GroundCheckDistance, GroundLayers);
 
-            if (leftCheck || rightCheck)
-            {
-                _isGrounded = true;
-                _isJumping = false;
-                _coyoteTime = Time.fixedTime + CoyoteDuration;
-                _extraJumpCount = ExtraJumps;
-            }
+
+            if (!leftCheck && !rightCheck) 
+                return;
+
+
+            _isGrounded = true;
+            _isJumping = false;
+            _coyoteTime = Time.fixedTime + CoyoteDuration;
+            _extraJumpCount = ExtraJumps;
         }
 
         [Server]
@@ -201,11 +204,15 @@ namespace Io_Framework.Examples.JumpIO
             if (_jumpTime <= Time.fixedTime)
                 _isJumping = false;
 
-            if ((_isGrounded || _coyoteTime > Time.fixedTime) && (_jumpBufferTime > Time.fixedTime || _jumpPressedServer && _jumpHeldServer) && !_isJumping)
+
+            if ((_isGrounded || _coyoteTime > Time.fixedTime) 
+                && (_jumpBufferTime > Time.fixedTime || _jumpPressedServer && _jumpHeldServer) 
+                && !_isJumping)
             {
                 Jump();
                 return;
             }
+
 
             if (_jumpPressedServer && _extraJumpCount > 0 && !_isGrounded)
             {
@@ -214,10 +221,12 @@ namespace Io_Framework.Examples.JumpIO
                 return;
             }
 
+
             if (_isJumping && _jumpHeldServer)
             {
                 _rigidBody.AddForce(new Vector2(0f, JumpHoldForce), ForceMode2D.Impulse);
             }
+
 
             if (_isGrounded)
             {
@@ -233,7 +242,7 @@ namespace Io_Framework.Examples.JumpIO
             if (_horizontalMove * _playerDir < 0f)
                 FlipCharacterDirection();
 
-            Vector2 targetVelocity = new Vector2(_horizontalMove * Time.fixedDeltaTime * 50f, _rigidBody.velocity.y);
+            var targetVelocity = new Vector2(_horizontalMove * Time.fixedDeltaTime * 50f, _rigidBody.velocity.y);
             _rigidBody.velocity = Vector2.SmoothDamp(_rigidBody.velocity, targetVelocity, ref _velocity, MovementSmoothing);
         }
 
@@ -242,7 +251,7 @@ namespace Io_Framework.Examples.JumpIO
         {
             _playerDir *= -1;
 
-            Vector3 scale = transform.localScale;
+            var scale = transform.localScale;
             scale.x *= -1;
             transform.localScale = scale;
         }

@@ -31,7 +31,6 @@ namespace Io_Framework
             OnScoreChangedClient?.Invoke(oldScore, newScore);
         }
 
-        [Server]
         public override void OnStartServer()
         {
             _playerObject = GetComponent<Player>();

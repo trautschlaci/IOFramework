@@ -48,7 +48,6 @@ namespace Io_Framework
             }
         }
 
-        [Client]
         public override void OnStopClient()
         {
             base.OnStopClient();
@@ -61,7 +60,7 @@ namespace Io_Framework
         }
 
         [Client]
-        void OnTopScoresUpdated(SyncListEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)
+        private void OnTopScoresUpdated(SyncListEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)
         {
             switch (op)
             {
@@ -263,7 +262,6 @@ namespace Io_Framework
             return -1;
         }
 
-        [Server]
         public override void OnStopServer()
         {
             IsRefreshStopped = true;

@@ -19,7 +19,7 @@ namespace Io_Framework
             return ConstantScore;
         }
 
-        public virtual void ClaimReward(GameObject other)
+        protected virtual void ClaimReward(GameObject other)
         {
             IsAvailable = false;
             other.GetComponent<PlayerScore>().Score += EarnedScore();

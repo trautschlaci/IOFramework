@@ -20,20 +20,20 @@ namespace Io_Framework
         public bool IsStopped;
 
 
-        [Server]
         public override void OnStartServer()
         {
-            if (SelectableObjectsToSpawn.Any(spawnObject => spawnObject.GameObject != null && !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
+            if (SelectableObjectsToSpawn.Any(spawnObject => spawnObject.GameObject != null 
+                                                            && !NetworkManager.singleton.spawnPrefabs.Contains(spawnObject.GameObject)))
             {
                 Debug.LogError("Prefabs to spawn should also be added to the list of the NetworkManager");
                 return;
             }
 
+
             if (AutoStartSpawning)
                 StartSpawning();
         }
 
-        [Server]
         public override void OnStopServer()
         {
             IsStopped = true;
@@ -60,9 +60,7 @@ namespace Io_Framework
         [Server]
         protected virtual GameObject SelectObjectToSpawn()
         {
-            var weightSum = 0;
-            foreach (var weightedGo in SelectableObjectsToSpawn) weightSum += weightedGo.Weight;
-
+            var weightSum = SelectableObjectsToSpawn.Sum(weightedGo => weightedGo.Weight);
 
             var randomWeight = Random.Range(0, weightSum);
             foreach (var weightedGo in SelectableObjectsToSpawn)

@@ -14,7 +14,7 @@ namespace Io_Framework
         private bool _isHidden;
 
         [Server]
-        public void PickUp(GameObject player)
+        protected void PickUp(GameObject player)
         {
             if(CanBeGivenToPlayerServer(player))
                 StartCoroutine(PickUpCoroutine(player));
@@ -41,24 +41,6 @@ namespace Io_Framework
             NetworkServer.Destroy(gameObject);
         }
 
-        public virtual void Update()
-        {
-            if (!_isHidden)
-                return;
-
-
-            if (isClient)
-                HideClient();
-            else
-                HideServer();
-        }
-
-        [TargetRpc]
-        public virtual void TargetDisplayCollect(NetworkConnection conn)
-        {
-            Instantiate(CollectedEffect, transform.position, transform.rotation);
-        }
-
         [Server]
         public virtual bool CanBeGivenToPlayerServer(GameObject player)
         {
@@ -71,12 +53,35 @@ namespace Io_Framework
             return true;
         }
 
-        public abstract void HideClient();
 
-        public abstract void HideServer();
+        protected virtual void Update()
+        {
+            if (!_isHidden)
+                return;
 
-        public abstract void ApplyEffect(GameObject player);
 
-        public abstract void RevertEffect(GameObject player);
+            if (isClient)
+                HideClient();
+            else
+                HideServer();
+        }
+
+
+
+        [TargetRpc]
+        protected virtual void TargetDisplayCollect(NetworkConnection conn)
+        {
+            Instantiate(CollectedEffect, transform.position, transform.rotation);
+        }
+
+
+
+        protected abstract void HideClient();
+
+        protected abstract void HideServer();
+
+        protected abstract void ApplyEffect(GameObject player);
+
+        protected abstract void RevertEffect(GameObject player);
     }
 }

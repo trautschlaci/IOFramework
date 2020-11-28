@@ -30,9 +30,6 @@ namespace Io_Framework.Examples.Agar
             return 3 + size;
         }
 
-
-
-
         protected override void Start()
         {
             base.Start();
@@ -43,6 +40,8 @@ namespace Io_Framework.Examples.Agar
 
             _sprite = GetComponent<SpriteRenderer>();
         }
+
+
 
         [ClientCallback]
         private void Update()

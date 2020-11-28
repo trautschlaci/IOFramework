@@ -15,7 +15,7 @@ namespace Io_Framework.Examples.JumpIO
         }
 
         [ClientRpc]
-        public override void RpcDisplayDestroy()
+        protected override void RpcDisplayDestroy()
         {
             base.RpcDisplayDestroy();
 
@@ -25,7 +25,7 @@ namespace Io_Framework.Examples.JumpIO
             if (!hasAuthority)
                 return;
 
-            IoNetworkManager networkManager = (IoNetworkManager) NetworkManager.singleton;
+            var networkManager = (IoNetworkManager) NetworkManager.singleton;
             networkManager.RestartPlayerClient();
         }
     }

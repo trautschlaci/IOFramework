@@ -15,13 +15,13 @@ namespace Io_Framework.Examples.JumpIO
         }
 
         [Server]
-        public override void ApplyEffect(GameObject player)
+        protected override void ApplyEffect(GameObject player)
         {
             player.GetComponent<PlayerControllerJumpIO>().RunSpeed += SpeedModifier;
         }
 
         [Server]
-        public override void RevertEffect(GameObject player)
+        protected override void RevertEffect(GameObject player)
         {
             player.GetComponent<PlayerControllerJumpIO>().RunSpeed -= SpeedModifier;
         }

@@ -10,7 +10,7 @@ namespace Io_Framework.Examples.Agar
 
         private Material _cachedMaterial;
 
-        [Server]
+
         public override void OnStartServer()
         {
             BodyColor = Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
@@ -24,7 +24,7 @@ namespace Io_Framework.Examples.Agar
         }
 
         [ClientCallback]
-        void OnDestroy()
+        private void OnDestroy()
         {
             Destroy(_cachedMaterial);
         }

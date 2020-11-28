@@ -14,7 +14,7 @@ namespace Io_Framework
 
 
         [ServerCallback]
-        void Start()
+        private void Start()
         {
             InitializeSingleton();
         }

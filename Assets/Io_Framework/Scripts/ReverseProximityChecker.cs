@@ -27,7 +27,8 @@ namespace Io_Framework
             CancelInvoke(nameof(RebuildObservers));
         }
 
-        void RebuildObservers()
+        [Server]
+        private void RebuildObservers()
         {
             netIdentity.RebuildObservers(false);
         }
@@ -50,16 +51,14 @@ namespace Io_Framework
             if (ForceHidden)
                 return;
 
-            // 'transform.' calls GetComponent, only do it once
-            Vector3 position = transform.position;
+            var position = transform.position;
 
-            foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values)
+            foreach (var conn in NetworkServer.connections.Values)
             {
                 if (conn != null && conn.identity != null && conn.identity.GetComponent<Player>() != null)
                 {
                     var playerIdentity = conn.identity;
 
-                    // check distance
                     if (Vector3.Distance(playerIdentity.transform.position, position) < playerIdentity.GetComponent<Player>().ViewRange + OwnExtent)
                     {
                         observers.Add(conn);

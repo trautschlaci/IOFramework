@@ -7,7 +7,7 @@ namespace Io_Framework
     {
         public int MaxNumberOfClones = 20;
 
-        [Server]
+
         public override void OnStartServer()
         {
             base.OnStartServer();
@@ -17,7 +17,7 @@ namespace Io_Framework
         [Server]
         public override void Destroy()
         {
-            bool wasLast = PlayerObjectManager.Singleton.DeleteGameObject(connectionToClient.connectionId, this);
+            var wasLast = PlayerObjectManager.Singleton.DeleteGameObject(connectionToClient.connectionId, this);
             if(wasLast)
                 OnLastPlayerObjectDestroyed();
 
@@ -27,7 +27,7 @@ namespace Io_Framework
         [Server]
         public virtual GameObject SpawnClone(Vector3 targetPos, Quaternion rotation)
         {
-            GameObject clone = PlayerObjectManager.Singleton.InstantiatePlayerObject(targetPos, rotation);
+            var clone = PlayerObjectManager.Singleton.InstantiatePlayerObject(targetPos, rotation);
             clone.GetComponent<Player>().PlayerName = PlayerName;
             NetworkServer.Spawn(clone, connectionToClient);
             return clone;
@@ -40,7 +40,7 @@ namespace Io_Framework
         }
 
         [Server]
-        public virtual void OnLastPlayerObjectDestroyed()
+        protected virtual void OnLastPlayerObjectDestroyed()
         {
             LeaderBoard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
         }

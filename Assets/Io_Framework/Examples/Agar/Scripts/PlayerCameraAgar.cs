@@ -16,7 +16,7 @@ namespace Io_Framework.Examples.Agar
         }
 
         [ClientCallback]
-        void OnDisable()
+        private void OnDisable()
         {
             if (Camera.main == null || Camera.main.transform.parent != transform) return;
 

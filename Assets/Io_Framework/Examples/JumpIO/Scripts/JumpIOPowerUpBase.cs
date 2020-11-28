@@ -17,14 +17,14 @@ namespace Io_Framework.Examples.JumpIO
         }
 
         [Client]
-        public override void HideClient()
+        protected override void HideClient()
         {
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;
         }
 
         [Server]
-        public override void HideServer()
+        protected override void HideServer()
         {
             GetComponent<Collider2D>().enabled = false;
             GetComponent<SpriteRenderer>().enabled = false;

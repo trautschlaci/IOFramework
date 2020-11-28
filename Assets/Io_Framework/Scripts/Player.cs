@@ -31,16 +31,18 @@ namespace Io_Framework
         }
 
 
-        public virtual void HideObject()
+
+        protected virtual void HideObject()
         {
-            foreach (Collider2D c in GetComponentsInChildren<Collider2D>()) { c.enabled = false; }
-            foreach (Collider c in GetComponentsInChildren<Collider>()) { c.enabled = false; }
-            foreach (Renderer r in GetComponentsInChildren<Renderer>()) { r.enabled = false; }
+            foreach (var c in GetComponentsInChildren<Collider2D>()) { c.enabled = false; }
+            foreach (var c in GetComponentsInChildren<Collider>()) { c.enabled = false; }
+            foreach (var r in GetComponentsInChildren<Renderer>()) { r.enabled = false; }
         }
 
 
+
         [ClientRpc]
-        public virtual void RpcDisplayDestroy()
+        protected virtual void RpcDisplayDestroy()
         {
             HideObject();
         }
