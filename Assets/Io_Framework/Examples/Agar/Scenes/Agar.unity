@@ -527,16 +527,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 277549051}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
-  m_Father: {fileID: 648668729}
-  m_RootOrder: 2
+  m_Father: {fileID: 777946541}
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 359.5, y: 124.5}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &277549053
@@ -821,6 +821,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ed48888ca3cbc944dbb33b2c2c519ff6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   PlayerPrefab: {fileID: 5558229976809921361, guid: 2db5e3cb747244b4c8fff22d390d9722,
     type: 3}
 --- !u!114 &567823409
@@ -870,7 +872,6 @@ RectTransform:
   m_Children:
   - {fileID: 176398781}
   - {fileID: 1180306743}
-  - {fileID: 277549052}
   m_Father: {fileID: 777946541}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1334,6 +1335,7 @@ RectTransform:
   - {fileID: 1722162814}
   - {fileID: 648668729}
   - {fileID: 1431114899}
+  - {fileID: 277549052}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1935,8 +1937,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1370688050}
-  - component: {fileID: 1370688048}
   - component: {fileID: 1370688049}
+  - component: {fileID: 1370688048}
   m_Layer: 0
   m_Name: Network Manager
   m_TagString: Untagged

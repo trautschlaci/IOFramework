@@ -21,7 +21,7 @@ namespace Io_Framework
 
         // Client
         private readonly List<GameObject> _entries = new List<GameObject>();
-        public ScoreEntry OwnScore { get; private set; }
+        public ScoreEntry OwnScore { get; private set; } = new ScoreEntry(-1, null, -1);
         public int OwnPosition { get; private set; }
 
         // Client and Server
@@ -34,9 +34,8 @@ namespace Io_Framework
         [Client]
         public override void OnStartClient()
         {
-            OwnScore = new ScoreEntry(-1, null, -1);
             _topScores.Callback += OnTopScoresUpdated;
-            for (int i = 0; i < NumberOfEntries+1; i++)
+            for (var i = 0; i < NumberOfEntries+1; i++)
             {
                 _entries.Add(Instantiate(EntryTemplate, EntryContainer.transform));
                 _entries[i].SetActive(false);
@@ -48,9 +47,12 @@ namespace Io_Framework
             }
         }
 
-        public override void OnStopClient()
+
+        private void OnDisable()
         {
-            base.OnStopClient();
+            if (isServer)
+                return;
+
             for (var i = _entries.Count - 1; i >= 0; i--)
             {
                 var temp = _entries[i];
@@ -58,6 +60,7 @@ namespace Io_Framework
                 Destroy(temp);
             }
         }
+
 
         [Client]
         private void OnTopScoresUpdated(SyncListEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)
@@ -127,8 +130,7 @@ namespace Io_Framework
         }
 
 
-        [ServerCallback]
-        private void Start()
+        public override void OnStartServer()
         {
             InitializeSingleton();
             StartCoroutine(Refresh());

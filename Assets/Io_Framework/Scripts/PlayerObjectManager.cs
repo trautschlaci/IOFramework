@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Io_Framework
 {
-    public class PlayerObjectManager: MonoBehaviour
+    public class PlayerObjectManager: NetworkBehaviour
     {
         public GameObject PlayerPrefab;
         public static PlayerObjectManager Singleton { get; private set; }
@@ -13,8 +13,7 @@ namespace Io_Framework
         private readonly Dictionary<int, List<CloneablePlayerObject>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObject>>();
 
 
-        [ServerCallback]
-        private void Start()
+        public override void OnStartServer()
         {
             InitializeSingleton();
         }

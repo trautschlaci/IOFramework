@@ -15,7 +15,6 @@ namespace Io_Framework.Examples.Agar
             Camera.main.orthographicSize = GetComponent<AgarGrowingPlayer>().GetCameraScale();
         }
 
-        [ClientCallback]
         private void OnDisable()
         {
             if (Camera.main == null || Camera.main.transform.parent != transform) return;

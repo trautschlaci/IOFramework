@@ -21,7 +21,6 @@ namespace Io_Framework.Examples.JumpIO
             _cinemachineCamera.Follow = transform;
         }
 
-        [ClientCallback]
         private void OnDisable()
         {
             if (_cinemachineCamera == null || _cinemachineCamera.Follow != transform) return;

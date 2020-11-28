@@ -60,9 +60,9 @@ namespace Io_Framework.Examples.Agar
         }
 
 
+
         private void Start()
         {
-            _rigidBody = GetComponent<Rigidbody2D>();
             _rigidBody.simulated = isServer;
             _player = GetComponent<AgarPlayer>();
 
@@ -74,9 +74,8 @@ namespace Io_Framework.Examples.Agar
         private void Awake()
         {
             _rigidBody = GetComponent<Rigidbody2D>();
-            _rigidBody.simulated = isServer;
-            _player = GetComponent<AgarPlayer>();
         }
+
 
 
         [ServerCallback]
