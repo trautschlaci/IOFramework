@@ -23,7 +23,6 @@ namespace Io_Framework.Examples.Agar
             _cachedMaterial.color = newColor;
         }
 
-        [ClientCallback]
         private void OnDestroy()
         {
             Destroy(_cachedMaterial);

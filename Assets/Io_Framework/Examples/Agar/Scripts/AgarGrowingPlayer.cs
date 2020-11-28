@@ -30,18 +30,11 @@ namespace Io_Framework.Examples.Agar
             return 3 + size;
         }
 
-        protected override void Start()
+        protected override void Awake()
         {
-            base.Start();
-
-
-            if (!isClient)
-                return;
-
+            base.Awake();
             _sprite = GetComponent<SpriteRenderer>();
         }
-
-
 
         [ClientCallback]
         private void Update()

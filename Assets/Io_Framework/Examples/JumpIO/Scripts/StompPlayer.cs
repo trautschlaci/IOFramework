@@ -12,8 +12,7 @@ namespace Io_Framework.Examples.JumpIO
 
         private Player _player;
 
-        [ServerCallback]
-        private void Start()
+        private void Awake()
         {
             _player = GetComponent<Player>();
         }

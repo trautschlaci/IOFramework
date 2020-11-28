@@ -10,7 +10,6 @@ namespace Io_Framework.Examples.Agar
         private PlayerScore _playerScore;
 
 
-        [ServerCallback]
         private void Awake()
         {
             _playerScore = GetComponent<PlayerScore>();

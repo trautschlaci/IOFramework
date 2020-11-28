@@ -10,7 +10,6 @@ namespace Io_Framework
 
         public override void OnStartServer()
         {
-            base.OnStartServer();
             PlayerObjectManager.Singleton.AddPlayerObject(connectionToClient.connectionId, this);
         }
 

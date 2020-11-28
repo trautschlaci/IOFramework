@@ -41,16 +41,18 @@ namespace Io_Framework
 
         protected abstract float CalculateCameraScale(float size);
 
-        protected virtual void Start()
+        protected virtual void Awake()
         {
             Score = GetComponent<PlayerScore>();
             OwnPlayer = GetComponent<Player>();
+            _reverseProximityChecker = GetComponent<ReverseProximityChecker>();
+        }
 
-
+        protected virtual void Start()
+        {
             if (!isServer)
                 return;
 
-            _reverseProximityChecker = GetComponent<ReverseProximityChecker>();
             Score.OnScoreChangedServer += ChangeSizeServer;
             ChangeSizeServer(0, Score.Score);
         }

@@ -10,7 +10,6 @@ namespace Io_Framework.Examples.Agar
 
         private Color _normalColor;
 
-        [ClientCallback]
         private void Awake()
         {
             _normalColor = BackgroundImage.color;

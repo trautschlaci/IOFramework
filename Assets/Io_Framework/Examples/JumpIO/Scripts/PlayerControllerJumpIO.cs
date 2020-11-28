@@ -115,17 +115,18 @@ namespace Io_Framework.Examples.JumpIO
             CmdSendInputInfo(inputInfo);
         }
 
-
+        private void Awake()
+        {
+            _rigidBody = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
+        }
 
         private void Start()
         {
-            _rigidBody = GetComponent<Rigidbody2D>();
             _rigidBody.simulated = isServer;
-
 
             if (!isClient) return;
 
-            _animator = GetComponent<Animator>();
             _runningParamId = Animator.StringToHash("IsRunning");
             _fallingParamId = Animator.StringToHash("IsFalling");
             _midAirParamId = Animator.StringToHash("IsMidAir");

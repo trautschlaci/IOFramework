@@ -31,9 +31,13 @@ namespace Io_Framework
             OnScoreChangedClient?.Invoke(oldScore, newScore);
         }
 
-        public override void OnStartServer()
+        private void Awake()
         {
             _playerObject = GetComponent<Player>();
+        }
+
+        public override void OnStartServer()
+        {
             OnScoreChangedServer += ScoreChangedServer;
             OnScoreChangedServer?.Invoke(0, _score);
             _playerObject.OnPlayerDestroyedServer += PlayerDestroyed;

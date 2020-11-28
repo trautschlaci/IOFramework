@@ -64,7 +64,6 @@ namespace Io_Framework.Examples.Agar
         private void Start()
         {
             _rigidBody.simulated = isServer;
-            _player = GetComponent<AgarPlayer>();
 
             _boundary = GameObject.Find("Map").GetComponent<RectTransform>();
             _boundaryCorners = new Vector3[4];
@@ -74,6 +73,7 @@ namespace Io_Framework.Examples.Agar
         private void Awake()
         {
             _rigidBody = GetComponent<Rigidbody2D>();
+            _player = GetComponent<AgarPlayer>();
         }
 
 
