@@ -446,7 +446,7 @@ GameObject:
   - component: {fileID: 173284967}
   - component: {fileID: 173284966}
   m_Layer: 5
-  m_Name: PlayButton (1)
+  m_Name: HostButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1532,7 +1532,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Play
+  m_Text: Host
 --- !u!222 &705288306
 CanvasRenderer:
   m_ObjectHideFlags: 0
