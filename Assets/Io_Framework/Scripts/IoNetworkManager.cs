@@ -17,6 +17,7 @@ namespace Io_Framework
         public float SpawnRetryDelay = 0.01f;
         public float SpawnTimeout = 2.0f;
 
+
         private float _spawnRetryTime;
 
         public class CreatePlayerMessage : MessageBase

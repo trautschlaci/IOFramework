@@ -1,5 +1,4 @@
 ﻿using Mirror;
-using TMPro;
 using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
