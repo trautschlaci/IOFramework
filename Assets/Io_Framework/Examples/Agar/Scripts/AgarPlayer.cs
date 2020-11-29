@@ -7,12 +7,17 @@ namespace Io_Framework.Examples.Agar
     {
         public int MinScoreToSplit = 10;
 
+
         private PlayerScore _playerScore;
+        private Collider2D _collider;
+        private RandomColor _color;
 
 
         private void Awake()
         {
             _playerScore = GetComponent<PlayerScore>();
+            _collider = GetComponent<Collider2D>();
+            _color = GetComponent<RandomColor>();
         }
 
         [Server]
@@ -23,10 +28,10 @@ namespace Io_Framework.Examples.Agar
 
             _playerScore.Score = (int)(_playerScore.Score / 2.0f);
 
-            var target = transform.position + (Vector3)(startVelocityDir * GetComponent<Collider2D>().bounds.extents.x * 1.1f);
+            var target = transform.position + (Vector3)(startVelocityDir * _collider.bounds.extents.x * 1.1f);
             var half = SpawnClone(target, Quaternion.identity);
             half.GetComponent<PlayerScore>().Score = _playerScore.Score;
-            half.GetComponent<RandomColor>().BodyColor = GetComponent<RandomColor>().BodyColor;
+            half.GetComponent<RandomColor>().BodyColor = _color.BodyColor;
             half.GetComponent<PlayerControllerAgar>().GiveStartVelocity(startVelocityDir);
         }
     

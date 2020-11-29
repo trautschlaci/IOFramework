@@ -22,7 +22,7 @@ namespace Io_Framework.Examples.Agar
 
         public float GetCameraScale()
         {
-            return CalculateCameraScale(transform.localScale.x);
+            return CalculateCameraScale(OwnTransform.localScale.x);
         }
 
         protected override float CalculateCameraScale(float size)
@@ -43,10 +43,10 @@ namespace Io_Framework.Examples.Agar
             NameText.sortingOrder = Score.Score;
 
 
-            if (Camera.main == null || Camera.main.transform.parent != transform)
+            if (Camera.main == null || Camera.main.transform.parent != OwnTransform)
                 return;
 
-            Camera.main.orthographicSize = CalculateCameraScale(transform.localScale.x);
+            Camera.main.orthographicSize = CalculateCameraScale(OwnTransform.localScale.x);
         }
     }
 }

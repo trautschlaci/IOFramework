@@ -6,6 +6,7 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class PlayerCameraJumpIO : NetworkBehaviour
     {
+
         private CinemachineVirtualCamera _cinemachineCamera;
 
 

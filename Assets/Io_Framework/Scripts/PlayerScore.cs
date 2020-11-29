@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    [RequireComponent(typeof(Player))]
     public class PlayerScore : NetworkBehaviour
     {
         [SerializeField]

@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    [RequireComponent(typeof(Player))]
+    [RequireComponent(typeof(PlayerScore))]
     public abstract class GrowingPlayer : NetworkBehaviour
     {
         public float ViewRangeScaler = 3.0f;
@@ -11,6 +13,7 @@ namespace Io_Framework
 
         protected PlayerScore Score;
         protected Player OwnPlayer;
+        protected Transform OwnTransform;
 
 
         private ReverseProximityChecker _reverseProximityChecker;
@@ -19,13 +22,13 @@ namespace Io_Framework
         [Server]
         protected virtual void ChangeSizeServer(int oldScore, int newScore)
         {
-            var lastSize = transform.localScale.x;
+            var lastSize = OwnTransform.localScale.x;
             var newSize = CalculateSizeFromScore(newScore);
 
             if (Is2D)
-                transform.localScale = new Vector3(newSize, newSize, 1.0f);
+                OwnTransform.localScale = new Vector3(newSize, newSize, 1.0f);
             else
-                transform.localScale = new Vector3(newSize, newSize, newSize);
+                OwnTransform.localScale = new Vector3(newSize, newSize, newSize);
             
 
             OwnPlayer.ViewRange = ViewRangeScaler * CalculateCameraScale(newSize);
@@ -45,6 +48,7 @@ namespace Io_Framework
         {
             Score = GetComponent<PlayerScore>();
             OwnPlayer = GetComponent<Player>();
+            OwnTransform = transform;
             _reverseProximityChecker = GetComponent<ReverseProximityChecker>();
         }
 

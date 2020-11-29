@@ -1,4 +1,5 @@
 ﻿using Mirror;
+using TMPro;
 using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
@@ -21,6 +22,8 @@ namespace Io_Framework.Examples.Agar
         private RectTransform _boundary;
 
 
+
+        private Transform _transform;
         private Vector3[] _boundaryCorners;
         private Vector2 _moveVectorServer;
         private bool _jumpPressedServer;
@@ -74,6 +77,7 @@ namespace Io_Framework.Examples.Agar
         {
             _rigidBody = GetComponent<Rigidbody2D>();
             _player = GetComponent<AgarPlayer>();
+            _transform = transform;
         }
 
 
@@ -89,9 +93,9 @@ namespace Io_Framework.Examples.Agar
                 _player.Split(_moveVectorServer.normalized);
             }
 
-            var newX = Mathf.Clamp(transform.position.x, _boundaryCorners[0].x - 0.01f, _boundaryCorners[2].x + 0.01f);
-            var newY = Mathf.Clamp(transform.position.y, _boundaryCorners[0].y - 0.01f, _boundaryCorners[2].y + 0.01f);
-            transform.position = new Vector3(newX, newY, 0);
+            var newX = Mathf.Clamp(_transform.position.x, _boundaryCorners[0].x - 0.01f, _boundaryCorners[2].x + 0.01f);
+            var newY = Mathf.Clamp(_transform.position.y, _boundaryCorners[0].y - 0.01f, _boundaryCorners[2].y + 0.01f);
+            _transform.position = new Vector3(newX, newY, 0);
         }
 
         [Server]
@@ -99,7 +103,7 @@ namespace Io_Framework.Examples.Agar
         {
             _moveBlockTime = Time.fixedTime + MoveBlockInterval;
 
-            _rigidBody.velocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(transform.localScale.x);
+            _rigidBody.velocity = startVelocityDir * JumpSpeed * Time.fixedDeltaTime * 50f * Mathf.Sqrt(_transform.localScale.x);
         }
 
         [Command]
@@ -118,7 +122,7 @@ namespace Io_Framework.Examples.Agar
         private void UpdateMovement(InputInfo input)
         {
             var mousePos = input.MousePos;
-            _moveVectorServer = new Vector2(mousePos.x - transform.position.x, mousePos.y - transform.position.y);
+            _moveVectorServer = new Vector2(mousePos.x - _transform.position.x, mousePos.y - _transform.position.y);
         
             if (_moveVectorServer.magnitude > 1)
                 _moveVectorServer = _moveVectorServer.normalized;
@@ -133,7 +137,7 @@ namespace Io_Framework.Examples.Agar
             if (_moveBlockTime > Time.fixedTime)
                 return;
 
-            _rigidBody.velocity = _moveVectorServer * Speed * Time.fixedDeltaTime * 50f / Mathf.Sqrt(transform.localScale.x);
+            _rigidBody.velocity = _moveVectorServer * Speed * Time.fixedDeltaTime * 50f / Mathf.Sqrt(_transform.localScale.x);
         }
 
     }

@@ -61,6 +61,14 @@ namespace Io_Framework
             }
         }
 
+        private void OnValidate()
+        {
+            if (EntryTemplate.GetComponent<LeaderBoardEntryBase>() == null)
+            {
+                Debug.LogError("LeaderBoard: EntryTemplate must have script derived from LeaderBoardEntryBase");
+            }
+        }
+
 
         [Client]
         private void OnTopScoresUpdated(SyncListEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)

@@ -13,6 +13,15 @@ namespace Io_Framework
         private readonly Dictionary<int, List<CloneablePlayerObject>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObject>>();
 
 
+        private void OnValidate()
+        {
+            if (PlayerPrefab.GetComponent<CloneablePlayerObject>() == null)
+            {
+                Debug.LogError("PlayerObjectManager: PlayerPrefab must have CloneablePlayerObject script");
+            }
+        }
+
+
         public override void OnStartServer()
         {
             InitializeSingleton();

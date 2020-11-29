@@ -11,7 +11,7 @@ namespace Io_Framework
 
         public virtual bool CanBeGivenToOther(GameObject other)
         {
-            return IsAvailable;
+            return IsAvailable && other.GetComponent<PlayerScore>() != null;
         }
 
         public virtual int EarnedScore()

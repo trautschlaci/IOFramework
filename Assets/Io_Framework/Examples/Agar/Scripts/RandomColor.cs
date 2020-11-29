@@ -8,6 +8,7 @@ namespace Io_Framework.Examples.Agar
         [SyncVar(hook = nameof(SetColor))]
         public Color32 BodyColor = Color.black;
 
+
         private Material _cachedMaterial;
 
 
