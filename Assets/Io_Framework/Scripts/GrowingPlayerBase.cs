@@ -13,7 +13,7 @@ namespace Io_Framework
         [Tooltip("The calculated size of the camera gets multiplied by this value to determine the ViewRange of the Player.")]
         public float ViewRangeScaler = 3.0f;
 
-        [Tooltip("Set this true if the game is 2D otherwise false.")]
+        [Tooltip("Set this true if the object is in 2D otherwise false.")]
         public bool Is2D = true;
 
         #endregion
