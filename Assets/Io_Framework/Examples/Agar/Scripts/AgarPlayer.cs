@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class AgarPlayer : CloneablePlayerObject
+    public class AgarPlayer : CloneablePlayerObjectBase
     {
         public int MinScoreToSplit = 10;
 
@@ -57,7 +57,7 @@ namespace Io_Framework.Examples.Agar
         }
 
 
-        public override int CompareTo(CloneablePlayerObject other)
+        public override int CompareTo(CloneablePlayerObjectBase other)
         {
             var otherScore = other.GetComponent<PlayerScore>();
             if (otherScore == null)

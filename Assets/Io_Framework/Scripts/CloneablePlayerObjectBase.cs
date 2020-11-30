@@ -3,7 +3,8 @@ using UnityEngine;
 
 namespace Io_Framework
 {
-    public abstract class CloneablePlayerObject : Player
+    // Abstract base class to use on player-objects if one player can have multiple player-objects.
+    public abstract class CloneablePlayerObjectBase : Player
     {
         public int MaxNumberOfClones = 20;
 
@@ -45,7 +46,7 @@ namespace Io_Framework
         }
 
         [Server]
-        public virtual int CompareTo(CloneablePlayerObject other)
+        public virtual int CompareTo(CloneablePlayerObjectBase other)
         {
             return 0;
         }

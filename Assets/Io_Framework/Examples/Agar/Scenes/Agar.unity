@@ -699,7 +699,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f87f6898445edfa4c8aa1f2cf42889e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SpawnArea: {fileID: 430430667}
+  AreaToChooseFrom: {fileID: 430430667}
 --- !u!1 &445951907
 GameObject:
   m_ObjectHideFlags: 0
@@ -2201,6 +2201,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   PositionSelector: {fileID: 430430668}
   SafeRadius: 0.3
   CheckLayers:
@@ -2291,6 +2293,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1442107167}
+  - component: {fileID: 1442107168}
   - component: {fileID: 1442107166}
   m_Layer: 0
   m_Name: PlayerSpawner
@@ -2311,6 +2314,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34d637a01ad34fd48b841c1dbf156b29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   PositionSelector: {fileID: 430430668}
   SafeRadius: 1
   CheckLayers:
@@ -2330,6 +2335,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1442107168
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1442107165}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 386276248
+  serverOnly: 1
+  m_AssetId: 
+  hasSpawned: 0
 --- !u!1 &1644919967
 GameObject:
   m_ObjectHideFlags: 0

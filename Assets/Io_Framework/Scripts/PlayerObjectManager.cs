@@ -10,14 +10,14 @@ namespace Io_Framework
         public static PlayerObjectManager Singleton { get; private set; }
 
 
-        private readonly Dictionary<int, List<CloneablePlayerObject>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObject>>();
+        private readonly Dictionary<int, List<CloneablePlayerObjectBase>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObjectBase>>();
 
 
         private void OnValidate()
         {
-            if (PlayerPrefab.GetComponent<CloneablePlayerObject>() == null)
+            if (PlayerPrefab.GetComponent<CloneablePlayerObjectBase>() == null)
             {
-                Debug.LogError("PlayerObjectManager: PlayerPrefab must have CloneablePlayerObject script");
+                Debug.LogError("PlayerObjectManager: PlayerPrefab must have CloneablePlayerObjectBase script");
             }
         }
 
@@ -44,17 +44,17 @@ namespace Io_Framework
         }
 
         [Server]
-        public void AddPlayerObject(int playerId, CloneablePlayerObject playerObject)
+        public void AddPlayerObject(int playerId, CloneablePlayerObjectBase playerObject)
         {
             if(!_objectsOfPlayers.ContainsKey(playerId))
-                _objectsOfPlayers.Add(playerId, new List<CloneablePlayerObject>());
+                _objectsOfPlayers.Add(playerId, new List<CloneablePlayerObjectBase>());
             _objectsOfPlayers[playerId].Add(playerObject);
         }
 
         [Server]
-        public CloneablePlayerObject GetNextMainPlayerObject(int playerId)
+        public CloneablePlayerObjectBase GetNextMainPlayerObject(int playerId)
         {
-            CloneablePlayerObject nextMainPlayerObject = null;
+            CloneablePlayerObjectBase nextMainPlayerObject = null;
             foreach (var playerObject in _objectsOfPlayers[playerId])
             {
                 if (!IsMainPlayerObject(playerObject) && (nextMainPlayerObject == null || playerObject.CompareTo(nextMainPlayerObject) > 0))
@@ -67,7 +67,7 @@ namespace Io_Framework
         }
 
         [Server]
-        public void RemovePlayerObject(int playerId, CloneablePlayerObject playerObject)
+        public void RemovePlayerObject(int playerId, CloneablePlayerObjectBase playerObject)
         {
             _objectsOfPlayers[playerId].Remove(playerObject);
             if (_objectsOfPlayers[playerId].Count < 1)
@@ -85,7 +85,7 @@ namespace Io_Framework
 
         // Returns true if it was the last object of the player else false.
         [Server]
-        public bool DeleteGameObject(int playerId, CloneablePlayerObject playerObject)
+        public bool DeleteGameObject(int playerId, CloneablePlayerObjectBase playerObject)
         {
             bool isLastPlayerObject = false;
             if (IsMainPlayerObject(playerObject))
@@ -97,7 +97,7 @@ namespace Io_Framework
         }
 
         [Server]
-        public bool IsMainPlayerObject(CloneablePlayerObject playerObject)
+        public bool IsMainPlayerObject(CloneablePlayerObjectBase playerObject)
         {
             return playerObject.connectionToClient.identity == playerObject.netIdentity;
         }
@@ -105,7 +105,7 @@ namespace Io_Framework
         [Server]
         public bool ChangeMainPlayerObject(int playerId)
         {
-            CloneablePlayerObject nextMainPlayer = GetNextMainPlayerObject(playerId);
+            CloneablePlayerObjectBase nextMainPlayer = GetNextMainPlayerObject(playerId);
 
             if (nextMainPlayer != null)
             {
@@ -123,7 +123,7 @@ namespace Io_Framework
         }
 
         [Server]
-        public List<CloneablePlayerObject> GetPlayerObjects(int playerId)
+        public List<CloneablePlayerObjectBase> GetPlayerObjects(int playerId)
         {
             if (!_objectsOfPlayers.ContainsKey(playerId)) return null;
 

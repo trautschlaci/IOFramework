@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    // Abstract base class for player objects that can change size based on their score.
     [RequireComponent(typeof(Player))]
     [RequireComponent(typeof(PlayerScore))]
     public abstract class GrowingPlayerBase : NetworkBehaviour

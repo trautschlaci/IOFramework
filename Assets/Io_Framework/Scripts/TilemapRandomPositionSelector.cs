@@ -4,12 +4,20 @@ using UnityEngine.Tilemaps;
 
 namespace Io_Framework
 {
-    public class TilemapRandomPositionSelector : RandomPositionSelector
+    public class TilemapRandomPositionSelector : RandomPositionSelectorBase
     {
         public Tilemap TilemapToUse;
 
+
         private List<Vector3> _emptyPositions;
         private BoundsInt _tilemapBounds;
+
+
+        public override Vector3 RandomPosition()
+        {
+            return _emptyPositions[Random.Range(0, _emptyPositions.Count)];
+        }
+
 
         private void Start()
         {
@@ -21,16 +29,11 @@ namespace Io_Framework
                 if (tileArray[index] != null) 
                     continue;
 
+                // Calculating the world position of the empty cell.
                 var coords = TilemapToUse.GetCellCenterWorld(ArrayIndexToCellPosition(index));
                 _emptyPositions.Add(coords);
             }
         }
-
-        public override Vector3 RandomPosition()
-        {
-            return _emptyPositions[Random.Range(0, _emptyPositions.Count)];
-        }
-
 
         private Vector3Int ArrayIndexToCellPosition(int index)
         {
@@ -39,5 +42,6 @@ namespace Io_Framework
 
             return new Vector3Int(x, y, 0);
         }
+
     }
 }

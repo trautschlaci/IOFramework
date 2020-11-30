@@ -11,6 +11,9 @@ namespace Io_Framework
 {
     public class ObjectSpawner: NetworkBehaviour
     {
+
+        #region Server
+
         public List<WeightedGameObject> SelectableObjectsToSpawn;
         public SpawnPositionSelector SpawnPointSelector;
         public bool AutoStartSpawning = true;
@@ -19,6 +22,32 @@ namespace Io_Framework
         public int BulkSpawn = 1;
         public bool IsStopped;
 
+
+        [Server]
+        public void StartSpawning()
+        {
+            IsStopped = false;
+            StartCoroutine(ExecuteSpawning());
+        }
+
+        [Server]
+        public virtual void Spawn()
+        {
+            var doesNotCollide = SpawnPointSelector.SelectSpawnPosition(out var targetPosition);
+
+
+            if (!doesNotCollide)
+                return;
+
+
+            var selectedGo = SelectObjectToSpawn();
+
+            if (selectedGo != null)
+            {
+                var spawnGameObject = Instantiate(selectedGo, targetPosition, Quaternion.identity);
+                NetworkServer.Spawn(spawnGameObject);
+            }
+        }
 
         public override void OnStartServer()
         {
@@ -40,24 +69,6 @@ namespace Io_Framework
         }
 
         [Server]
-        public void StartSpawning()
-        {
-            IsStopped = false;
-            StartCoroutine(ExecuteSpawning());
-        }
-
-        [Server]
-        private IEnumerator ExecuteSpawning()
-        {
-            while (!IsStopped)
-            {
-                for(var i = 0; i < BulkSpawn; i++)
-                    Spawn();
-                yield return new WaitForSeconds(Random.Range(MinSpawnDelay, MaxSpawnDelay));
-            }
-        }
-
-        [Server]
         protected virtual GameObject SelectObjectToSpawn()
         {
             var weightSum = SelectableObjectsToSpawn.Sum(weightedGo => weightedGo.Weight);
@@ -76,23 +87,18 @@ namespace Io_Framework
         }
 
         [Server]
-        public virtual void Spawn()
+        private IEnumerator ExecuteSpawning()
         {
-            var doesNotCollide = SpawnPointSelector.SelectSpawnPosition(out var targetPosition);
-
-
-            if (!doesNotCollide)
-                return;
-
-
-            var selectedGo = SelectObjectToSpawn();
-
-            if (selectedGo != null)
+            while (!IsStopped)
             {
-                var spawnGameObject = Instantiate(selectedGo, targetPosition, Quaternion.identity);
-                NetworkServer.Spawn(spawnGameObject);
+                for(var i = 0; i < BulkSpawn; i++)
+                    Spawn();
+                yield return new WaitForSeconds(Random.Range(MinSpawnDelay, MaxSpawnDelay));
             }
         }
+
+        #endregion
+
     }
 
 
@@ -103,4 +109,5 @@ namespace Io_Framework
         [DefaultValue(1)]
         public int Weight;
     }
+
 }

@@ -2,19 +2,13 @@
 
 namespace Io_Framework
 {
-    public class RectangleRandomPositionSelector : RandomPositionSelector
+    public class RectangleRandomPositionSelector : RandomPositionSelectorBase
     {
-        public RectTransform SpawnArea;
+        public RectTransform AreaToChooseFrom;
 
 
         private Vector3[] _corners;
 
-
-        private void Start()
-        {
-            _corners = new Vector3[4];
-            SpawnArea.GetWorldCorners(_corners);
-        }
 
         public override Vector3 RandomPosition()
         {
@@ -24,6 +18,12 @@ namespace Io_Framework
             var target = new Vector3(x, y, 0);
 
             return target;
+        }
+
+        private void Start()
+        {
+            _corners = new Vector3[4];
+            AreaToChooseFrom.GetWorldCorners(_corners);
         }
     }
 }
