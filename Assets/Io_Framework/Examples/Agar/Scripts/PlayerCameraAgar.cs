@@ -12,7 +12,7 @@ namespace Io_Framework.Examples.Agar
             Camera.main.transform.SetParent(transform);
             Camera.main.transform.localPosition = LocalCameraTransform.localPosition;
             Camera.main.transform.localRotation = LocalCameraTransform.localRotation;
-            Camera.main.orthographicSize = GetComponent<AgarGrowingPlayer>().GetCameraScale();
+            Camera.main.orthographicSize = GetComponent<AgarGrowingPlayer>().GetCameraSize();
         }
 
         private void OnDisable()

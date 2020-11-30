@@ -5,7 +5,6 @@ using UnityEngine.UI;
 
 namespace Io_Framework
 {
-    [AddComponentMenu("")]
     public class IoNetworkManager : NetworkManager
     {
         public GameObject IndexUI;

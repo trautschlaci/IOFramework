@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class AgarGrowingPlayer : GrowingPlayer
+    public class AgarGrowingPlayer : GrowingPlayerBase
     {
         public TextMeshPro NameText;
 
@@ -20,14 +20,14 @@ namespace Io_Framework.Examples.Agar
 
 
 
-        public float GetCameraScale()
+        public float GetCameraSize()
         {
-            return CalculateCameraScale(OwnTransform.localScale.x);
+            return CalculateCameraSize(OwnTransform.localScale.x);
         }
 
-        protected override float CalculateCameraScale(float size)
+        protected override float CalculateCameraSize(float ownSize)
         {
-            return 3 + size;
+            return 3 + ownSize;
         }
 
         protected override void Awake()
@@ -46,7 +46,7 @@ namespace Io_Framework.Examples.Agar
             if (Camera.main == null || Camera.main.transform.parent != OwnTransform)
                 return;
 
-            Camera.main.orthographicSize = CalculateCameraScale(OwnTransform.localScale.x);
+            Camera.main.orthographicSize = CalculateCameraSize(OwnTransform.localScale.x);
         }
     }
 }

@@ -5,6 +5,9 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class PlayerControllerJumpIO : NetworkBehaviour
     {
+
+        #region Public variables Server
+
         public float RunSpeed = 4f;
         public float JumpForce = 6f;
         public float JumpHoldForce = 0.6f;
@@ -21,8 +24,11 @@ namespace Io_Framework.Examples.JumpIO
         public float GroundCheckDistance = 0.05f;
         public LayerMask GroundLayers;
 
+        #endregion
 
-        #region Client variables
+
+
+        #region Client
 
         private Animator _animator;
         private int _runningParamId;
@@ -31,53 +37,6 @@ namespace Io_Framework.Examples.JumpIO
 
         private InputInfo _lastInput;
 
-        #endregion
-
-
-        #region Client and Server variables
-
-        private Rigidbody2D _rigidBody;
-
-        [SyncVar]
-        private AnimatorVariables _animatorInfo;
-
-        #endregion
-
-
-        #region Server variables
-
-        private float _horizontalServer;
-        private bool _jumpPressedServer;
-        private bool _jumpHeldServer;
-
-        private Vector2 _velocity = Vector2.zero;
-        private float _horizontalMove;
-        private int _playerDir = 1;
-        private bool _isGrounded;
-        private bool _isJumping;
-        private float _coyoteTime;
-        private float _jumpBufferTime;
-        private float _jumpTime;
-        private int _extraJumpCount;
-
-        private float _animatorUpdateTime;
-
-        #endregion
-
-
-        private struct InputInfo
-        {
-            public int Horizontal;
-            public bool JumpPressed;
-            public bool JumpHeld;
-        }
-
-        private struct AnimatorVariables
-        {
-            public bool IsRunning;
-            public bool IsFalling;
-            public bool IsMidAir;
-        }
 
         [ClientCallback]
         private void Update()
@@ -115,6 +74,33 @@ namespace Io_Framework.Examples.JumpIO
             CmdSendInputInfo(inputInfo);
         }
 
+        #endregion
+
+
+
+        #region Client and Server
+
+        private Rigidbody2D _rigidBody;
+
+        [SyncVar]
+        private AnimatorVariables _animatorInfo;
+
+
+        private struct InputInfo
+        {
+            public int Horizontal;
+            public bool JumpPressed;
+            public bool JumpHeld;
+        }
+
+        private struct AnimatorVariables
+        {
+            public bool IsRunning;
+            public bool IsFalling;
+            public bool IsMidAir;
+        }
+
+
         private void Awake()
         {
             _rigidBody = GetComponent<Rigidbody2D>();
@@ -133,6 +119,56 @@ namespace Io_Framework.Examples.JumpIO
         }
 
 
+        [Command]
+        private void CmdSendInputInfo(InputInfo input)
+        {
+            _horizontalServer = Mathf.Clamp(input.Horizontal, -1, 1);
+            _jumpHeldServer = input.JumpHeld;
+            if (input.JumpPressed)
+            {
+                _jumpPressedServer = true;
+                _jumpBufferTime = Time.fixedTime + JumpBuffer;
+            }
+        }
+
+        #endregion
+
+
+
+        #region Server
+
+        private float _horizontalServer;
+        private bool _jumpPressedServer;
+        private bool _jumpHeldServer;
+
+        private Vector2 _velocity = Vector2.zero;
+        private float _horizontalMove;
+        private int _playerDir = 1;
+        private bool _isGrounded;
+        private bool _isJumping;
+        private float _coyoteTime;
+        private float _jumpBufferTime;
+        private float _jumpTime;
+        private int _extraJumpCount;
+
+        private float _animatorUpdateTime;
+
+
+        [Server]
+        public void Jump()
+        {
+            _isJumping = true;
+            _jumpTime = Time.fixedTime + JumpHoldDuration;
+            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, JumpForce);
+
+            _jumpPressedServer = false;
+        }
+
+
+        public override void OnStartServer()
+        {
+            _animatorUpdateTime = Time.fixedTime + 0.2f;
+        }
 
         [ServerCallback]
         private void FixedUpdate()
@@ -151,33 +187,6 @@ namespace Io_Framework.Examples.JumpIO
                 SyncAnimatorState();
                 _animatorUpdateTime = Time.fixedTime + AnimationSyncInterval;
             }
-        }
-
-        [Command]
-        private void CmdSendInputInfo(InputInfo input)
-        {
-            _horizontalServer = Mathf.Clamp(input.Horizontal, -1, 1);
-            _jumpHeldServer = input.JumpHeld;
-            if (input.JumpPressed)
-            {
-                _jumpPressedServer = true;
-                _jumpBufferTime = Time.fixedTime + JumpBuffer;
-            }
-        }
-
-        [Server]
-        public void Jump()
-        {
-            _isJumping = true;
-            _jumpTime = Time.fixedTime + JumpHoldDuration;
-            _rigidBody.velocity = new Vector2(_rigidBody.velocity.x, JumpForce);
-
-            _jumpPressedServer = false;
-        }
-
-        public override void OnStartServer()
-        {
-            _animatorUpdateTime = Time.fixedTime + 0.2f;
         }
 
         [Server]
@@ -267,5 +276,8 @@ namespace Io_Framework.Examples.JumpIO
                 IsMidAir = !_isGrounded
             };
         }
+
+        #endregion
+
     }
 }

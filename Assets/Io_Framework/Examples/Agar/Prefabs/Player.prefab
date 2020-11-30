@@ -86,14 +86,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5558229976809921363}
-  - component: {fileID: -8080154277492193237}
-  - component: {fileID: 255147376077071153}
-  - component: {fileID: 4722273232285375839}
   - component: {fileID: 5558229976809921360}
   - component: {fileID: 2993354878972745121}
   - component: {fileID: 700950218909110871}
   - component: {fileID: 5558229976809921357}
   - component: {fileID: 5558229976809921362}
+  - component: {fileID: -8080154277492193237}
+  - component: {fileID: 255147376077071153}
+  - component: {fileID: 4722273232285375839}
   - component: {fileID: 4149672768815094167}
   - component: {fileID: 8690573829068873889}
   - component: {fileID: -3743514672454514056}
@@ -124,58 +124,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &-8080154277492193237
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558229976809921361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e326abad2b767aa4ba91396b48f1fc97, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0
-  PlayerName: 
-  ViewRange: 15
-  DestroyDelay: 0.1
-  MaxNumberOfClones: 20
-  MinScoreToSplit: 10
---- !u!114 &255147376077071153
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558229976809921361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d77fca3013ac5414b8a9466ea3dbf411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  _score: 0
---- !u!114 &4722273232285375839
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5558229976809921361}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e55116b350f458f41847f40143d21874, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  Speed: 8
-  JumpSpeed: 20
-  MoveBlockInterval: 0.3
-  InputSyncInterval: 0.1
 --- !u!212 &5558229976809921360
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -297,6 +245,58 @@ MonoBehaviour:
   localPositionSensitivity: 0.01
   localRotationSensitivity: 0.01
   localScaleSensitivity: 0.01
+--- !u!114 &-8080154277492193237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5558229976809921361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e326abad2b767aa4ba91396b48f1fc97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0
+  PlayerName: 
+  ViewRange: 15
+  DestroyDelay: 0.1
+  MaxNumberOfClones: 21
+  MinScoreToSplit: 10
+--- !u!114 &255147376077071153
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5558229976809921361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d77fca3013ac5414b8a9466ea3dbf411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  _score: 0
+--- !u!114 &4722273232285375839
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5558229976809921361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e55116b350f458f41847f40143d21874, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  Speed: 8
+  JumpSpeed: 20
+  MoveBlockInterval: 0.3
+  InputSyncInterval: 0.1
 --- !u!114 &4149672768815094167
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -369,7 +369,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5558229976809921361}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dce202ce27353d3488bb22e6756d356b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7e1b880edc563094c8365139f91ec186, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
