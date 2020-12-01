@@ -4,10 +4,11 @@ using UnityEngine;
 
 namespace Io_Framework
 {
-    public class PlayerNamePresenter : MonoBehaviour
+    public class PlayerNamePresenter : NetworkBehaviour
     {
         public Player PlayerToPresent;
         public TextMeshPro NameText;
+        public Color32 HighlightColor;
 
         private int _direction = 1;
 
@@ -31,6 +32,10 @@ namespace Io_Framework
                 scale.x *= -1;
             }
             NameText.transform.localScale = scale;
+
+            if (hasAuthority)
+                NameText.color = HighlightColor;
+
         }
     }
 }
