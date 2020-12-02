@@ -14,28 +14,49 @@ namespace Io_Framework
 
         #region Server
 
+        [Tooltip("List of objects to randomly choose from for spawning. Set the weight on each object to change it's probability of spawning")]
         public List<WeightedGameObject> SelectableObjectsToSpawn;
+
+        [Tooltip("The object that selects positions randomly.")]
         public SpawnPositionSelector SpawnPointSelector;
+
+        [Tooltip("Should the spawning start immediately?")]
         public bool AutoStartSpawning = true;
+
+        [Tooltip("The minimum delay between two spawning.")]
         public float MinSpawnDelay = 0.1f;
+
+        [Tooltip("The maximum delay between two spawning.")]
         public float MaxSpawnDelay = 0.1f;
+
+        [Tooltip("How many objects should be spawned at the same time.")]
         public int BulkSpawn = 1;
-        public bool IsStopped;
+
+
+        private bool _isStopped;
 
 
         [Server]
         public void StartSpawning()
         {
-            IsStopped = false;
-            StartCoroutine(ExecuteSpawning());
+            _isStopped = false;
+            StartCoroutine(SpawnCoroutine());
         }
 
         [Server]
-        public virtual void Spawn()
+        public void StopSpawning()
+        {
+            _isStopped = true;
+        }
+
+        // Selects a position to spawn to and an object to spawn, then executes the spawning. 
+        [Server]
+        public virtual void SpawnOne()
         {
             var doesNotCollide = SpawnPointSelector.SelectSpawnPosition(out var targetPosition);
 
 
+            // If the SpawnPointSelector selects a position that already has an object on, don't execute the spawning. 
             if (!doesNotCollide)
                 return;
 
@@ -65,7 +86,7 @@ namespace Io_Framework
 
         public override void OnStopServer()
         {
-            IsStopped = true;
+            _isStopped = true;
         }
 
         [Server]
@@ -87,12 +108,12 @@ namespace Io_Framework
         }
 
         [Server]
-        private IEnumerator ExecuteSpawning()
+        private IEnumerator SpawnCoroutine()
         {
-            while (!IsStopped)
+            while (!_isStopped)
             {
                 for(var i = 0; i < BulkSpawn; i++)
-                    Spawn();
+                    SpawnOne();
                 yield return new WaitForSeconds(Random.Range(MinSpawnDelay, MaxSpawnDelay));
             }
         }
