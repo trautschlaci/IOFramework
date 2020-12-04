@@ -52,7 +52,7 @@ namespace Io_Framework.Examples.Agar
         [TargetRpc]
         private void TargetLastObjectDestroyed()
         {
-            var networkManager = (IONetworkManager2)NetworkManager.singleton;
+            var networkManager = (IONetworkManager)NetworkManager.singleton;
             networkManager.ShowRestartUI();
         }
 

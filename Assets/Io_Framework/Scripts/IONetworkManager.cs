@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Io_Framework
 {
-    public class IONetworkManager2 : NetworkManager
+    public class IONetworkManager : NetworkManager
     {
 
         #region Public fields Client
