@@ -5,7 +5,7 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Banana : JumpIOPowerUpBase
     {
-        public float JumpHoldDurationModifier = 1f;
+        public float JumpHoldDurationModifier = 0.5f;
 
         [Server]
         protected override void ApplyEffect(GameObject player)

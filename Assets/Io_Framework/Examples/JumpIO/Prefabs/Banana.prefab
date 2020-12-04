@@ -150,7 +150,7 @@ MonoBehaviour:
   Duration: 20
   CollectedEffect: {fileID: 4266640867937716280, guid: 21e6a241b490ed741be10642794757ae,
     type: 3}
-  JumpHoldDurationModifier: 1
+  JumpHoldDurationModifier: 0.5
 --- !u!114 &7239664347053922279
 MonoBehaviour:
   m_ObjectHideFlags: 0

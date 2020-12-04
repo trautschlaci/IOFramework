@@ -6,7 +6,7 @@ namespace Io_Framework.Examples.JumpIO
     public class PlayerControllerJumpIO : NetworkBehaviour
     {
 
-        #region Public variables Server
+        #region Public fields Server
 
         public float RunSpeed = 4f;
         public float JumpForce = 6f;

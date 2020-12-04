@@ -5,6 +5,7 @@ namespace Io_Framework.Examples.JumpIO
 {
     public abstract class JumpIOPowerUpBase: PowerUpBase
     {
+
         [ServerCallback]
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -16,18 +17,5 @@ namespace Io_Framework.Examples.JumpIO
             }
         }
 
-        [Client]
-        protected override void HideClient()
-        {
-            GetComponent<Collider2D>().enabled = false;
-            GetComponent<SpriteRenderer>().enabled = false;
-        }
-
-        [Server]
-        protected override void HideServer()
-        {
-            GetComponent<Collider2D>().enabled = false;
-            GetComponent<SpriteRenderer>().enabled = false;
-        }
     }
 }

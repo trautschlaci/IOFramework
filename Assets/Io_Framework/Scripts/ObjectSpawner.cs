@@ -57,6 +57,7 @@ namespace Io_Framework
 
 
             // If the SpawnPointSelector selects a position that already has an object on, don't execute the spawning. 
+            // In that case no spawning will happen this time.
             if (!doesNotCollide)
                 return;
 

@@ -5,8 +5,8 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Melon : JumpIOPowerUpBase
     {
-        public float SpeedModifier = 2.0f;
-        public float MaxSpeed = 10.0f;
+        public float SpeedModifier = 1.0f;
+        public float MaxSpeed = 8.0f;
 
         [Server]
         public override bool CanAffectPlayerServer(GameObject player)

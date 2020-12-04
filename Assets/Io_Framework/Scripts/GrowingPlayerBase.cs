@@ -9,7 +9,7 @@ namespace Io_Framework
     public abstract class GrowingPlayerBase : NetworkBehaviour
     {
 
-        #region Public variables Server
+        #region Public fields Server
 
         [Tooltip("The calculated size of the camera gets multiplied by this value to determine the ViewRange of the Player.")]
         public float ViewRangeScaler = 3.0f;
