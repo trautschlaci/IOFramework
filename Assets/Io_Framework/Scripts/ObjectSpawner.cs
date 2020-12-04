@@ -17,16 +17,16 @@ namespace Io_Framework
         [Tooltip("List of objects to randomly choose from for spawning. Set the weight on each object to change it's probability of spawning")]
         public List<WeightedGameObject> SelectableObjectsToSpawn;
 
-        [Tooltip("The object that selects positions randomly.")]
+        [Tooltip("An object that selects positions to spawn to.")]
         public SpawnPositionSelector SpawnPointSelector;
 
         [Tooltip("Should the spawning start immediately?")]
         public bool AutoStartSpawning = true;
 
-        [Tooltip("The minimum delay between two spawning.")]
+        [Tooltip("The minimum delay between two spawning, in seconds.")]
         public float MinSpawnDelay = 0.1f;
 
-        [Tooltip("The maximum delay between two spawning.")]
+        [Tooltip("The maximum delay between two spawning, in seconds.")]
         public float MaxSpawnDelay = 0.1f;
 
         [Tooltip("How many objects should be spawned at the same time.")]

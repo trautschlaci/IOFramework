@@ -5,37 +5,61 @@ using UnityEngine.UI;
 
 namespace Io_Framework
 {
-    public class IoNetworkManager : NetworkManager
+    public class IONetworkManager : NetworkManager
     {
+
+        #region Public fields Client
+
+        [Tooltip("The main GameObject of the index UI. It gets enabled when the player disconnects from the server.")]
         public GameObject IndexUI;
+
+        [Tooltip("The main GameObject of the restart UI. Restart UI is the UI that gets shown after a player dies.")]
         public GameObject RestartUI;
-        public InputField RestartNameInputField;
-        public GameObject LeaderBoardUI;
+
+        [Tooltip("The InputField in the RestartUI where the player can input it's name.")]
+        public InputField RestartUINameInputField;
+
+
         public string PlayerName { get; set; }
+
+        #endregion
+
+
+
+        #region Public fields Server
+
+        [Tooltip("An object that selects positions to spawn to for the player.")]
         public SpawnPositionSelector SpawnPointSelector;
+
+        [Tooltip("The minimum delay between two spawn attempts, in seconds.")]
         public float SpawnRetryDelay = 0.01f;
+
+        [Tooltip("The maximum amount of time should be spent trying to spawn the player, in seconds.")]
         public float SpawnTimeout = 2.0f;
 
+        #endregion
 
-        private float _spawnRetryTime;
 
-        public class CreatePlayerMessage : MessageBase
+
+        #region Client
+
+        // Sends the server a message to create an object for the player with it's name.
+        [Client]
+        public void CreateNewPlayer()
         {
-            public string Name;
+            NetworkClient.connection.Send(new CreatePlayerMessage { Name = PlayerName });
         }
 
-        public class CouldNotSpawnMessage : MessageBase
+        [Client]
+        public virtual void ShowRestartUI()
         {
+            if (RestartUINameInputField != null)
+                RestartUINameInputField.text = PlayerName;
+
+            if (RestartUI != null)
+                RestartUI.SetActive(true);
         }
 
-        public override void OnValidate()
-        {
-            base.OnValidate();
-            if (playerPrefab.GetComponent<Player>() == null)
-            {
-                Debug.LogError("IoNetworkManager: playerPrefab must have Player script");
-            }
-        }
 
         public override void OnStartClient()
         {
@@ -43,22 +67,18 @@ namespace Io_Framework
             NetworkClient.RegisterHandler<CouldNotSpawnMessage>(OnCouldNotSpawnPlayer);
         }
 
-        protected virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
-        {
-        }
-
         public override void OnClientConnect(NetworkConnection conn)
         {
-            if (clientLoadedScene) 
+            if (clientLoadedScene)
                 return;
 
 
-            if (!ClientScene.ready) 
+            if (!ClientScene.ready)
                 ClientScene.Ready(conn);
 
             if (autoCreatePlayer)
                 CreateNewPlayer();
-            
+
         }
 
         public override void OnClientDisconnect(NetworkConnection conn)
@@ -67,37 +87,58 @@ namespace Io_Framework
 
             if (IndexUI != null)
                 IndexUI.SetActive(true);
-        
-            if(LeaderBoardUI != null)
-                LeaderBoardUI.SetActive(false);
 
             if (RestartUI != null)
                 RestartUI.SetActive(false);
         }
 
+
+        // Override this method to specify what should happen in the client of the player whose object couldn't have been spawned.
         [Client]
-        public void CreateNewPlayer()
+        protected virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
         {
-            NetworkClient.connection.Send(new CreatePlayerMessage { Name = PlayerName });
         }
 
-        [Client]
-        public virtual void RestartPlayerClient()
-        {
-            if (RestartNameInputField != null)
-                RestartNameInputField.text = PlayerName;
+        #endregion
 
-            if (RestartUI != null)
-                RestartUI.SetActive(true);
+
+
+        #region Client and Server
+
+        private float _spawnRetryTime;
+
+
+        protected class CreatePlayerMessage : MessageBase
+        {
+            public string Name;
         }
+
+        protected class CouldNotSpawnMessage : MessageBase
+        {
+        }
+
+
+        public override void OnValidate()
+        {
+            base.OnValidate();
+            if (playerPrefab.GetComponent<Player>() == null)
+            {
+                Debug.LogError("IONetworkManager: playerPrefab must have Player script");
+            }
+        }
+
+        #endregion
+
+
+
+        #region Server
 
         public override void OnStartServer()
         {
             base.OnStartServer();
             NetworkServer.RegisterHandler<CreatePlayerMessage>(OnCreatePlayerMessage);
-            if (IndexUI != null)
-                IndexUI.SetActive(false);
         }
+
 
         [Server]
         private void OnCreatePlayerMessage(NetworkConnection connection, CreatePlayerMessage createPlayerMessage)
@@ -110,6 +151,8 @@ namespace Io_Framework
         {
             var couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out var spawnPosition);
 
+
+            // If the position is occupied try to select other.
             while (!couldSelectSpawnPosition && _spawnRetryTime < SpawnTimeout)
             {
                 couldSelectSpawnPosition = SpawnPointSelector.SelectSpawnPosition(out spawnPosition);
@@ -119,6 +162,7 @@ namespace Io_Framework
 
             _spawnRetryTime = 0.0f;
 
+            // If spawn position couldn't have been selected, send a message to the player and disconnect it.
             if (!couldSelectSpawnPosition)
             {
                 NetworkServer.connections[connectionId].Send(new CouldNotSpawnMessage());
@@ -126,11 +170,16 @@ namespace Io_Framework
                 yield break;
             }
 
+
+            // Create the object for the player.
             var playerGameObject = Instantiate(playerPrefab, spawnPosition, Quaternion.identity);
             playerGameObject.GetComponent<Player>().PlayerName = playerName;
 
             NetworkServer.AddPlayerForConnection(NetworkServer.connections[connectionId], playerGameObject);
 
         }
+
+        #endregion
+
     }
 }

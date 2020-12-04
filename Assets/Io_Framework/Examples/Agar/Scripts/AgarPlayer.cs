@@ -52,8 +52,8 @@ namespace Io_Framework.Examples.Agar
         [TargetRpc]
         private void TargetLastObjectDestroyed()
         {
-            var networkManager = (IoNetworkManager)NetworkManager.singleton;
-            networkManager.RestartPlayerClient();
+            var networkManager = (IONetworkManager)NetworkManager.singleton;
+            networkManager.ShowRestartUI();
         }
 
 

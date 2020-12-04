@@ -4,12 +4,16 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    // Base class for power-ups.
     public abstract class PowerUpBase : NetworkBehaviour
     {
 
         #region Public fields Server
 
+        [Tooltip("Can players still use it?")]
         public bool IsAvailable = true;
+
+        [Tooltip("How long should it's effect last.")]
         public float Duration = 30.0f;
 
         #endregion
@@ -18,6 +22,7 @@ namespace Io_Framework
 
         #region Public fields Client
 
+        [Tooltip("Optional to use, the given GameObject will be instantiated for the player who collects the power-up.")]
         public GameObject CollectedEffect;
 
         #endregion
@@ -53,7 +58,8 @@ namespace Io_Framework
         [TargetRpc]
         protected virtual void TargetDisplayCollect(NetworkConnection conn)
         {
-            Instantiate(CollectedEffect, transform.position, transform.rotation);
+            if(CollectedEffect != null)
+                Instantiate(CollectedEffect, transform.position, transform.rotation);
         }
 
 
@@ -102,6 +108,7 @@ namespace Io_Framework
 
                 yield return new WaitForSeconds(Duration);
 
+                // The player could have been destroyed by the time the effect should be reverted.
                 if (player != null)
                     RevertEffect(player);
             }

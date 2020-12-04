@@ -925,8 +925,7 @@ MonoBehaviour:
   - {fileID: 3304267130202560207, guid: 7314d1258e5da5045892e93ad7a5766d, type: 3}
   IndexUI: {fileID: 1757505718}
   RestartUI: {fileID: 318595900}
-  RestartNameInputField: {fileID: 1208442211}
-  LeaderBoardUI: {fileID: 534770339}
+  RestartUINameInputField: {fileID: 1208442211}
   SpawnPointSelector: {fileID: 1165212358}
   SpawnRetryDelay: 0.01
   SpawnTimeout: 2
@@ -19293,7 +19292,6 @@ MonoBehaviour:
   MinSpawnDelay: 4
   MaxSpawnDelay: 4
   BulkSpawn: 1
-  IsStopped: 0
 --- !u!114 &2133162665
 MonoBehaviour:
   m_ObjectHideFlags: 0

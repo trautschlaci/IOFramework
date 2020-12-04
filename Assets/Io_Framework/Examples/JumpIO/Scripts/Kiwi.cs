@@ -5,7 +5,7 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Kiwi : JumpIOPowerUpBase
     {
-        public float JumpForceModifier = 4f;
+        public float JumpForceModifier = 2f;
 
         [Server]
         protected override void ApplyEffect(GameObject player)

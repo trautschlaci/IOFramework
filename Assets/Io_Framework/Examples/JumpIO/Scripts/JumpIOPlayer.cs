@@ -25,8 +25,8 @@ namespace Io_Framework.Examples.JumpIO
             if (!hasAuthority)
                 return;
 
-            var networkManager = (IoNetworkManager) NetworkManager.singleton;
-            networkManager.RestartPlayerClient();
+            var networkManager = (IONetworkManager) NetworkManager.singleton;
+            networkManager.ShowRestartUI();
         }
     }
 }
