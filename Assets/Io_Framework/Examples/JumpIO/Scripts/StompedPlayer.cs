@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class StompPlayer : RewardBase
+    public class StompedPlayer : RewardBase
     {
         public Transform HeadLeft;
         public Transform HeadRight;

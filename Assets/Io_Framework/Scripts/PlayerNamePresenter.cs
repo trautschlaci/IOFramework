@@ -6,9 +6,18 @@ namespace Io_Framework
 {
     public class PlayerNamePresenter : NetworkBehaviour
     {
+
+        #region Client
+
+        [Tooltip("The player-object whose name should be displayed.")]
         public Player PlayerToPresent;
+
+        [Tooltip("The text that displays the name of the player.")]
         public TextMeshPro NameText;
+
+        [Tooltip("The text changes to this color when it is displaying own name of the player.")]
         public Color32 HighlightColor;
+
 
         private int _direction = 1;
 
@@ -37,5 +46,8 @@ namespace Io_Framework
                 NameText.color = HighlightColor;
 
         }
+
+        #endregion
+
     }
 }

@@ -3,11 +3,11 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class PlayerCameraAgar : NetworkBehaviour
+    public class PlayerCameraAgar : PlayerCameraBase
     {
         public Transform LocalCameraTransform;
 
-        public override void OnStartLocalPlayer()
+        protected override void FollowWithCamera()
         {
             Camera.main.transform.SetParent(transform);
             Camera.main.transform.localPosition = LocalCameraTransform.localPosition;
@@ -15,10 +15,13 @@ namespace Io_Framework.Examples.Agar
             Camera.main.orthographicSize = GetComponent<AgarGrowingPlayer>().GetCameraSize();
         }
 
-        private void OnDisable()
+        protected override bool IsCameraFollowing()
         {
-            if (Camera.main == null || Camera.main.transform.parent != transform) return;
+            return Camera.main != null && Camera.main.transform.parent == transform;
+        }
 
+        protected override void StopFollowing()
+        {
             Camera.main.transform.SetParent(null);
         }
 

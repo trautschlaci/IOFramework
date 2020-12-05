@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class PlayerCameraJumpIO : NetworkBehaviour
+    public class PlayerCameraJumpIO : PlayerCameraBase
     {
 
         private CinemachineVirtualCamera _cinemachineCamera;
 
 
-        public override void OnStartLocalPlayer()
+        protected override void FollowWithCamera()
         {
             var cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
             if (cameraBrain == null)
@@ -22,10 +22,13 @@ namespace Io_Framework.Examples.JumpIO
             _cinemachineCamera.Follow = transform;
         }
 
-        private void OnDisable()
+        protected override bool IsCameraFollowing()
         {
-            if (_cinemachineCamera == null || _cinemachineCamera.Follow != transform) return;
+            return _cinemachineCamera != null && _cinemachineCamera.Follow == transform;
+        }
 
+        protected override void StopFollowing()
+        {
             _cinemachineCamera.Follow = null;
         }
 

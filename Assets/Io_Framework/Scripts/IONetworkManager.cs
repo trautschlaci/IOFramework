@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 namespace Io_Framework
 {
+    // NetworkManager to use for IO games.
     public class IONetworkManager : NetworkManager
     {
 
@@ -18,9 +19,6 @@ namespace Io_Framework
 
         [Tooltip("The InputField in the RestartUI where the player can input it's name.")]
         public InputField RestartUINameInputField;
-
-
-        public string PlayerName { get; set; }
 
         #endregion
 
@@ -42,6 +40,9 @@ namespace Io_Framework
 
 
         #region Client
+
+        public string PlayerName { get; set; }
+
 
         // Sends the server a message to create an object for the player with it's name.
         [Client]
@@ -93,7 +94,7 @@ namespace Io_Framework
         }
 
 
-        // Override this method to specify what should happen in the client of the player whose object couldn't have been spawned.
+        // Override this method to specify what should happen on the client-side of the player whose object couldn't have been spawned.
         [Client]
         protected virtual void OnCouldNotSpawnPlayer(NetworkConnection conn, CouldNotSpawnMessage message)
         {
@@ -104,9 +105,6 @@ namespace Io_Framework
 
 
         #region Client and Server
-
-        private float _spawnRetryTime;
-
 
         protected class CreatePlayerMessage : MessageBase
         {
@@ -132,6 +130,9 @@ namespace Io_Framework
 
 
         #region Server
+
+        private float _spawnRetryTime;
+
 
         public override void OnStartServer()
         {

@@ -8,13 +8,13 @@ namespace Io_Framework.Examples.JumpIO
         [Server]
         protected override void ApplyEffect(GameObject player)
         {
-            player.GetComponent<StompPlayer>().IsAvailable = false;
+            player.GetComponent<StompedPlayer>().IsAvailable = false;
         }
 
         [Server]
         protected override void RevertEffect(GameObject player)
         {
-            player.GetComponent<StompPlayer>().IsAvailable = true;
+            player.GetComponent<StompedPlayer>().IsAvailable = true;
         }
     }
 }
