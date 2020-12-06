@@ -5,7 +5,11 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Apple : PowerUpBaseJumpIO
     {
+
+        #region Server
+
         public int ExtraJumpModifier = 1;
+
 
         [Server]
         protected override void ApplyEffect(GameObject player)
@@ -18,5 +22,8 @@ namespace Io_Framework.Examples.JumpIO
         {
             player.GetComponent<PlayerControllerJumpIO>().ExtraJumps -= ExtraJumpModifier;
         }
+
+        #endregion
+
     }
 }

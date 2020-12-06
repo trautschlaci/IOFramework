@@ -5,14 +5,15 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class PlayerJumpIO : Player
     {
+
+        #region Public fields Client
+
         public GameObject DeathEffect;
 
-        [Server]
-        public override void Destroy()
-        {
-            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
-            base.Destroy();
-        }
+        #endregion
+
+
+        #region Client and Server
 
         [ClientRpc]
         protected override void RpcDisplayDestroy()
@@ -25,8 +26,24 @@ namespace Io_Framework.Examples.JumpIO
             if (!hasAuthority)
                 return;
 
-            var networkManager = (IONetworkManager) NetworkManager.singleton;
+            var networkManager = (IONetworkManager)NetworkManager.singleton;
             networkManager.ShowRestartUI();
         }
+
+        #endregion
+
+
+
+        #region Server
+
+        [Server]
+        public override void Destroy()
+        {
+            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            base.Destroy();
+        }
+
+        #endregion
+
     }
 }

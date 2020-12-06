@@ -7,9 +7,12 @@ namespace Io_Framework.Examples.JumpIO
     public class PlayerCameraJumpIO : PlayerCameraBase
     {
 
+        #region Client
+
         private CinemachineVirtualCamera _cinemachineCamera;
 
 
+        [Client]
         protected override void FollowWithCamera()
         {
             var cameraBrain = Camera.main.GetComponent<CinemachineBrain>();
@@ -22,15 +25,19 @@ namespace Io_Framework.Examples.JumpIO
             _cinemachineCamera.Follow = transform;
         }
 
+        [Client]
         protected override bool IsCameraFollowing()
         {
             return _cinemachineCamera != null && _cinemachineCamera.Follow == transform;
         }
 
+        [Client]
         protected override void StopFollowing()
         {
             _cinemachineCamera.Follow = null;
         }
+
+        #endregion
 
     }
 }

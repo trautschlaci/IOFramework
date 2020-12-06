@@ -6,6 +6,8 @@ namespace Io_Framework.Examples.JumpIO
     public abstract class PowerUpBaseJumpIO: PowerUpBase
     {
 
+        #region Server
+
         [ServerCallback]
         private void OnTriggerEnter2D(Collider2D other)
         {
@@ -16,6 +18,8 @@ namespace Io_Framework.Examples.JumpIO
                 PickUp(other.gameObject);
             }
         }
+
+        #endregion
 
     }
 }

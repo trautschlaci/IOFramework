@@ -1,12 +1,15 @@
 ﻿using Mirror;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Io_Framework.Examples.JumpIO
 {
     public class LeaderboardEntryJumpIO : LeaderboardEntryBase
     {
+
+        #region Client
+
         public Color32 HighlightColor;
+
 
         [Client]
         protected override void SwitchHighlight(bool value)
@@ -24,6 +27,8 @@ namespace Io_Framework.Examples.JumpIO
                 ScoreText.color = Color.black;
             }
         }
+
+        #endregion
 
     }
 }

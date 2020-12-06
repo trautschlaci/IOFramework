@@ -5,6 +5,9 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Pineapple : PowerUpBaseJumpIO
     {
+
+        #region Server
+
         [Server]
         protected override void ApplyEffect(GameObject player)
         {
@@ -16,5 +19,8 @@ namespace Io_Framework.Examples.JumpIO
         {
             player.GetComponent<StompedPlayer>().IsAvailable = true;
         }
+
+        #endregion
+
     }
 }

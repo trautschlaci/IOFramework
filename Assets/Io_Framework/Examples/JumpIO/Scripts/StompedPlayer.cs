@@ -5,12 +5,30 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class StompedPlayer : RewardBase
     {
+
+        #region Server
+
         public Transform HeadLeft;
         public Transform HeadRight;
         public float CheckDistance = 0.05f;
         public LayerMask PlayerLayer;
 
+
         private Player _player;
+
+
+        [Server]
+        public override bool CanBeGivenToOther(GameObject other)
+        {
+            return base.CanBeGivenToOther(other) && other != gameObject;
+        }
+
+        [Server]
+        public override void Destroy()
+        {
+            _player.Destroy();
+        }
+
 
         private void Awake()
         {
@@ -21,6 +39,14 @@ namespace Io_Framework.Examples.JumpIO
         private void FixedUpdate()
         {
             CheckAboveHead();
+        }
+
+
+        [Server]
+        protected override void ClaimReward(GameObject player)
+        {
+            player.GetComponent<PlayerControllerJumpIO>().Jump();
+            base.ClaimReward(player);
         }
 
         [Server]
@@ -39,23 +65,7 @@ namespace Io_Framework.Examples.JumpIO
             }
         }
 
-        [Server]
-        public override bool CanBeGivenToOther(GameObject other)
-        {
-            return base.CanBeGivenToOther(other) && other != gameObject;
-        }
+        #endregion
 
-        [Server]
-        protected override void ClaimReward(GameObject player)
-        {
-            player.GetComponent<PlayerControllerJumpIO>().Jump();
-            base.ClaimReward(player);
-        }
-
-        [Server]
-        public override void Destroy()
-        {
-            _player.Destroy();
-        }
     }
 }

@@ -5,7 +5,11 @@ namespace Io_Framework.Examples.JumpIO
 {
     public class Kiwi : PowerUpBaseJumpIO
     {
+
+        #region Server
+
         public float JumpForceModifier = 2f;
+
 
         [Server]
         protected override void ApplyEffect(GameObject player)
@@ -18,5 +22,8 @@ namespace Io_Framework.Examples.JumpIO
         {
             player.GetComponent<PlayerControllerJumpIO>().JumpForce -= JumpForceModifier;
         }
+
+        #endregion
+
     }
 }
