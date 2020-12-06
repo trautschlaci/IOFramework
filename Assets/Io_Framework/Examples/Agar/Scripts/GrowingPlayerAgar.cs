@@ -6,35 +6,19 @@ namespace Io_Framework.Examples.Agar
 {
     public class GrowingPlayerAgar : GrowingPlayerBase
     {
+
+        #region Public fields Client
+
         public TextMeshPro NameText;
 
+        #endregion
+
+
+
+        #region Client
 
         private SpriteRenderer _sprite;
 
-
-        [Server]
-        protected override float CalculateSizeFromScore(int score)
-        {
-            return Mathf.Sqrt(1.0f + score / (2.0f * Mathf.PI));
-        }
-
-
-
-        public float GetCameraSize()
-        {
-            return CalculateCameraSize(OwnTransform.localScale.x);
-        }
-
-        protected override float CalculateCameraSize(float ownSize)
-        {
-            return 3 + ownSize;
-        }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            _sprite = GetComponent<SpriteRenderer>();
-        }
 
         [ClientCallback]
         private void Update()
@@ -48,5 +32,44 @@ namespace Io_Framework.Examples.Agar
 
             Camera.main.orthographicSize = CalculateCameraSize(OwnTransform.localScale.x);
         }
+
+        #endregion
+
+
+
+        #region Client and Server
+
+        public float GetCameraSize()
+        {
+            return CalculateCameraSize(OwnTransform.localScale.x);
+        }
+
+
+        protected override void Awake()
+        {
+            base.Awake();
+            _sprite = GetComponent<SpriteRenderer>();
+        }
+
+
+        protected override float CalculateCameraSize(float ownSize)
+        {
+            return 3 + ownSize;
+        }
+
+        #endregion
+
+
+
+        #region Server
+
+        [Server]
+        protected override float CalculateSizeFromScore(int score)
+        {
+            return Mathf.Sqrt(1.0f + score / (2.0f * Mathf.PI));
+        }
+
+        #endregion
+
     }
 }

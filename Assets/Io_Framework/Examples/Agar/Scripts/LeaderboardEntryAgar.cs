@@ -6,14 +6,20 @@ namespace Io_Framework.Examples.Agar
 {
     public class LeaderboardEntryAgar : LeaderboardEntryBase
     {
+
+        #region Client
+
         public Image BackgroundImage;
 
+
         private Color _normalColor;
+
 
         private void Awake()
         {
             _normalColor = BackgroundImage.color;
         }
+
 
         [Client]
         protected override void SwitchHighlight(bool value)
@@ -27,6 +33,8 @@ namespace Io_Framework.Examples.Agar
                 BackgroundImage.color = _normalColor;
             }
         }
+
+        #endregion
 
     }
 }

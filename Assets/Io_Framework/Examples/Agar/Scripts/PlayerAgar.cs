@@ -5,8 +5,16 @@ namespace Io_Framework.Examples.Agar
 {
     public class PlayerAgar : CloneablePlayerObjectBase
     {
+
+        #region Public fields Server
+
         public int MinScoreToSplit = 10;
 
+        #endregion
+
+
+
+        #region Client and Server
 
         private PlayerScore _playerScore;
         private Collider2D _collider;
@@ -19,6 +27,20 @@ namespace Io_Framework.Examples.Agar
             _collider = GetComponent<Collider2D>();
             _color = GetComponent<RandomColor>();
         }
+
+
+        [TargetRpc]
+        private void TargetLastObjectDestroyed()
+        {
+            var networkManager = (IONetworkManager)NetworkManager.singleton;
+            networkManager.ShowRestartUI();
+        }
+
+        #endregion
+
+
+
+        #region Server
 
         [Server]
         public void Split(Vector2 startVelocityDir)
@@ -42,21 +64,6 @@ namespace Io_Framework.Examples.Agar
         }
 
         [Server]
-        protected override void OnLastPlayerObjectDestroyed()
-        {
-            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
-            TargetLastObjectDestroyed();
-        }
-
-
-        [TargetRpc]
-        private void TargetLastObjectDestroyed()
-        {
-            var networkManager = (IONetworkManager)NetworkManager.singleton;
-            networkManager.ShowRestartUI();
-        }
-
-
         public override int CompareTo(CloneablePlayerObjectBase other)
         {
             var otherScore = other.GetComponent<PlayerScore>();
@@ -65,5 +72,16 @@ namespace Io_Framework.Examples.Agar
 
             return _playerScore.Score.CompareTo(otherScore.Score);
         }
+
+
+        [Server]
+        protected override void OnLastPlayerObjectDestroyed()
+        {
+            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            TargetLastObjectDestroyed();
+        }
+
+        #endregion
+
     }
 }
