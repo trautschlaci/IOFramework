@@ -17,7 +17,7 @@ namespace Io_Framework.Examples.Agar
 
 
         private Rigidbody2D _rigidBody;
-        private AgarPlayer _player;
+        private PlayerAgar _player;
         private RectTransform _boundary;
 
 
@@ -75,7 +75,7 @@ namespace Io_Framework.Examples.Agar
         private void Awake()
         {
             _rigidBody = GetComponent<Rigidbody2D>();
-            _player = GetComponent<AgarPlayer>();
+            _player = GetComponent<PlayerAgar>();
             _transform = transform;
         }
 

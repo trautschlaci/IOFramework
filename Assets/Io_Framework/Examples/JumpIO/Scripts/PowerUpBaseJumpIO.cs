@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public abstract class JumpIOPowerUpBase: PowerUpBase
+    public abstract class PowerUpBaseJumpIO: PowerUpBase
     {
 
         [ServerCallback]

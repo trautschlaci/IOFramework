@@ -5,7 +5,7 @@ using UnityEngine.UI;
 namespace Io_Framework
 {
     // Base class for entries of leaderboard.
-    public abstract class LeaderBoardEntryBase : MonoBehaviour
+    public abstract class LeaderboardEntryBase2 : MonoBehaviour
     {
 
         #region Client

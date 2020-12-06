@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Banana : JumpIOPowerUpBase
+    public class Banana : PowerUpBaseJumpIO
     {
         public float JumpHoldDurationModifier = 0.5f;
 

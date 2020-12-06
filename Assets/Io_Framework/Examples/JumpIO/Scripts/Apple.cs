@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Apple : JumpIOPowerUpBase
+    public class Apple : PowerUpBaseJumpIO
     {
         public int ExtraJumpModifier = 1;
 

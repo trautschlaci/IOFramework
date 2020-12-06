@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Kiwi : JumpIOPowerUpBase
+    public class Kiwi : PowerUpBaseJumpIO
     {
         public float JumpForceModifier = 2f;
 

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class JumpIOLeaderBoardEntry : LeaderBoardEntryBase
+    public class LeaderboardEntryJumpIO : LeaderboardEntryBase2
     {
         public Color32 HighlightColor;
 

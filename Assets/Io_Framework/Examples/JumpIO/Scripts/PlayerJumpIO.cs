@@ -3,14 +3,14 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class JumpIOPlayer : Player
+    public class PlayerJumpIO : Player
     {
         public GameObject DeathEffect;
 
         [Server]
         public override void Destroy()
         {
-            LeaderBoard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            Leaderboard2.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
             base.Destroy();
         }
 

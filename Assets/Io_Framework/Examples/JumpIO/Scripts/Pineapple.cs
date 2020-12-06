@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Pineapple : JumpIOPowerUpBase
+    public class Pineapple : PowerUpBaseJumpIO
     {
         [Server]
         protected override void ApplyEffect(GameObject player)

@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class AgarLeaderBoardEntry : LeaderBoardEntryBase
+    public class LeaderboardEntryAgar : LeaderboardEntryBase2
     {
         public Image BackgroundImage;
 

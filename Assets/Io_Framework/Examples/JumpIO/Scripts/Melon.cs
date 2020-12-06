@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Melon : JumpIOPowerUpBase
+    public class Melon : PowerUpBaseJumpIO
     {
         public float SpeedModifier = 1.0f;
         public float MaxSpeed = 8.0f;

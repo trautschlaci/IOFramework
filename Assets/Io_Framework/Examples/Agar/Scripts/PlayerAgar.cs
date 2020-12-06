@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class AgarPlayer : CloneablePlayerObjectBase
+    public class PlayerAgar : CloneablePlayerObjectBase
     {
         public int MinScoreToSplit = 10;
 
@@ -44,7 +44,7 @@ namespace Io_Framework.Examples.Agar
         [Server]
         protected override void OnLastPlayerObjectDestroyed()
         {
-            LeaderBoard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            Leaderboard2.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
             TargetLastObjectDestroyed();
         }
 

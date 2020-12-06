@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.Agar
 {
-    public class AgarGrowingPlayer : GrowingPlayerBase
+    public class GrowingPlayerAgar : GrowingPlayerBase
     {
         public TextMeshPro NameText;
 
