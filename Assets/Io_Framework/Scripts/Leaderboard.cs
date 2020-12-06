@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Io_Framework
 {
     // Component that manages score of all players. It is also responsible for sending data of the top players to the clients.
-    public class Leaderboard2: NetworkBehaviour
+    public class Leaderboard: NetworkBehaviour
     {
 
         #region Public fields Client
@@ -64,7 +64,7 @@ namespace Io_Framework
             for (var i = 0; i < _topScores.Count; i++)
             {
                 _leaderBoardEntries[i].SetActive(true);
-                _leaderBoardEntries[i].GetComponent<LeaderboardEntryBase2>().SetValues(i, _topScores[i].PlayerName, _topScores[i].Score, false);
+                _leaderBoardEntries[i].GetComponent<LeaderboardEntryBase>().SetValues(i, _topScores[i].PlayerName, _topScores[i].Score, false);
             }
         }
 
@@ -78,7 +78,7 @@ namespace Io_Framework
                     // index is where it got added in the list
                     // item is the new item
                     _leaderBoardEntries[index].SetActive(true);
-                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase2>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
@@ -97,7 +97,7 @@ namespace Io_Framework
                     // index is where it got added in the list
                     // item is the new item
                     _leaderBoardEntries[index].SetActive(true);
-                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase2>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
@@ -113,7 +113,7 @@ namespace Io_Framework
                 case SyncListScoreEntry.Operation.OP_SET:
                     // index is the index of the item that was updated
                     // item is the previous item
-                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase2>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    _leaderBoardEntries[index].GetComponent<LeaderboardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
                     if (newScore.PlayerId == OwnScore.PlayerId)
                     {
                         _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
@@ -147,9 +147,9 @@ namespace Io_Framework
 
         private void OnValidate()
         {
-            if (EntryTemplate.GetComponent<LeaderboardEntryBase2>() == null)
+            if (EntryTemplate.GetComponent<LeaderboardEntryBase>() == null)
             {
-                Debug.LogError("Leaderboard2: EntryTemplate must have script derived from LeaderboardEntryBase2");
+                Debug.LogError("Leaderboard: EntryTemplate must have script derived from LeaderboardEntryBase");
             }
         }
 
@@ -163,7 +163,7 @@ namespace Io_Framework
                 if (_topScores[i].PlayerId == OwnScore.PlayerId)
                 {
                     _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
-                    _leaderBoardEntries[i].GetComponent<LeaderboardEntryBase2>().SetValues(position, OwnScore.PlayerName, OwnScore.Score, true);
+                    _leaderBoardEntries[i].GetComponent<LeaderboardEntryBase>().SetValues(position, OwnScore.PlayerName, OwnScore.Score, true);
                     return;
                 }
             }
@@ -171,7 +171,7 @@ namespace Io_Framework
             // If own player is not amongst the top players, then the last entry should display it.
 
             _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(true);
-            _leaderBoardEntries[_leaderBoardEntries.Count - 1].GetComponent<LeaderboardEntryBase2>().SetValues(position, OwnScore.PlayerName, OwnScore.Score, true);
+            _leaderBoardEntries[_leaderBoardEntries.Count - 1].GetComponent<LeaderboardEntryBase>().SetValues(position, OwnScore.PlayerName, OwnScore.Score, true);
         }
 
         #endregion
@@ -180,7 +180,7 @@ namespace Io_Framework
 
         #region Server
 
-        public static Leaderboard2 ServerSingleton { get; private set; }
+        public static Leaderboard ServerSingleton { get; private set; }
 
 
         private readonly List<ScoreEntry> _scoreOfPlayers = new List<ScoreEntry>();

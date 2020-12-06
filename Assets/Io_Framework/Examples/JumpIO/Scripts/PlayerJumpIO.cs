@@ -10,7 +10,7 @@ namespace Io_Framework.Examples.JumpIO
         [Server]
         public override void Destroy()
         {
-            Leaderboard2.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
             base.Destroy();
         }
 

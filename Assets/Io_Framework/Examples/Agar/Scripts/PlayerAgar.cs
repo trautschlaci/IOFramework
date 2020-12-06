@@ -44,7 +44,7 @@ namespace Io_Framework.Examples.Agar
         [Server]
         protected override void OnLastPlayerObjectDestroyed()
         {
-            Leaderboard2.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
+            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
             TargetLastObjectDestroyed();
         }
 

@@ -69,13 +69,13 @@ namespace Io_Framework
         [Server]
         private void ScoreChangedServer(int oldScore, int newScore)
         {
-            Leaderboard2.ServerSingleton.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
+            Leaderboard.ServerSingleton.ChangeScore(connectionToClient.connectionId, _playerObject.PlayerName, newScore-oldScore);
         }
 
         [Server]
         private void PlayerDestroyed()
         {
-            Leaderboard2.ServerSingleton.RemoveScore(connectionToClient.connectionId, _score);
+            Leaderboard.ServerSingleton.RemoveScore(connectionToClient.connectionId, _score);
         }
 
         #endregion
