@@ -4,13 +4,88 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    // If CloneablePlayerObjects are used, an object is needed with this class to control the multiple player-objects.
+    // The PlayerObjectManager is a singleton, so you can only use one, but accessing it is simple.
     public class PlayerObjectManager: NetworkBehaviour
     {
+
+        #region Server
+
+        [Tooltip("Prefab of the player-object. It must have component derived from CloneablePlayerObjectBase.")]
         public GameObject PlayerPrefab;
+
+
         public static PlayerObjectManager Singleton { get; private set; }
 
 
         private readonly Dictionary<int, List<CloneablePlayerObjectBase>> _objectsOfPlayers = new Dictionary<int, List<CloneablePlayerObjectBase>>();
+
+
+        [Server]
+        public void AddPlayerObjectToList(int playerId, CloneablePlayerObjectBase playerObject)
+        {
+            if(!_objectsOfPlayers.ContainsKey(playerId))
+                _objectsOfPlayers.Add(playerId, new List<CloneablePlayerObjectBase>());
+            _objectsOfPlayers[playerId].Add(playerObject);
+        }
+
+        [Server]
+        public void RemovePlayerObjectFromList(int playerId, CloneablePlayerObjectBase playerObject)
+        {
+            _objectsOfPlayers[playerId].Remove(playerObject);
+            if (_objectsOfPlayers[playerId].Count < 1)
+            {
+                _objectsOfPlayers.Remove(playerId);
+            }
+        }
+
+        [Server]
+        public GameObject InstantiatePlayerObject(Vector3 targetPos, Quaternion rotation)
+        {
+            var spawnedPlayerObject = Instantiate(PlayerPrefab, targetPos, rotation);
+            return spawnedPlayerObject;
+        }
+
+
+        [Server]
+        public void DeletePlayerObject(int playerId, CloneablePlayerObjectBase playerObject, out bool wasLastPlayerObject)
+        {
+            wasLastPlayerObject = false;
+            if (IsMainPlayerObject(playerObject))
+                wasLastPlayerObject = !ChangeMainPlayerObject(playerId);
+
+            RemovePlayerObjectFromList(playerId, playerObject);
+        }
+
+        // Returns true if it could change the main player-object.
+        [Server]
+        public bool ChangeMainPlayerObject(int playerId)
+        {
+            CloneablePlayerObjectBase nextMainPlayer = GetNextMainPlayerObject(playerId);
+
+            if (nextMainPlayer != null)
+            {
+                NetworkServer.ReplacePlayerForConnection(nextMainPlayer.connectionToClient, nextMainPlayer.gameObject, true);
+                return true;
+            }
+
+            return false;
+        }
+
+        [Server]
+        public List<CloneablePlayerObjectBase> GetPlayerObjects(int playerId)
+        {
+            if (!_objectsOfPlayers.ContainsKey(playerId)) return null;
+
+            return _objectsOfPlayers[playerId];
+
+        }
+
+        [Server]
+        public int GetNumberOfPlayerObjects(int playerId)
+        {
+            return GetPlayerObjects(playerId).Count;
+        }
 
 
         private void OnValidate()
@@ -21,11 +96,11 @@ namespace Io_Framework
             }
         }
 
-
         public override void OnStartServer()
         {
             InitializeSingleton();
         }
+
 
         [Server]
         private void InitializeSingleton()
@@ -44,15 +119,13 @@ namespace Io_Framework
         }
 
         [Server]
-        public void AddPlayerObject(int playerId, CloneablePlayerObjectBase playerObject)
+        private bool IsMainPlayerObject(CloneablePlayerObjectBase playerObject)
         {
-            if(!_objectsOfPlayers.ContainsKey(playerId))
-                _objectsOfPlayers.Add(playerId, new List<CloneablePlayerObjectBase>());
-            _objectsOfPlayers[playerId].Add(playerObject);
+            return playerObject.connectionToClient.identity == playerObject.netIdentity;
         }
 
         [Server]
-        public CloneablePlayerObjectBase GetNextMainPlayerObject(int playerId)
+        private CloneablePlayerObjectBase GetNextMainPlayerObject(int playerId)
         {
             CloneablePlayerObjectBase nextMainPlayerObject = null;
             foreach (var playerObject in _objectsOfPlayers[playerId])
@@ -66,69 +139,7 @@ namespace Io_Framework
             return nextMainPlayerObject;
         }
 
-        [Server]
-        public void RemovePlayerObject(int playerId, CloneablePlayerObjectBase playerObject)
-        {
-            _objectsOfPlayers[playerId].Remove(playerObject);
-            if (_objectsOfPlayers[playerId].Count < 1)
-            {
-                _objectsOfPlayers.Remove(playerId);
-            }
-        }
+        #endregion
 
-        [Server]
-        public GameObject InstantiatePlayerObject(Vector3 targetPos, Quaternion rotation)
-        {
-            GameObject spawnedPlayerObject = Instantiate(PlayerPrefab, targetPos, rotation);
-            return spawnedPlayerObject;
-        }
-
-        // Returns true if it was the last object of the player else false.
-        [Server]
-        public bool DeleteGameObject(int playerId, CloneablePlayerObjectBase playerObject)
-        {
-            bool isLastPlayerObject = false;
-            if (IsMainPlayerObject(playerObject))
-                isLastPlayerObject = !ChangeMainPlayerObject(playerId);
-
-            RemovePlayerObject(playerId, playerObject);
-
-            return isLastPlayerObject;
-        }
-
-        [Server]
-        public bool IsMainPlayerObject(CloneablePlayerObjectBase playerObject)
-        {
-            return playerObject.connectionToClient.identity == playerObject.netIdentity;
-        }
-
-        [Server]
-        public bool ChangeMainPlayerObject(int playerId)
-        {
-            CloneablePlayerObjectBase nextMainPlayer = GetNextMainPlayerObject(playerId);
-
-            if (nextMainPlayer != null)
-            {
-                NetworkServer.ReplacePlayerForConnection(nextMainPlayer.connectionToClient, nextMainPlayer.gameObject, true);
-                return true;
-            }
-
-            return false;
-        }
-
-        [Server]
-        public int GetNumberOfPlayerObjects(int playerId)
-        {
-            return _objectsOfPlayers[playerId].Count;
-        }
-
-        [Server]
-        public List<CloneablePlayerObjectBase> GetPlayerObjects(int playerId)
-        {
-            if (!_objectsOfPlayers.ContainsKey(playerId)) return null;
-
-            return _objectsOfPlayers[playerId];
-
-        }
     }
 }

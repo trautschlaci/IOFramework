@@ -3,21 +3,20 @@ using UnityEngine;
 
 namespace Io_Framework
 {
-    // Abstract base class to use on player-objects if one player can have multiple player-objects.
+    // Abstract base class to use on player-objects if one player can have multiple objects.
     public abstract class CloneablePlayerObjectBase : Player
     {
+
+        #region Server
+
+        [Tooltip("Maximum how many player-object can a player have.")]
         public int MaxNumberOfClones = 20;
 
-
-        public override void OnStartServer()
-        {
-            PlayerObjectManager.Singleton.AddPlayerObject(connectionToClient.connectionId, this);
-        }
 
         [Server]
         public override void Destroy()
         {
-            var wasLast = PlayerObjectManager.Singleton.DeleteGameObject(connectionToClient.connectionId, this);
+            PlayerObjectManager.Singleton.DeletePlayerObject(connectionToClient.connectionId, this, out var wasLast);
             if(wasLast)
                 OnLastPlayerObjectDestroyed();
 
@@ -36,13 +35,8 @@ namespace Io_Framework
         [Server]
         public virtual bool CanCreateClone()
         {
+            // The player can only create more clones if it has less player-objects than the specified max number.
             return PlayerObjectManager.Singleton.GetNumberOfPlayerObjects(connectionToClient.connectionId) < MaxNumberOfClones;
-        }
-
-        [Server]
-        protected virtual void OnLastPlayerObjectDestroyed()
-        {
-            LeaderBoard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
         }
 
         [Server]
@@ -50,6 +44,17 @@ namespace Io_Framework
         {
             return 0;
         }
+
+
+        public override void OnStartServer()
+        {
+            PlayerObjectManager.Singleton.AddPlayerObjectToList(connectionToClient.connectionId, this);
+        }
+
+
+        protected abstract void OnLastPlayerObjectDestroyed();
+
+        #endregion
 
     }
 }

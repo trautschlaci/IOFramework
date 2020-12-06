@@ -4,12 +4,33 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    // Score of a player-object.
     [RequireComponent(typeof(Player))]
     public class PlayerScore : NetworkBehaviour
     {
+
+        #region Client
+
+        public event Action<int, int> OnScoreChangedClient;
+
+
+        [Client]
+        private void SetScoreClient(int oldScore, int newScore)
+        {
+            OnScoreChangedClient?.Invoke(oldScore, newScore);
+        }
+
+        #endregion
+
+
+
+        #region Client and Server
+
         [SerializeField]
         [SyncVar(hook = nameof(SetScoreClient))]
         private int _score;
+
+        // Should only be changed from server.
         public int Score
         {
             get => _score;
@@ -20,22 +41,23 @@ namespace Io_Framework
             }
         }
 
-        public event Action<int, int> OnScoreChangedClient;
-        public event Action<int, int> OnScoreChangedServer;
-
-        // Server
-        private Player _playerObject;
-
-        [Client]
-        private void SetScoreClient(int oldScore, int newScore)
-        {
-            OnScoreChangedClient?.Invoke(oldScore, newScore);
-        }
 
         private void Awake()
         {
             _playerObject = GetComponent<Player>();
         }
+
+        #endregion
+
+
+
+        #region Server
+
+        public event Action<int, int> OnScoreChangedServer;
+
+
+        private Player _playerObject;
+
 
         public override void OnStartServer()
         {
@@ -55,6 +77,8 @@ namespace Io_Framework
         {
             LeaderBoard.ServerSingleton.RemoveScore(connectionToClient.connectionId, _score);
         }
+
+        #endregion
 
     }
 }

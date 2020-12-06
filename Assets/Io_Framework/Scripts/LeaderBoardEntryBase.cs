@@ -4,10 +4,19 @@ using UnityEngine.UI;
 
 namespace Io_Framework
 {
+    // Base class for entries of leaderboard.
     public abstract class LeaderBoardEntryBase : MonoBehaviour
     {
+
+        #region Client
+
+        [Tooltip("The text component that shows the displayed player's position on the leaderboard.")]
         public Text PositionText;
+
+        [Tooltip("The text component that shows the displayed player's name.")]
         public Text NameText;
+
+        [Tooltip("The text component that shows the displayed player's score.")]
         public Text ScoreText;
 
 
@@ -21,6 +30,8 @@ namespace Io_Framework
         }
 
         protected abstract void SwitchHighlight(bool value);
+
+        #endregion
 
     }
 }

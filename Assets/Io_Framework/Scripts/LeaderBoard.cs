@@ -6,46 +6,130 @@ using UnityEngine;
 
 namespace Io_Framework
 {
+    // Component that manages score of all players. It is also responsible for sending data of the top players to the clients.
     public class LeaderBoard: NetworkBehaviour
     {
+
+        #region Public fields Client
+
+        [Tooltip("The GameObject on the leaderboard UI, which contains the entries.")]
         public GameObject EntryContainer;
+
+        [Tooltip("Example of an entry, which gets cloned and changed for displaying each top player's score.")]
         public GameObject EntryTemplate;
+
+        #endregion
+
+
+
+        #region Public fields Client and Server
+
+        [Tooltip("How many players should be displayed on the top list.")]
         public int NumberOfEntries = 10;
-        public float RefreshDelaySeconds = 0.2f;
+
+        #endregion
+
+
+
+        #region Public fields Server
+
+        [Tooltip("How often should the scores of players be refreshed, in seconds.")]
+        public float RefreshDelay = 0.2f;
+
+        [Tooltip("Set to false to stop refreshing the scores.")]
         public bool IsRefreshStopped;
 
-
-        // Server
-        public static LeaderBoard ServerSingleton { get; private set; }
+        #endregion
 
 
-        // Client
-        private readonly List<GameObject> _entries = new List<GameObject>();
+
+        #region Client
+
         public ScoreEntry OwnScore { get; private set; } = new ScoreEntry(-1, null, -1);
         public int OwnPosition { get; private set; }
 
-        // Client and Server
-        private readonly SyncListEntry _topScores = new SyncListEntry();
-
-        // Server
-        private readonly List<ScoreEntry> _scoreOfPlayers = new List<ScoreEntry>();
+        private readonly List<GameObject> _leaderBoardEntries = new List<GameObject>();
 
 
-        [Client]
+
         public override void OnStartClient()
         {
             _topScores.Callback += OnTopScoresUpdated;
-            for (var i = 0; i < NumberOfEntries+1; i++)
+
+            for (var i = 0; i < NumberOfEntries + 1; i++)
             {
-                _entries.Add(Instantiate(EntryTemplate, EntryContainer.transform));
-                _entries[i].SetActive(false);
+                _leaderBoardEntries.Add(Instantiate(EntryTemplate, EntryContainer.transform));
+                _leaderBoardEntries[i].SetActive(false);
             }
+
             for (var i = 0; i < _topScores.Count; i++)
             {
-                _entries[i].SetActive(true);
-                _entries[i].GetComponent<LeaderBoardEntryBase>().SetValues(i, _topScores[i].PlayerName, _topScores[i].Score, false);
+                _leaderBoardEntries[i].SetActive(true);
+                _leaderBoardEntries[i].GetComponent<LeaderBoardEntryBase>().SetValues(i, _topScores[i].PlayerName, _topScores[i].Score, false);
             }
         }
+
+
+        [Client]
+        private void OnTopScoresUpdated(SyncListScoreEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)
+        {
+            switch (op)
+            {
+                case SyncListScoreEntry.Operation.OP_ADD:
+                    // index is where it got added in the list
+                    // item is the new item
+                    _leaderBoardEntries[index].SetActive(true);
+                    _leaderBoardEntries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    if (newScore.PlayerId == OwnScore.PlayerId)
+                    {
+                        _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
+                    }
+                    break;
+
+                case SyncListScoreEntry.Operation.OP_CLEAR:
+                    // list got cleared
+                    foreach (var entry in _leaderBoardEntries)
+                    {
+                        entry.SetActive(false);
+                    }
+                    break;
+
+                case SyncListScoreEntry.Operation.OP_INSERT:
+                    // index is where it got added in the list
+                    // item is the new item
+                    _leaderBoardEntries[index].SetActive(true);
+                    _leaderBoardEntries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    if (newScore.PlayerId == OwnScore.PlayerId)
+                    {
+                        _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
+                    }
+                    break;
+
+                case SyncListScoreEntry.Operation.OP_REMOVEAT:
+                    // index is where it got removed in the list
+                    // item is the item that was removed
+                    _leaderBoardEntries[index].SetActive(false);
+                    break;
+
+                case SyncListScoreEntry.Operation.OP_SET:
+                    // index is the index of the item that was updated
+                    // item is the previous item
+                    _leaderBoardEntries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
+                    if (newScore.PlayerId == OwnScore.PlayerId)
+                    {
+                        _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
+                    }
+                    break;
+            }
+        }
+
+        #endregion
+
+
+
+        #region Client and Server
+
+        private readonly SyncListScoreEntry _topScores = new SyncListScoreEntry();
 
 
         private void OnDisable()
@@ -53,10 +137,11 @@ namespace Io_Framework
             if (isServer)
                 return;
 
-            for (var i = _entries.Count - 1; i >= 0; i--)
+            // Cleanup the leaderboard.
+            for (var i = _leaderBoardEntries.Count - 1; i >= 0; i--)
             {
-                var temp = _entries[i];
-                _entries.RemoveAt(i);
+                var temp = _leaderBoardEntries[i];
+                _leaderBoardEntries.RemoveAt(i);
                 Destroy(temp);
             }
         }
@@ -70,57 +155,8 @@ namespace Io_Framework
         }
 
 
-        [Client]
-        private void OnTopScoresUpdated(SyncListEntry.Operation op, int index, ScoreEntry oldScore, ScoreEntry newScore)
-        {
-            switch (op)
-            {
-                case SyncListEntry.Operation.OP_ADD:
-                    // index is where it got added in the list
-                    // item is the new item
-                    _entries[index].SetActive(true);
-                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
-                    if (newScore.PlayerId == OwnScore.PlayerId)
-                    {
-                        _entries[_entries.Count - 1].SetActive(false);
-                    }
-                    break;
-                case SyncListEntry.Operation.OP_CLEAR:
-                    // list got cleared
-                    foreach (var entry in _entries)
-                    {
-                        entry.SetActive(false);
-                    }
-                    break;
-                case SyncListEntry.Operation.OP_INSERT:
-                    // index is where it got added in the list
-                    // item is the new item
-                    _entries[index].SetActive(true);
-                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId == OwnScore.PlayerId);
-                    if (newScore.PlayerId == OwnScore.PlayerId)
-                    {
-                        _entries[_entries.Count - 1].SetActive(false);
-                    }
-                    break;
-                case SyncListEntry.Operation.OP_REMOVEAT:
-                    // index is where it got removed in the list
-                    // item is the item that was removed
-                    _entries[index].SetActive(false);
-                    break;
-                case SyncListEntry.Operation.OP_SET:
-                    // index is the index of the item that was updated
-                    // item is the previous item
-                    _entries[index].GetComponent<LeaderBoardEntryBase>().SetValues(index, newScore.PlayerName, newScore.Score, newScore.PlayerId==OwnScore.PlayerId);
-                    if (newScore.PlayerId == OwnScore.PlayerId)
-                    {
-                        _entries[_entries.Count - 1].SetActive(false);
-                    }
-                    break;
-            }
-        }
-
         [TargetRpc]
-        public void TargetUpdateOwnScore(NetworkConnection conn, ScoreEntry score, int position)
+        private void TargetUpdateOwnScore(NetworkConnection conn, ScoreEntry score, int position)
         {
             OwnScore = score;
             OwnPosition = position;
@@ -128,37 +164,29 @@ namespace Io_Framework
             {
                 if (_topScores[i].PlayerId == OwnScore.PlayerId)
                 {
-                    _entries[_entries.Count - 1].SetActive(false);
-                    _entries[i].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
+                    _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(false);
+                    _leaderBoardEntries[i].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
                     return;
-                } 
-            }
-            _entries[_entries.Count - 1].SetActive(true);
-            _entries[_entries.Count - 1].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
-        }
-
-
-        public override void OnStartServer()
-        {
-            InitializeSingleton();
-            StartCoroutine(Refresh());
-        }
-
-        [Server]
-        private void InitializeSingleton()
-        {
-            if (ServerSingleton != null)
-            {
-                if (ServerSingleton == this) return;
-
-                Debug.Log("Multiple LeaderBoards detected in the scene. The duplicate will be destroyed.");
-                Destroy(gameObject);
-
-                return;
+                }
             }
 
-            ServerSingleton = this;
+            // If own player is not amongst the top players, then the last entry should display it.
+
+            _leaderBoardEntries[_leaderBoardEntries.Count - 1].SetActive(true);
+            _leaderBoardEntries[_leaderBoardEntries.Count - 1].GetComponent<LeaderBoardEntryBase>().SetValues(OwnPosition, OwnScore.PlayerName, OwnScore.Score, true);
         }
+
+        #endregion
+
+
+
+        #region Server
+
+        public static LeaderBoard ServerSingleton { get; private set; }
+
+
+        private readonly List<ScoreEntry> _scoreOfPlayers = new List<ScoreEntry>();
+
 
         [Server]
         public void ChangeScore(int playerId, string playerName, int changeValue)
@@ -194,6 +222,35 @@ namespace Io_Framework
             _scoreOfPlayers.RemoveAt(GetScoreEntryIndexById(playerId));
         }
 
+
+        public override void OnStartServer()
+        {
+            InitializeSingleton();
+            StartCoroutine(Refresh());
+        }
+
+        public override void OnStopServer()
+        {
+            IsRefreshStopped = true;
+        }
+
+
+        [Server]
+        private void InitializeSingleton()
+        {
+            if (ServerSingleton != null)
+            {
+                if (ServerSingleton == this) return;
+
+                Debug.Log("Multiple LeaderBoards detected in the scene. The duplicate will be destroyed.");
+                Destroy(gameObject);
+
+                return;
+            }
+
+            ServerSingleton = this;
+        }
+
         [Server]
         private IEnumerator Refresh()
         {
@@ -207,14 +264,14 @@ namespace Io_Framework
 
                 SendScoresToOwners();
 
-                yield return new WaitForSeconds(RefreshDelaySeconds);
+                yield return new WaitForSeconds(RefreshDelay);
             }
         }
 
         [Server]
         private void RemoveDisconnectedPlayers()
         {
-            for (var i = _scoreOfPlayers.Count-1; i >= 0; i--)
+            for (var i = _scoreOfPlayers.Count - 1; i >= 0; i--)
             {
                 var connectionId = _scoreOfPlayers[i].PlayerId;
                 if (!NetworkServer.connections.ContainsKey(connectionId))
@@ -227,7 +284,7 @@ namespace Io_Framework
         [Server]
         private void RefreshTopList()
         {
-            for (int i = 0; i < NumberOfEntries && i < _scoreOfPlayers.Count; i++)
+            for (var i = 0; i < NumberOfEntries && i < _scoreOfPlayers.Count; i++)
             {
                 if (_topScores.Count < i + 1)
                 {
@@ -239,7 +296,7 @@ namespace Io_Framework
                 }
             }
 
-            for (int i = _scoreOfPlayers.Count; i < _topScores.Count; i++)
+            for (var i = _scoreOfPlayers.Count; i < _topScores.Count; i++)
             {
                 _topScores.RemoveAt(_scoreOfPlayers.Count);
             }
@@ -248,7 +305,7 @@ namespace Io_Framework
         [Server]
         private void SendScoresToOwners()
         {
-            for (int i = 0; i < _scoreOfPlayers.Count; i++)
+            for (var i = 0; i < _scoreOfPlayers.Count; i++)
             {
                 var connectionId = _scoreOfPlayers[i].PlayerId;
                 if (NetworkServer.connections.ContainsKey(connectionId))
@@ -261,7 +318,7 @@ namespace Io_Framework
         [Server]
         private int GetScoreEntryIndexById(int playerId)
         {
-            for (int i=0; i<_scoreOfPlayers.Count; i++)
+            for (var i = 0; i < _scoreOfPlayers.Count; i++)
             {
                 if (_scoreOfPlayers[i].PlayerId == playerId)
                 {
@@ -272,15 +329,12 @@ namespace Io_Framework
             return -1;
         }
 
-        public override void OnStopServer()
-        {
-            IsRefreshStopped = true;
-        }
+        #endregion
+
     }
 
-
     [Serializable]
-    public class SyncListEntry : SyncList<ScoreEntry> { }
+    public class SyncListScoreEntry : SyncList<ScoreEntry> { }
 
     [Serializable]
     public struct ScoreEntry: IComparable<ScoreEntry>
@@ -301,4 +355,5 @@ namespace Io_Framework
             return other.Score.CompareTo(Score);
         }
     }
+
 }
