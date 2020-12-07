@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Io_Framework
 {
-    // Component that manages score of all players. It is also responsible for sending data of the top players to the clients.
+    // Component that manages score of all players. It is also responsible for sending the data of top players to the clients.
     public class Leaderboard: NetworkBehaviour
     {
 
@@ -294,9 +294,9 @@ namespace Io_Framework
                 }
             }
 
-            for (var i = _scoreOfPlayers.Count; i < _topScores.Count; i++)
+            for (var i = _topScores.Count-1; i >= _scoreOfPlayers.Count; i--)
             {
-                _topScores.RemoveAt(_scoreOfPlayers.Count);
+                _topScores.RemoveAt(i);
             }
         }
 

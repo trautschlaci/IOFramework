@@ -25,13 +25,11 @@ namespace Io_Framework.Examples.JumpIO
             _cinemachineCamera.Follow = transform;
         }
 
-        [Client]
         protected override bool IsCameraFollowing()
         {
             return _cinemachineCamera != null && _cinemachineCamera.Follow == transform;
         }
 
-        [Client]
         protected override void StopFollowing()
         {
             _cinemachineCamera.Follow = null;

@@ -22,22 +22,6 @@ namespace Io_Framework
         public bool ForceHidden;
 
 
-        public override void OnStartServer()
-        {
-            InvokeRepeating(nameof(RebuildObservers), 0, VisUpdateInterval);
-        }
-
-        public override void OnStopServer()
-        {
-            CancelInvoke(nameof(RebuildObservers));
-        }
-
-        [Server]
-        private void RebuildObservers()
-        {
-            netIdentity.RebuildObservers(false);
-        }
-
         // Callback to determine if the given connection of a player can see this object.
         public override bool OnCheckObserver(NetworkConnection conn)
         {
@@ -72,6 +56,24 @@ namespace Io_Framework
                     }
                 }
             }
+        }
+
+
+        public override void OnStartServer()
+        {
+            InvokeRepeating(nameof(RebuildObservers), 0, VisUpdateInterval);
+        }
+
+        public override void OnStopServer()
+        {
+            CancelInvoke(nameof(RebuildObservers));
+        }
+
+
+        [Server]
+        private void RebuildObservers()
+        {
+            netIdentity.RebuildObservers(false);
         }
 
         #endregion

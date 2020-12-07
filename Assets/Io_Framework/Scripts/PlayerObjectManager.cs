@@ -29,9 +29,12 @@ namespace Io_Framework
             _objectsOfPlayers[playerId].Add(playerObject);
         }
 
-        [Server]
+        [ServerCallback]
         public void RemovePlayerObjectFromList(int playerId, CloneablePlayerObjectBase playerObject)
         {
+            if (!_objectsOfPlayers.ContainsKey(playerId))
+                return;
+
             _objectsOfPlayers[playerId].Remove(playerObject);
             if (_objectsOfPlayers[playerId].Count < 1)
             {

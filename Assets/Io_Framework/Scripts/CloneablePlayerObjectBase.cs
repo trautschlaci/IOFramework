@@ -51,6 +51,11 @@ namespace Io_Framework
             PlayerObjectManager.Singleton.AddPlayerObjectToList(connectionToClient.connectionId, this);
         }
 
+        public override void OnStopServer()
+        {
+            PlayerObjectManager.Singleton.RemovePlayerObjectFromList(connectionToClient.connectionId, this);
+        }
+
 
         protected abstract void OnLastPlayerObjectDestroyed();
 

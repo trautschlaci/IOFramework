@@ -556,7 +556,7 @@ MonoBehaviour:
   EntryContainer: {fileID: 1180306742}
   EntryTemplate: {fileID: 2124509842}
   NumberOfEntries: 10
-  RefreshDelaySeconds: 0.2
+  RefreshDelay: 0.2
   IsRefreshStopped: 0
 --- !u!114 &277549054
 MonoBehaviour:
@@ -2020,8 +2020,7 @@ MonoBehaviour:
   - {fileID: 1455619517116697774, guid: 2c34bb0c58613844d84c8ada67e9e10c, type: 3}
   IndexUI: {fileID: 1722162813}
   RestartUI: {fileID: 1431114898}
-  RestartNameInputField: {fileID: 2000581079}
-  LeaderBoardUI: {fileID: 648668728}
+  RestartUINameInputField: {fileID: 2000581079}
   SpawnPointSelector: {fileID: 1442107166}
   SpawnRetryDelay: 0.01
   SpawnTimeout: 2
@@ -2157,8 +2156,7 @@ MonoBehaviour:
   AutoStartSpawning: 1
   MinSpawnDelay: 0.5
   MaxSpawnDelay: 0.5
-  BulkSpawn: 10
-  IsStopped: 0
+  BulkSpawn: 2
 --- !u!114 &1425738888
 MonoBehaviour:
   m_ObjectHideFlags: 0

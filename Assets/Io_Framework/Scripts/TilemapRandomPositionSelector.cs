@@ -24,6 +24,7 @@ namespace Io_Framework
             _emptyPositions = new List<Vector3>();
             _tilemapBounds = TilemapToUse.cellBounds;
             var tileArray = TilemapToUse.GetTilesBlock(_tilemapBounds);
+
             for (var index = 0; index < tileArray.Length; index++)
             {
                 if (tileArray[index] != null) 
