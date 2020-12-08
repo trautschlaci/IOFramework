@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Io_Framework.Examples.JumpIO
 {
-    public class Melon : PowerUpBaseJumpIO
+    public class Melon : PowerUpJumpIOBase
     {
 
         #region Server
