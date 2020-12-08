@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3453141645313337180}
   m_Layer: 9
   m_Name: TriggerCollider
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -293,10 +293,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  InputSyncInterval: 0.1
   Speed: 8
   JumpSpeed: 20
   MoveBlockInterval: 0.3
-  InputSyncInterval: 0.1
 --- !u!114 &4149672768815094167
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -31,19 +31,5 @@ namespace Io_Framework.Examples.JumpIO
         }
 
         #endregion
-
-
-
-        #region Server
-
-        [Server]
-        public override void Destroy()
-        {
-            Leaderboard.ServerSingleton.RemovePlayer(connectionToClient.connectionId);
-            base.Destroy();
-        }
-
-        #endregion
-
     }
 }
