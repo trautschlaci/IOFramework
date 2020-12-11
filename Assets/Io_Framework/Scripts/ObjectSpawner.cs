@@ -111,6 +111,7 @@ namespace Io_Framework
         [Server]
         private IEnumerator SpawnCoroutine()
         {
+            // Wait for the proper setup of components.
             yield return new WaitForSeconds(2);
 
             while (!_isStopped)
