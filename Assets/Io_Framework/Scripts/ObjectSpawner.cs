@@ -111,6 +111,8 @@ namespace Io_Framework
         [Server]
         private IEnumerator SpawnCoroutine()
         {
+            yield return new WaitForSeconds(2);
+
             while (!_isStopped)
             {
                 for(var i = 0; i < BulkSpawn; i++)

@@ -6,6 +6,6 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Io_Framework/Examples/Agar/Scenes/Agar.unity
-    guid: 9460ea0f68e30944a9be8fa6576df78b
+    path: Assets/Io_Framework/Examples/JumpIO/Scenes/Main.unity
+    guid: 7087c3c7ec5ae614685ca79f4fdfb348
   m_configObjects: {}
